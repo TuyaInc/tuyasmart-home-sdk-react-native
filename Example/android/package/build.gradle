@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.tuya.buildPackage'
+android {
+    compileSdkVersion 27
+
+
+
+    defaultConfig {
+        applicationId "com.hugh.apackage"
+        minSdkVersion 21
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:appcompat-v7:27.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+tuyasdk{
+    excludeLib('react-native')
+    excludeLib 'fastjson'
+    excludeLib 'okhttp-urlconnection'
+    excludeLib 'eventbus'
+    excludeLib 'rxandroid'
+    excludeLib 'rxjava'
+    excludeLib 'mqttv3'
+    excludeLib 'kotlin-stdlib-jdk7'
+    excludeLib 'org.eclipse.paho.android.service'
+    excludeLib 'appcompat-v7'
+    excludeLib 'junit'
+    excludeLib 'com.android.support.test'
+    excludeLib 'WheelPicker'
+    excludeLib 'multidex'
+    isProguard(false)
+    exclude 'react-native-wheel-picker'
+    exclude'react-native-svg'
+}

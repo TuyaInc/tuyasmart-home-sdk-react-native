@@ -1,0 +1,7 @@
+rootProject.name = 'TuyaRnDemo'
+include ':react-native-svg', ':package'
+project(':react-native-svg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-svg/android')
+include ':react-native-wheel-picker'
+project(':react-native-wheel-picker').projectDir = new File(settingsDir, '../node_modules/react-native-wheel-picker/android')
+
+include ':app', ':tuyasmart-sdk-react-native'

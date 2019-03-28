@@ -1,0 +1,41 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+source 'https://github.com/CocoaPods/Specs.git'  # 官方库
+
+target 'TuyaRnDemo' do
+
+  pod 'TuyaSmartHomeKit'
+  pod 'TuyaSmartTimerKit'
+  pod 'TuyaSmartDeviceKit'
+  pod 'TuyaSmartFeedbackKit'
+  pod 'TuyaSmartSceneKit'
+  pod 'TuyaSmartMessageKit'
+
+  pod 'React', :path => '../node_modules/react-native/', :subspecs => [
+    'Core',
+    'CxxBridge',
+    'ART',
+    'RCTActionSheet',
+    'RCTAnimation',
+    'RCTGeolocation',
+    'RCTImage',
+    'RCTNetwork',
+    'RCTPushNotification',
+    'RCTSettings',
+    'RCTText',
+    'RCTImage',
+    'RCTVibration',
+    'RCTWebSocket',
+    'RCTLinkingIOS',
+    'DevSupport'
+    ]
+    
+    pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+    pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
+    pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+    pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
+    pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+
+end

@@ -1,0 +1,148 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'maven'
+
+
+buildscript {
+    ext.kotlin_version = '1.2.41'
+    repositories {
+
+        maven{url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        jcenter()
+        google()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+
+android {
+    compileSdkVersion 28
+
+
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.facebook.react:react-native:+'
+    implementation 'com.alibaba:fastjson:1.1.68.android'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.6.0'
+    implementation 'de.greenrobot:eventbus:2.4.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.7'
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
+    implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
+   // implementation(name: 'tuyasmart-2.7.2', ext: 'aar')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.tuya.smart:tuyasmart:2.9.3'
+}
+repositories {
+    maven {
+        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+        url "$projectDir/../node_modules/react-native/android"
+    }
+    mavenCentral()
+    google()
+//    flatDir {
+//        dirs 'libs'
+//    }
+}
+
+//def configureReactNativePom(def pom) {
+//    def packageJson = new groovy.json.JsonSlurper().parseText(file('../../package.json').text)
+//
+//    pom.project {
+//        name packageJson.title
+//        artifactId packageJson.name
+//        version = packageJson.version
+//        group = "com.tuya.smart.rnsdk"
+//        description packageJson.description
+//        url packageJson.repository.baseUrl
+//
+//        licenses {
+//            license {
+//                name packageJson.license
+//                url packageJson.repository.baseUrl + '/blob/master/' + packageJson.licenseFilename
+//                distribution 'repo'
+//            }
+//        }
+//
+//        developers {
+//            developer {
+//                id packageJson.author.username
+//                name packageJson.author.name
+//            }
+//        }
+//    }
+//}
+
+//afterEvaluate { project ->
+//
+//    task androidJavadoc(type: Javadoc) {
+//        source = android.sourceSets.main.java.srcDirs
+//        classpath += files(android.bootClasspath)
+//        classpath += files(project.getConfigurations().getByName('compile').asList())
+//        include '**/*.java'
+//    }
+//
+//    task androidJavadocJar(type: Jar, dependsOn: androidJavadoc) {
+//        classifier = 'javadoc'
+//        from androidJavadoc.destinationDir
+//    }
+//
+//    task androidSourcesJar(type: Jar) {
+//        classifier = 'sources'
+//        from android.sourceSets.main.java.srcDirs
+//        include '**/*.java'
+//    }
+//
+//    android.libraryVariants.all { variant ->
+//        def name = variant.name.capitalize()
+//        task "jar${name}"(type: Jar, dependsOn: variant.javaCompile) {
+//            from variant.javaCompile.destinationDir
+//        }
+//    }
+//
+//    artifacts {
+//        archives androidSourcesJar
+//        archives androidJavadocJar
+//    }
+//
+//    task installArchives(type: Upload) {
+//        configuration = configurations.archives
+//        repositories.mavenDeployer {
+//            // Deploy to react-native-event-bridge/maven, ready to publish to npm
+//            repository url: "file://${projectDir}/../android/maven"
+//
+//            configureReactNativePom pom
+//        }
+//    }
+//}
+
