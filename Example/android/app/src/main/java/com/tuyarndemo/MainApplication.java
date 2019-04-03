@@ -10,6 +10,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.tuya.smart.rnsdk.TuyaReactPackage;
+import com.tuya.smart.rnsdk.core.TuyaCoreModule;
 import com.zyu.ReactNativeWheelPickerPackage;
 
 
@@ -49,5 +50,7 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+    // Fill in appkey and appsecret of the application below
+    TuyaCoreModule.Companion.initTuyaSDk("xxxxxxx","xxxxxxxx",this);
   }
 }

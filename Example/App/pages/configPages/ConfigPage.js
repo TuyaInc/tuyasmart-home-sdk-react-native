@@ -142,7 +142,7 @@ export default class ConfigPage extends Component {
       })
         .then((data) => {
           console.log('----->data', data);
-          console.warn('PEIWANGCGON');
+          console.warn('config success');
           this.setState({
             progresstime: 10,
             state: 'success',

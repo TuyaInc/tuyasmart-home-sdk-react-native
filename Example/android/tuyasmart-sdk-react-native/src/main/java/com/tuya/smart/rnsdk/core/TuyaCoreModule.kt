@@ -20,6 +20,12 @@ import java.util.HashMap
 
 class TuyaCoreModule(reactContext: ReactApplicationContext?) : ReactContextBaseJavaModule(reactContext) {
 
+    companion object {
+        fun initTuyaSDk(appKey:String,appSecret:String,application: Application){
+            TuyaHomeSdk.init(application, appKey, appSecret)
+        }
+    }
+
     override fun getName(): String {
         return "TuyaCoreModule"
     }
@@ -28,6 +34,7 @@ class TuyaCoreModule(reactContext: ReactApplicationContext?) : ReactContextBaseJ
      *  不带参数的初始化，appKey和appSecret要写在AndroidManifest中
      */
     @ReactMethod
+    @Deprecated("Android can't initSDK in react-native,it should be used in application")
     fun initWithoutOptions() {
         TuyaHomeSdk.init(reactApplicationContext.applicationContext as Application?);
         TuyaHomeSdk.setOnNeedLoginListener {
@@ -36,6 +43,7 @@ class TuyaCoreModule(reactContext: ReactApplicationContext?) : ReactContextBaseJ
     }
 
     @ReactMethod
+    @Deprecated("Android can't initSDK in react-native,it should be used in application")
     fun initWithOptions(params: ReadableMap) {
         val appKey = params.getString("appKey")
         val appSecret = params.getString("appSecret")
@@ -46,6 +54,17 @@ class TuyaCoreModule(reactContext: ReactApplicationContext?) : ReactContextBaseJ
             }
         })
     }
+
+    @ReactMethod
+    fun setOnNeedLoginListener(){
+        TuyaHomeSdk.setOnNeedLoginListener(INeedLoginListener() {
+            fun onNeedLogin(context: Context?) {
+                TuyaReactUtils.sendEvent(reactApplicationContext, NEEDLOGIN, null)
+            }
+        })
+    }
+
+
 
     @ReactMethod
     fun exitApp() {
