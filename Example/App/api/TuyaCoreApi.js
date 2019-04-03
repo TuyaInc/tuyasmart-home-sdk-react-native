@@ -26,15 +26,8 @@ TuyaCoreApi.initWithOptions = function (data) {
   CoreNativeApi.initWithOptions(data);
 };
 
-// TuyaCoreApi.initApp(data) =function(data){
-//   // sync
-//   initApp (data) {
-//     if(data){
-//       CoreNativeApi.initWithOptions(data)
-//     }else{
-//       CoreNativeApi.initWithoutOptions()
-//     }
-//   },
-// }
+TuyaCoreApi.setOnNeedLoginListener = function(){
+  CoreNativeApi.setOnNeedLoginListener();
+}
 
 module.exports = TuyaCoreApi;

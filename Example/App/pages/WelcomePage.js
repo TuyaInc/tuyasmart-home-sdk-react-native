@@ -32,10 +32,12 @@ export default class WelcomePage extends Component {
         appSecret: 'xxxxxxxxxxxxxxxxxxxxxxx',
       });
     } else {
-      TuyaCoreApi.initWithOptions({
-        appKey: 'xxxxxxxxxxxxxxxxxxxxxxx',
-        appSecret: 'xxxxxxxxxxxxxxxxxxxxxxx',
-      });
+       //Android can't init three
+      // TuyaCoreApi.initWithOptions({
+      //   appKey: 'xxxxxxxxxxxxxxxxxxxxxxx',
+      //   appSecret: 'xxxxxxxxxxxxxxxxxxxxxxx',
+      // });
+      TuyaCoreApi.setOnNeedLoginListener();
     }
   }
 
