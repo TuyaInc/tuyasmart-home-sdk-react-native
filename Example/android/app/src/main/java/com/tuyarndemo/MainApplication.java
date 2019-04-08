@@ -51,6 +51,6 @@ public class MainApplication extends Application implements ReactApplication {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
     // Fill in appkey and appsecret of the application below
-    TuyaCoreModule.Companion.initTuyaSDk("xxxxxxx","xxxxxxxx",this);
+    TuyaCoreModule.Companion.initTuyaSDk("xxxxxxxxxxxxxxxxxxxxx","xxxxxxxxxxxxxxxxxxxxx",this);
   }
 }

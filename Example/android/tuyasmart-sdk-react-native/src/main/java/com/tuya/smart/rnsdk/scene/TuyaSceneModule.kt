@@ -336,7 +336,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext?) : ReactContextBase
                     rules.add(getRules(condition))
                     val devCondition = SceneCondition.createDevCondition(TuyaHomeSdk.getDataInstance().getDeviceBean(condition.getString(DEVID)),
                             condition.getString(DPID),
-                            rules)
+                            getRules(condition))
                     sceneConditionList.add(devCondition)
                 } else { //创建定时
                     /**
@@ -460,7 +460,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext?) : ReactContextBase
                                             rules.add(getRules(condition))
                                             val devCondition = SceneCondition.createDevCondition(TuyaHomeSdk.getDataInstance().getDeviceBean(condition.getString(DEVID)),
                                                     condition.getString(DPID),
-                                                    rules)
+                                                    getRules(condition))
                                             sceneConditionList.add(devCondition)
                                         } else { //创建定时
                                             //      TimerRule timerRule = TimerRule.newInstance("Asia/Shanghai","0111110","16:00","20180310")

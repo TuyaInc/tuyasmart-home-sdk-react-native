@@ -57,6 +57,13 @@ class TuyaHomeManagerModule(reactContext: ReactApplicationContext?) : ReactConte
     @ReactMethod
     fun registerTuyaHomeChangeListener(params: ReadableMap) {
         TuyaHomeSdk.getHomeManagerInstance().registerTuyaHomeChangeListener(object : ITuyaHomeChangeListener {
+            override fun onHomeInvite(p0: Long, p1: String?) {
+                val map = Arguments.createMap()
+                map.putDouble("homeId", p0.toDouble())
+                map.putString("homeName", p1)
+                BridgeUtils.homeChange(reactApplicationContext, map, params.getString("homeId"))
+            }
+
             override fun onHomeAdded(var1: Long) {
                 val map = Arguments.createMap()
                 map.putDouble("homeId", var1.toDouble())

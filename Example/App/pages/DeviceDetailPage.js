@@ -78,6 +78,10 @@ export default class DeviceDetailPage extends Component {
     );
   }
 
+  componentWillUnmount(){
+    TuyaDeviceApi.unRegisterDevListener({devId: this.state.devId });
+  }
+
   getRightView(mode, type, range, dpId, dpValue) {
     // rw 可操作 ，ro只可获取
     if (mode == 'rw') {
