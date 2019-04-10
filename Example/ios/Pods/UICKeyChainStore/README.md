@@ -1,5 +1,4 @@
 # UICKeyChainStore
-
 [![CI Status](http://img.shields.io/travis/kishikawakatsumi/UICKeyChainStore.svg?style=flat)](https://travis-ci.org/kishikawakatsumi/UICKeyChainStore)
 [![Coverage Status](https://img.shields.io/coveralls/kishikawakatsumi/UICKeyChainStore.svg?style=flat)](https://coveralls.io/r/kishikawakatsumi/UICKeyChainStore?branch=master)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
@@ -20,14 +19,14 @@ Try [KeychainAccess](https://github.com/kishikawakatsumi/KeychainAccess).
 
 ## Features
 
-* Simple interface
-* Support access group
-* [Support accessibility](#accessibility)
-* [Support iCloud sharing](#icloud_sharing)
-* **[Support TouchID and Keychain integration (iOS 8+)](#touch_id_integration)**
-* **[Support Shared Web Credentials (iOS 8+)](#shared_web_credentials)**
-* Works on both iOS & OS X
-* Supported watchOS 2
+- Simple interface
+- Support access group
+- [Support accessibility](#accessibility)
+- [Support iCloud sharing](#icloud_sharing)
+- **[Support TouchID and Keychain integration (iOS 8+)](#touch_id_integration)**
+- **[Support Shared Web Credentials (iOS 8+)](#shared_web_credentials)**
+- Works on both iOS & OS X
+- Supported watchOS 2
 
 ## Usage
 
@@ -236,7 +235,7 @@ keychain[@"kishikawakatsumi"] = @"01234567-89ab-cdef-0123-456789abcdef"
 
 #### Adding a Touch ID protected item
 
-If you want to store the Touch ID protected Keychain item, specify `accessibility` and `authenticationPolicy` attributes.
+If you want to store the Touch ID protected Keychain item, specify `accessibility` and `authenticationPolicy` attributes.  
 
 ```objective-c
 UICKeyChainStore *keychain = [UICKeyChainStore keyChainStoreWithService:@"com.example.github-token"];
@@ -251,7 +250,7 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0),
 
 #### Updating a Touch ID protected item
 
-The same way as when adding.
+The same way as when adding.  
 
 **Do not run in the main thread if there is a possibility that the item you are trying to add already exists, and protected.**
 **Because updating protected items requires authentication.**
@@ -303,7 +302,7 @@ keychain[@"kishikawakatsumi"] = nil;
 ### <a name="shared_web_credentials"> Shared Web Credentials
 
 > Shared web credentials is a programming interface that enables native iOS apps to share credentials with their website counterparts. For example, a user may log in to a website in Safari, entering a user name and password, and save those credentials using the iCloud Keychain. Later, the user may run a native app from the same developer, and instead of the app requiring the user to reenter a user name and password, shared web credentials gives it access to the credentials that were entered earlier in Safari. The user can also create new accounts, update passwords, or delete her account from within the app. These changes are then saved and used by Safari.  
-> <https://developer.apple.com/library/ios/documentation/Security/Reference/SharedWebCredentialsRef/>
+<https://developer.apple.com/library/ios/documentation/Security/Reference/SharedWebCredentialsRef/>
 
 ```objective-c
 UICKeyChainStore *keychain = [UICKeyChainStore keyChainStoreWithServer:[NSURL URLWithString:@"https://kishikawakatsumi.com"]
@@ -349,7 +348,7 @@ if (password) {
 
 #### Generate strong random password
 
-Generate strong random password that is in the same format used by Safari autofill (xxx-xxx-xxx-xxx).
+Generate strong random password that is in the same format used by Safari autofill (xxx-xxx-xxx-xxx).  
 
 ```objective-c
 NSString *password = [UICKeyChainStore generatePassword];
@@ -358,11 +357,11 @@ NSLog(@"%@", password); // => Nhu-GKm-s3n-pMx
 
 #### How to set up Shared Web Credentials
 
-> 1.  Add a com.apple.developer.associated-domains entitlement to your app. This entitlement must include all the domains with which you want to share credentials.
+> 1. Add a com.apple.developer.associated-domains entitlement to your app. This entitlement must include all the domains with which you want to share credentials.
 
-> 2.  Add an apple-app-site-association file to your website. This file must include application identifiers for all the apps with which the site wants to share credentials, and it must be properly signed.
+> 2. Add an apple-app-site-association file to your website. This file must include application identifiers for all the apps with which the site wants to share credentials, and it must be properly signed.
 
-> 3.  When the app is installed, the system downloads and verifies the site association file for each of its associated domains. If the verification is successful, the app is associated with the domain.
+> 3. When the app is installed, the system downloads and verifies the site association file for each of its associated domains. If the verification is successful, the app is associated with the domain.
 
 **More details:**  
 <https://developer.apple.com/library/ios/documentation/Security/Reference/SharedWebCredentialsRef/>
@@ -493,7 +492,6 @@ Or specify the service name.
 ```
 
 ---
-
 Remove items.
 
 ```objective-c
@@ -544,8 +542,8 @@ it, simply add the following line to your Cartfile:
 
 ### To manually add to your project
 
-1.  Add `Security.framework` to your target.
-2.  Copy files in Lib (`UICKeyChainStore.h` and `UICKeyChainStore.m`) to your project.
+1. Add `Security.framework` to your target.
+2. Copy files in Lib (`UICKeyChainStore.h` and `UICKeyChainStore.m`) to your project.
 
 ## Author
 
@@ -553,9 +551,9 @@ kishikawa katsumi, kishikawakatsumi@mac.com
 
 ## License
 
-[apache]: http://www.apache.org/licenses/LICENSE-2.0
-[mit]: http://www.opensource.org/licenses/mit-license.php
-[gpl]: http://www.gnu.org/licenses/gpl.html
-[bsd]: http://opensource.org/licenses/bsd-license.php
+[Apache]: http://www.apache.org/licenses/LICENSE-2.0
+[MIT]: http://www.opensource.org/licenses/mit-license.php
+[GPL]: http://www.gnu.org/licenses/gpl.html
+[BSD]: http://opensource.org/licenses/bsd-license.php
 
 UICKeyChainStore is available under the [MIT license][MIT]. See the LICENSE file for more info.

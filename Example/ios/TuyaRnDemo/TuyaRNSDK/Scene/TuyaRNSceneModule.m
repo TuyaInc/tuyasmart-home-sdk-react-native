@@ -152,6 +152,7 @@ RCT_EXPORT_METHOD(createAutoScene:(NSDictionary *)params resolver:(RCTPromiseRes
       //定时条件
       actionModel.expr = @[item];
       actionModel.extraInfo = @{@"delayTime" : item[@"delayTime"]};
+      [conditionList addObject:actionModel];
     }
 
     // 设备：
@@ -163,6 +164,7 @@ RCT_EXPORT_METHOD(createAutoScene:(NSDictionary *)params resolver:(RCTPromiseRes
       actionModel.entitySubIds = [NSString stringWithFormat:@"%@", item[@"dpId"]];
       
       actionModel.expr = @[@[[NSString stringWithFormat:@"dp%@", item[@"dpId"]],@"==",item[@"rule"]]];
+      [conditionList addObject:actionModel];
     }
     
   }
@@ -337,6 +339,7 @@ RCT_EXPORT_METHOD(modifyAutoScene:(NSDictionary *)params resolver:(RCTPromiseRes
       //定时条件
       actionModel.expr = @[item];
       actionModel.extraInfo = @{@"delayTime" : item[@"delayTime"]};
+      [conditionList addObject:actionModel];
     }
     // 设备：
     else if([item[@"entityType"] integerValue] == 1) {
@@ -347,6 +350,7 @@ RCT_EXPORT_METHOD(modifyAutoScene:(NSDictionary *)params resolver:(RCTPromiseRes
       actionModel.entitySubIds = [NSString stringWithFormat:@"%@", item[@"dpId"]];
       
       actionModel.expr = @[@[[NSString stringWithFormat:@"dp%@", item[@"dpId"]],@"==",item[@"rule"]]];
+      [conditionList addObject:actionModel];
     }
   }
   

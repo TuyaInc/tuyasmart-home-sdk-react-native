@@ -1,1 +1,1 @@
-../../../../TYBluetooth/ios/TYBluetooth.framework/Versions/A/Headers/TYBLECharacteristicFactory.h
+../../../../TYBluetooth/TYBluetooth.framework/Versions/A/Headers/TYBLECharacteristicFactory.h

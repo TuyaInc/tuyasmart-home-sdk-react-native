@@ -1,1 +1,1 @@
-../../../../TYBluetooth/ios/TYBluetooth.framework/Versions/A/Headers/TYDisposable.h
+../../../../TYBluetooth/TYBluetooth.framework/Versions/A/Headers/TYDisposable.h

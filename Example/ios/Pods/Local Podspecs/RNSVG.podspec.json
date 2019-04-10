@@ -16,6 +16,8 @@
     "tvos": "9.2"
   },
   "dependencies": {
-    "React": []
+    "React": [
+
+    ]
   }
 }

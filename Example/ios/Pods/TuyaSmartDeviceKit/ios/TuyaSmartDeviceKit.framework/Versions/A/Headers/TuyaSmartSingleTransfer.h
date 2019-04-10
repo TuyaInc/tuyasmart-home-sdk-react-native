@@ -38,7 +38,7 @@ typedef NS_ENUM(NSUInteger, TuyaSmartTransferState) {
 
 @end
 
-@interface TuyaSmartSingleTransfer : NSObject
+__deprecated_msg("The channel already merged. We will provide new way to support it.") @interface TuyaSmartSingleTransfer : NSObject
 
 @property (nonatomic, weak) id<TuyaSmartTransferDelegate> delegate;
 
@@ -56,8 +56,9 @@ typedef NS_ENUM(NSUInteger, TuyaSmartTransferState) {
 
 /**
  关闭通道
+ ！！！（通道合并的缘故，将不会进行关闭，因为此操作会影响正常的设备订阅流程）
  */
-- (void)close;
+- (void)close __deprecated_msg("will remove it");;
 
 /**
  订阅设备

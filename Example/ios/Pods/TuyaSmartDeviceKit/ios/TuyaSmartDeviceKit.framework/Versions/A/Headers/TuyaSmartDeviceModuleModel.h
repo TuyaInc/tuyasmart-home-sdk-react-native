@@ -64,6 +64,13 @@
 
 @end
 
+@interface TuyaSmartDeviceSubpiecesModel : NSObject
+
+@property (nonatomic, assign) BOOL         isOnline;
+@property (nonatomic, strong) NSString     *verSw;
+
+@end
+
 @interface TuyaSmartDeviceModuleModel : NSObject
 
 @property (nonatomic, strong) TuyaSmartDeviceWifiModel           *wifi;
@@ -72,6 +79,7 @@
 @property (nonatomic, strong) TuyaSmartDeviceGprsModel           *gprs;
 @property (nonatomic, strong) TuyaSmartDeviceZigbeeModel         *zigbee;
 @property (nonatomic, strong) TuyaSmartDeviceInfraredModel       *infrared;
+@property (nonatomic, strong) TuyaSmartDeviceSubpiecesModel      *subpieces;
 
 
 @end
