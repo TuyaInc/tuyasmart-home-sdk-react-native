@@ -24,6 +24,14 @@ class TuyaCoreModule(reactContext: ReactApplicationContext?) : ReactContextBaseJ
         fun initTuyaSDk(appKey:String,appSecret:String,application: Application){
             TuyaHomeSdk.init(application, appKey, appSecret)
         }
+
+        fun initTuyaSDKWithoutOptions(application: Application){
+            TuyaHomeSdk.init(application)
+        }
+
+        fun setSDKDebug(open:Boolean){
+            TuyaHomeSdk.setDebugMode(open)
+        }
     }
 
     override fun getName(): String {

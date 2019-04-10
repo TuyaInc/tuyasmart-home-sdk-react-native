@@ -59,9 +59,8 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.1.7'
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
     implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
-   // implementation(name: 'tuyasmart-2.7.2', ext: 'aar')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.tuya.smart:tuyasmart:2.9.3'
+    implementation 'com.tuya.smart:tuyasmart:3.0.0'
 }
 repositories {
     maven {
