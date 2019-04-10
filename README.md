@@ -25,6 +25,51 @@ See the demo in https://github.com/TuyaInc/tuyasmart-home-sdk-react-native/tree/
 
 Refer to Details: [Tuya Smart Doc: tuyasmart-home-sdk-react-native](https://tuyakae.gitbook.io/tuyasmart-home-sdk-react-native)
 
+
+## How to use - iOS
+ 
+#### 1. Add the dependencies in the Podfile:
+``` ruby
+ platform :ios, '8.0'
+ target 'Your_Project_Name' do
+    pod "TuyaSmartHomeKit"
+    pod 'React', :path => 'path/to/node_modules/react-native/', :subspecs => [
+        'Core',
+        'CxxBridge',
+        'ART',
+        'RCTActionSheet',
+        'RCTAnimation',
+        'RCTGeolocation',
+        'RCTImage',
+        'RCTNetwork',
+        'RCTPushNotification',
+        'RCTSettings',
+        'RCTText',
+        'RCTImage',
+        'RCTVibration',
+        'RCTWebSocket',
+        'RCTLinkingIOS',
+        'DevSupport'
+    ]
+    
+    pod 'yoga', :path => 'path/to/node_modules/react-native/ReactCommon/yoga'
+    pod 'RNSVG', :path => 'path/to/node_modules/react-native-svg'
+    pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
+    pod 'glog', :podspec => 'path/to/node_modules/react-native/third-party-podspecs/glog.podspec'
+    pod 'Folly', :podspec => 'path/to/node_modules/react-native/third-party-podspecs/Folly.podspec'
+    end
+```
+#### 2. Drag the files in [TuyaRNSDK](https://github.com/TuyaInc/tuyasmart-home-sdk-react-native/tree/master/Example/ios/TuyaRnDemo/TuyaRNSDK) to your project.
+#### 3. put the secure image into the root path of your project and configure your AppKey and AppSecret in AppDelegate.m like this(refer to [SDK doc](https://tuyainc.github.io/tuyasmart_home_ios_sdk_doc/zh-hans/resource/Preparation.html)):
+
+``` objective-c
+  [[TuyaSmartSDK sharedInstance] startWithAppKey:@"" secretKey:@""];
+```
+
+
+
+
+
 ## USE AndroidRNSDK
 ###  1. click this `https://github.com/TuyaInc/tuyasmart-home-sdk-react-native/tree/master/Example/android`
 
