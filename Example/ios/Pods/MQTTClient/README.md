@@ -1,4 +1,4 @@
-# MQTT-Client-Framework
+# MQTT-Client-Framework 
 
 [![Build Status](https://travis-ci.org/novastone-media/MQTT-Client-Framework.svg?branch=master)](https://travis-ci.org/novastone-media/MQTT-Client-Framework)
 
@@ -24,8 +24,8 @@ MQTT-Client-Framework is tested with a long list of brokers:
 * CloudMQTT
 * aws
 * hbmqtt (MQTTv311 only, limitations)
-* [aedes](https://github.com/mcollina/aedes)
-* [flespi](https://flespi.com/mqtt-broker)
+* [aedes](https://github.com/mcollina/aedes) 
+* [flespi](https://flespi.com/mqtt-broker) 
 
 ## Usage
 
@@ -37,7 +37,7 @@ Create a new client and connect to a broker:
 MQTTCFSocketTransport *transport = [[MQTTCFSocketTransport alloc] init];
 transport.host = @"test.mosquitto.org";
 transport.port = 1883;
-
+    
 MQTTSession *session = [[MQTTSession alloc] init];
 session.transport = transport;
 [session connectWithConnectHandler:^(NSError *error) {
@@ -55,6 +55,7 @@ Subscribe to a topic:
         NSLog(@"Subscription sucessfull! Granted Qos: %@", gQoss);
     }
  }];
+
 ```
 
 In your `MQTTSession` delegate, add the following to receive messages for the subscribed topics:
@@ -74,14 +75,13 @@ Publish a message to a topic:
 
 ## Installation
 
-### CocoaPods
+### CocoaPods 
 
 Add this to your Podfile:
 
 ```
 pod 'MQTTClient'
 ```
-
 which is a short for:
 
 ```
@@ -117,17 +117,17 @@ github "novastone-media/MQTT-Client-Framework"
 
 #### Git submodule
 
-1.  Add MQTT-Client-Framework as a git submodule into your top-level project directory or simply copy whole folder
-2.  Find MQTTClient.xcodeproj and drag it into the file navigator of your app project.
-3.  In Xcode, navigate to the target configuration window by clicking on the blue project icon, and selecting the application target under the "Targets" heading in the sidebar.
-4.  Under "General" panel go to "Linked Frameworks and Libraries" and add MQTTClient.framework
+1. Add MQTT-Client-Framework as a git submodule into your top-level project directory or simply copy whole folder
+2. Find MQTTClient.xcodeproj and drag it into the file navigator of your app project.
+3. In Xcode, navigate to the target configuration window by clicking on the blue project icon, and selecting the application target under the "Targets" heading in the sidebar.
+4. Under "General" panel go to "Linked Frameworks and Libraries" and add MQTTClient.framework
 
 #### Framework
 
-1.  Download MQTT-Client-Framework
-2.  Build it and you should find MQTTClient.framework under "Products" group.
-3.  Right click on it and select "Show in Finder" option.
-4.  Just drag and drop MQTTClient.framework to your project
+1. Download MQTT-Client-Framework
+2. Build it and you should find MQTTClient.framework under "Products" group.
+3. Right click on it and select "Show in Finder" option.
+4. Just drag and drop MQTTClient.framework to your project
 
 ## Thanks
 

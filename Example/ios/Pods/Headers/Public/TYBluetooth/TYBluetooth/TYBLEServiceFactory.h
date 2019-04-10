@@ -1,1 +1,1 @@
-../../../../TYBluetooth/ios/TYBluetooth.framework/Versions/A/Headers/TYBLEServiceFactory.h
+../../../../TYBluetooth/TYBluetooth.framework/Versions/A/Headers/TYBLEServiceFactory.h

@@ -9,11 +9,18 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-
+#import <TuyaSmartHomeKit/TuyaSmartKit.h>
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  
+#ifdef DEBUG
+  [[TuyaSmartSDK sharedInstance] setDebugMode:YES];
+#endif
+
+  [[TuyaSmartSDK sharedInstance] startWithAppKey:@"AppKey" secretKey:@"AppSecret"];
+  
   NSURL *jsCodeLocation;
 
 //  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];

@@ -6,11 +6,6 @@ source 'https://github.com/CocoaPods/Specs.git'  # 官方库
 target 'TuyaRnDemo' do
 
   pod 'TuyaSmartHomeKit'
-  pod 'TuyaSmartTimerKit'
-  pod 'TuyaSmartDeviceKit'
-  pod 'TuyaSmartFeedbackKit'
-  pod 'TuyaSmartSceneKit'
-  pod 'TuyaSmartMessageKit'
 
   pod 'React', :path => '../node_modules/react-native/', :subspecs => [
     'Core',
