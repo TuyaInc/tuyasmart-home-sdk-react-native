@@ -115,7 +115,7 @@ RCT_EXPORT_METHOD(queryShareReceivedUserList:(RCTPromiseResolveBlock)resolver re
 RCT_EXPORT_METHOD(queryDevShareUserList:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
   self.deviceShare = deviceShare;
-  [deviceShare getDeviceShareMemberListWithDevId:@"dev_id" success:^(NSArray<TuyaSmartShareMemberModel *> *list) {
+  [deviceShare getDeviceShareMemberListWithDevId:params[@"devId"] success:^(NSArray<TuyaSmartShareMemberModel *> *list) {
     NSMutableArray *res = [NSMutableArray array];
     for (TuyaSmartShareMemberModel *item in list) {
       NSDictionary *dic = [item yy_modelToJSONObject];
