@@ -1,6 +1,7 @@
 package com.tuya.smart.rnsdk.home
 
 import com.facebook.react.bridge.*
+import com.tuya.smart.android.common.utils.L
 import com.tuya.smart.home.sdk.TuyaHomeSdk
 import com.tuya.smart.home.sdk.api.ITuyaHome
 import com.tuya.smart.home.sdk.api.ITuyaHomeStatusListener
@@ -10,7 +11,7 @@ import com.tuya.smart.home.sdk.callback.ITuyaGetRoomListCallback
 import com.tuya.smart.home.sdk.callback.ITuyaHomeResultCallback
 import com.tuya.smart.home.sdk.callback.ITuyaResultCallback
 import com.tuya.smart.home.sdk.callback.ITuyaRoomResultCallback
-import com.tuya.smart.rnsdk.utils.BridgeUtils
+import com.tuya.smart.rnsdk.utils.*
 import com.tuya.smart.rnsdk.utils.Constant.DEVIDLIST
 import com.tuya.smart.rnsdk.utils.Constant.GEONAME
 import com.tuya.smart.rnsdk.utils.Constant.HOMEID
@@ -21,9 +22,6 @@ import com.tuya.smart.rnsdk.utils.Constant.NAME
 import com.tuya.smart.rnsdk.utils.Constant.PRODUCTID
 import com.tuya.smart.rnsdk.utils.Constant.ROOMID
 import com.tuya.smart.rnsdk.utils.Constant.getIResultCallback
-import com.tuya.smart.rnsdk.utils.JsonUtils
-import com.tuya.smart.rnsdk.utils.ReactParamsCheck
-import com.tuya.smart.rnsdk.utils.TuyaReactUtils
 import com.tuya.smart.sdk.bean.GroupDeviceBean
 
 
@@ -245,7 +243,7 @@ class TuyaHomeModule(reactContext: ReactApplicationContext?) : ReactContextBaseJ
     fun getITuyaHomeResultCallback(promise: Promise): ITuyaHomeResultCallback? {
         return object : ITuyaHomeResultCallback {
             override fun onSuccess(p0: HomeBean?) {
-                promise.resolve(TuyaReactUtils.parseToWritableMap(p0))
+                promise.resolve(TYCommonUtls.parseToWritableMap(p0))
             }
 
             override fun onError(code: String?, error: String?) {
