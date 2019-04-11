@@ -24,7 +24,7 @@ import com.tuya.smart.sdk.api.ITuyaDevice
 
 class TuyaDeviceModule(reactContext: ReactApplicationContext?) : ReactContextBaseJavaModule(reactContext) {
 
-    var device : ITuyaDevice? = null
+    var device: ITuyaDevice? = null
 
     override fun getName(): String {
         return "TuyaDeviceModule"
@@ -34,6 +34,13 @@ class TuyaDeviceModule(reactContext: ReactApplicationContext?) : ReactContextBas
     fun getDevice(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(DEVID), params)) {
             promise.resolve(TuyaReactUtils.parseToWritableMap(getDevice(params.getString(DEVID))))
+        }
+    }
+
+    @ReactMethod
+    fun getDeviceData(params: ReadableMap, promise: Promise) {
+        if (ReactParamsCheck.checkParams(arrayOf(DEVID), params)) {
+            promise.resolve(TuyaReactUtils.parseToWritableMap(TuyaHomeSdk.getDataInstance().getDeviceBean(params.getString(DEVID))))
         }
     }
 
@@ -93,7 +100,7 @@ class TuyaDeviceModule(reactContext: ReactApplicationContext?) : ReactContextBas
     @ReactMethod
     fun unRegisterDevListener(params: ReadableMap) {
         if (ReactParamsCheck.checkParams(arrayOf(DEVID), params)) {
-            if(device !=null){
+            if (device != null) {
                 device!!.unRegisterDevListener()
             }
         }

@@ -51,6 +51,9 @@ const TuyaDeviceApi = {
   removeDevice(params) {
     return DeviceNativeApi.removeDevice(params);
   },
+  getDeviceData(params){
+    return DeviceNativeApi.getDeviceData(params);
+  }
 };
 
 module.exports = TuyaDeviceApi;
