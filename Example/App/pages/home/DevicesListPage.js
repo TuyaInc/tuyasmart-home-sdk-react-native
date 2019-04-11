@@ -67,7 +67,7 @@ class DevicesListPage extends Component {
               TuyaHomeManagerApi.registerTuyaHomeChangeListener(
                 { homeId: this.state.homeId },
                 (data) => {
-                  console.log('----->onHomeAdded');
+                  console.log('----->onHomeAdded',data);
                 },
                 (data) => {
                   console.log('----->onHomeRemoved');

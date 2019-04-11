@@ -34,8 +34,8 @@ object BridgeUtils {
         TuyaReactUtils.sendEvent(context, bindEventname(HOMESTATUS, devId), map)
     }
 
-    fun homeChange(context: ReactContext, map: WritableMap, homeId: String){
-        TuyaReactUtils.sendEvent(context, bindEventname(HOMECHANGE, homeId), map)
+    fun homeChange(context: ReactContext, map: WritableMap, homeId: Double){
+        TuyaReactUtils.sendEvent(context, HOMECHANGE, map)
     }
 
     private fun bindEventname(key: String, id: Any): String {
