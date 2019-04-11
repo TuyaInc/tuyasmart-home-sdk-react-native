@@ -61,48 +61,48 @@ class TuyaHomeManagerModule(reactContext: ReactApplicationContext?) : ReactConte
                 val map = Arguments.createMap()
                 map.putDouble("homeId", p0.toDouble())
                 map.putString("homeName", p1)
-                BridgeUtils.homeChange(reactApplicationContext, map, params.getString("homeId"))
+                BridgeUtils.homeChange(reactApplicationContext, map, params.getDouble("homeId"))
             }
 
             override fun onHomeAdded(var1: Long) {
                 val map = Arguments.createMap()
                 map.putDouble("homeId", var1.toDouble())
                 map.putString("type", "onHomeAdded");
-                BridgeUtils.homeChange(reactApplicationContext, map, params.getString("homeId"))
+                BridgeUtils.homeChange(reactApplicationContext, map, params.getDouble("homeId"))
             }
 
             override fun onHomeRemoved(var1: Long) {
                 val map = Arguments.createMap()
                 map.putDouble("homeId", var1.toDouble())
                 map.putString("type", "onHomeRemoved");
-                BridgeUtils.homeChange(reactApplicationContext, map, params.getString("homeId"))
+                BridgeUtils.homeChange(reactApplicationContext, map, params.getDouble("homeId"))
             }
 
             override fun onHomeInfoChanged(var1: Long) {
                 val map = Arguments.createMap()
                 map.putDouble("homeId", var1.toDouble())
                 map.putString("type", "onHomeInfoChanged");
-                BridgeUtils.homeChange(reactApplicationContext, map, params.getString("homeId"))
+                BridgeUtils.homeChange(reactApplicationContext, map, params.getDouble("homeId"))
             }
 
             override fun onSharedDeviceList(var1: List<DeviceBean>) {
                 val map = Arguments.createMap()
                 map.putArray("deviceBeans", TuyaReactUtils.parseToWritableArray(JsonUtils.toJsonArray(var1)))
                 map.putString("type", "onSharedDeviceList");
-                BridgeUtils.homeChange(reactApplicationContext, map, params.getString("homeId"))
+                BridgeUtils.homeChange(reactApplicationContext, map, params.getDouble("homeId"))
             }
 
             override fun onSharedGroupList(var1: List<GroupBean>) {
                 val map = Arguments.createMap()
                 map.putArray("groupBeans", TuyaReactUtils.parseToWritableArray(JsonUtils.toJsonArray(var1)))
                 map.putString("type", "onSharedGroupList");
-                BridgeUtils.homeChange(reactApplicationContext, map, params.getString("homeId"))
+                BridgeUtils.homeChange(reactApplicationContext, map, params.getDouble("homeId"))
             }
 
             override fun onServerConnectSuccess() {
                 val map = Arguments.createMap()
                 map.putString("type", "onServerConnectSuccess");
-                BridgeUtils.homeChange(reactApplicationContext, map, params.getDouble("homeId").toString())
+                BridgeUtils.homeChange(reactApplicationContext, map, params.getDouble("homeId"))
             }
         })
     }
