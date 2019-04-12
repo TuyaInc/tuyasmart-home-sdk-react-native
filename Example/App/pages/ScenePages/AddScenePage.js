@@ -11,6 +11,7 @@ import {
   FlatList,
   SwipeableFlatList,
 } from 'react-native';
+import { connect } from 'react-redux'
 import NavigationBar from '../../common/NavigationBar';
 import ButtonX from '../../standard/components/buttonX';
 import { resetAction } from '../../navigations/AppNavigator';
@@ -30,7 +31,7 @@ const Res = {
   trash: require('../../res/images/trash.png'),
 };
 
-export default class AddScenePage extends Component {
+class AddScenePage extends Component {
   constructor(props) {
     super(props);
 
@@ -47,6 +48,7 @@ export default class AddScenePage extends Component {
       isEdit: params.isEdit, // 是否从已有的点击去编辑
       item: params.item,
       sceneId: params.item.id,
+      homeId:this.props.homeId
     };
   }
 
@@ -140,7 +142,7 @@ export default class AddScenePage extends Component {
             console.log('---->scenId', this.state.sceneId);
             // 编辑调用modify
             TuyaSceneApi.modifyScene({
-              homeId: 2040920,
+              homeId: this.state.homeId,
               sceneId: this.state.sceneId,
               name: this.state.name,
               stickyOnTop: false,
@@ -167,7 +169,7 @@ export default class AddScenePage extends Component {
               console.log('----->devIds', devLists);
               console.log('------->tasks', ActionLists);
               TuyaSceneApi.createScene({
-                homeId: 2040920,
+                homeId: this.state.homeId,
                 name: this.state.name,
                 stickyOnTop: false,
                 devIds: devLists,
@@ -499,3 +501,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
 });
+export default connect((state) => ({
+  homeId:state.reducers.homeId,
+}))(AddScenePage)

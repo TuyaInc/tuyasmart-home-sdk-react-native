@@ -7,14 +7,15 @@ import TuyaHomeManagerApi from '../api/TuyaHomeManagerApi';
 import TuyaSceneApi from '../api/TuyaSceneApi';
 import DeviceStorage from '../utils/DeviceStorage';
 import TuyaTimerApi from '../api/TuyaTimerApi';
+import { connect } from 'react-redux'
 
 const { height, width } = Dimensions.get('window');
-export default class TestScenePage extends Component {
+class TestScenePage extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      homeId: '',
+      homeId: this.props.homeId,
       HomeList: [],
       ActionLists: [],
       ConditionList: [],
@@ -69,7 +70,7 @@ export default class TestScenePage extends Component {
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
-            // TuyaSceneApi.getTaskDevList({ homeId: 2040920 })
+            // TuyaSceneApi.getTaskDevList({ homeId: this.state.homeId })
             //   .then(data => {
             //     console.log("getTaskDevList--------",data)
             //   })
@@ -112,7 +113,7 @@ export default class TestScenePage extends Component {
               .catch((err) => {
                 console.log('--enableScene', err);
               });
-            // TuyaSceneApi.sortSceneList({homeId:2040920,sceneIds:arr}).then(data=>{
+            // TuyaSceneApi.sortSceneList({homeId:this.state.homeId,sceneIds:arr}).then(data=>{
             //   console.log("--sortSceneList",data)
             // }).catch(err=>{
             //   console.log("--enableScene",err)
@@ -175,7 +176,7 @@ export default class TestScenePage extends Component {
             //   entityType: 6, // 创建天气类型需要 3，设备传1,定时传6
             // });
             // TuyaSceneApi.createAutoScene({
-            //   homeId: 2040920,
+            //   homeId: this.state.homeId,
             //   name: '测试1111',
             //   stickyOnTop: false,
             //   devIds: devLists,
@@ -192,7 +193,7 @@ export default class TestScenePage extends Component {
             //   });
             TuyaSceneApi.modifyAutoScene({
               sceneId: 'fYHWTKU88pmWlaSw',
-              homeId: 2040920,
+              homeId: this.state.homeId,
               name: '我再改一次',
               stickyOnTop: false,
               devIds: devLists,
@@ -275,3 +276,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
 });
+export default connect((state) => ({
+  homeId:state.reducers.homeId,
+}))(TestScenePage)

@@ -20,23 +20,26 @@ import DeviceStorage from '../../utils/DeviceStorage';
 import TextButton from '../../component/TextButton';
 import ViewUtils from '../../utils/ViewUtils';
 import Strings from '../../i18n';
+import { connect } from 'react-redux'
 
 const { height, width } = Dimensions.get('window');
 const Res = {
   setting: require('../../res/images/scene_settings.png'),
 };
 
-export default class DeleteScenePage extends Component {
+class DeleteScenePage extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       sceneList: [],
+      homeId:this.props.homeId,
     };
   }
 
   componentDidMount() {
-    TuyaSceneApi.getSceneList({ homeId: 2040920 })
+    console.log("---->this.state.homeId",this.state.homeId)
+    TuyaSceneApi.getSceneList({ homeId: this.state.homeId })
       .then((data) => {
         console.log('-getSceneList--->', data);
         this.setState({
@@ -187,3 +190,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
 });
+export default connect((state) => ({
+  homeId:state.reducers.homeId,
+}))(DeleteScenePage)

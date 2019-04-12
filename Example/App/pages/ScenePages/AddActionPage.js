@@ -18,6 +18,7 @@ import DeviceStorage from '../../utils/DeviceStorage';
 import TextButton from '../../component/TextButton';
 import ViewUtils from '../../utils/ViewUtils';
 import TuyaSceneApi from '../../api/TuyaSceneApi';
+import { connect } from 'react-redux'
 
 const { height, width } = Dimensions.get('window');
 const Res = {
@@ -26,7 +27,7 @@ const Res = {
   plug: require('../../res/images/plug.png'),
 };
 
-export default class AddActionPage extends Component {
+class AddActionPage extends Component {
   constructor(props) {
     super(props);
 
@@ -35,11 +36,13 @@ export default class AddActionPage extends Component {
       onTop: true,
       DevicesLists: [],
       isFromScene: params.isFromScene,
+      homeId:this.props.homeId,
     };
   }
 
   componentDidMount() {
-    TuyaSceneApi.getConditionDevList({ homeId: 2040920 })
+    console.log("---->AddActionPage homeId",this.state.homeId);
+    TuyaSceneApi.getConditionDevList({ homeId: this.state.homeId })
       .then((data) => {
         console.log('--->getConditionDevList', data);
         this.setState({
@@ -121,3 +124,6 @@ export default class AddActionPage extends Component {
     );
   }
 }
+export default connect((state) => ({
+  homeId:state.reducers.homeId,
+}))(AddActionPage)

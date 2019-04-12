@@ -13,6 +13,7 @@ import {
   DeviceEventEmitter,
   Modal,
 } from 'react-native';
+import { connect } from 'react-redux'
 import NavigationBar from '../../common/NavigationBar';
 import ButtonX from '../../standard/components/buttonX';
 import TuyaSceneApi from '../../api/TuyaSceneApi';
@@ -22,15 +23,16 @@ const { height, width } = Dimensions.get('window');
 const Res = {
   arrow_down: require('../../res/images/arrow_down.png'),
 };
-export default class ScenePage extends Component {
+class ScenePage extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       isSceneListShow: false,
       isAutoListShow: false,
       sceneList: [],
       conditionList: [],
-      homeId: '',
+      homeId: this.props.homeId,
       isDialogShow: false,
       dialogText: '',
       dialogActions: [],
@@ -38,13 +40,13 @@ export default class ScenePage extends Component {
   }
 
   componentDidMount() {
-    console.log('--->', this.state.homeId.length);
+    console.log('--->', this.state.homeId);
 
     this.setHomeIdListener = DeviceEventEmitter.addListener('setHomeId', (value) => {
       console.warn('--->value', value);
     });
 
-    TuyaSceneApi.getSceneList({ homeId: 2040920 })
+    TuyaSceneApi.getSceneList({ homeId: this.state.homeId })
       .then((data) => {
         console.log('-getSceneList--->', data);
         const SceneList = new Array();
@@ -452,3 +454,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+export default connect((state) => ({
+  homeId:state.reducers.homeId,
+}))(ScenePage)
