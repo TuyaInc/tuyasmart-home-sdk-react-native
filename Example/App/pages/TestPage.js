@@ -4,13 +4,14 @@ import {
 } from 'react-native';
 import TuyaShareApi from '../api/TuyaShareApi';
 import TuyaHomeManagerApi from '../api/TuyaHomeManagerApi';
+import { connect } from 'react-redux'
 
-export default class TestPage extends Component {
+class TestPage extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      homeId: '',
+      homeId: this.props.homeId,
       HomeList: [],
     };
   }
@@ -21,7 +22,7 @@ export default class TestPage extends Component {
       return true;
     });
 
-    // 2040920
+    // 
     // TuyaHomeManagerApi.queryHomeList()
     //   .then(data => {
     //     console.log('Test--->queryHomeList', data);
@@ -36,7 +37,7 @@ export default class TestPage extends Component {
     //     console.warn('--->err', err);
     //   });
 
-    TuyaShareApi.queryUserShareList({ homeId: 2040920 })
+    TuyaShareApi.queryUserShareList({ homeId: this.state.homeId })
       .then((data) => {
         console.log('queryUserShareList---->', data);
       })
@@ -133,3 +134,6 @@ const styles = StyleSheet.create({
     width: 22,
   },
 });
+export default connect((state) => ({
+  homeId:state.reducers.homeId,
+}))(TestPage)

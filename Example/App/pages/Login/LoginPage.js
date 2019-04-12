@@ -12,6 +12,7 @@ import TextButton from '../../component/TextButton';
 import TuyaUserApi from '../../api/TuyaUserApi';
 import DeviceStorage from '../../utils/DeviceStorage';
 import { resetAction } from '../../navigations/AppNavigator';
+import EditDialog from '../../component/EditDialog'
 
 const { height, width } = Dimensions.get('window');
 
@@ -26,6 +27,7 @@ export default class LoginPage extends Component {
       canreigstr: true,
       useName: '',
       cityCode: '86',
+      editVisible:false,
     };
   }
 
@@ -99,7 +101,12 @@ export default class LoginPage extends Component {
         >
           登陆
         </Text>
-        <ButtonX style={{ height: 40, marginTop: 30 }}>
+        <ButtonX style={{ height: 40, marginTop: 30 }} onPress={()=>{
+            this.setState({
+              editVisible:true
+            })
+          }
+        }>
           <View
             style={{
               flexDirection: 'row',
@@ -158,6 +165,25 @@ export default class LoginPage extends Component {
           fadeOutDuration={1000}
           opacity={0.8}
           textStyle={{ color: 'white' }}
+        />
+          <EditDialog
+          title="更改区号"
+          visible={this.state.editVisible}
+          textValue={(value) => {
+            this.setState({
+              cityCode: value,
+            });
+          }}
+          save={() => {
+            this.setState({
+              editVisible: false,
+            });
+          }}
+          cancel={() => {
+            this.setState({
+              editVisible: false,
+            });
+          }}
         />
       </View>
     );

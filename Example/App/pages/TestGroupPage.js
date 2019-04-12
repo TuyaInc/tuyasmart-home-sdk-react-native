@@ -6,13 +6,14 @@ import TuyaShareApi from '../api/TuyaShareApi';
 import TuyaHomeManagerApi from '../api/TuyaHomeManagerApi';
 import TuyaSceneApi from '../api/TuyaSceneApi';
 import TuyaGroupApi from '../api/TuyaGroupApi';
+import { connect } from 'react-redux'
 
-export default class TestPage extends Component {
+class TestGroupPage extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      homeId: '',
+      homeId: this.props.homeId,
       HomeList: [],
     };
   }
@@ -86,3 +87,6 @@ const styles = StyleSheet.create({
     width: 22,
   },
 });
+export default connect((state) => ({
+  homeId:state.reducers.homeId,
+}))(TestGroupPage)

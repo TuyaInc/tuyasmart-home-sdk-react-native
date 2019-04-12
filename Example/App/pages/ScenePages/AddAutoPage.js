@@ -20,6 +20,7 @@ import TextButton from '../../component/TextButton';
 import Strings from '../../i18n';
 import TuyaSceneApi from '../../api/TuyaSceneApi';
 import EditDialog from '../../component/EditDialog';
+import { connect } from 'react-redux'
 
 const { height, width } = Dimensions.get('window');
 const Res = {
@@ -31,8 +32,7 @@ const Res = {
   humidity: require('../../res/images/humidity.png'),
   sunsetrise: require('../../res/images/sunsetrise.png'),
 };
-
-export default class AddAutoPage extends Component {
+class AddAutoPage extends Component {
   constructor(props) {
     super(props);
 
@@ -43,10 +43,12 @@ export default class AddAutoPage extends Component {
       nameValue: '',
       name: '编辑名称',
       ConditionList: [],
+      homeId:this.props.homeId
     };
   }
 
   componentWillMount() {
+    console.log("----->AddAutoPage",this.state.homeId)
     DeviceStorage.get('Action')
       .then((data) => {
         this.setState({
@@ -109,7 +111,7 @@ export default class AddAutoPage extends Component {
               devLists.push(ActionLists[i].devId);
             }
             TuyaSceneApi.createAutoScene({
-              homeId: 2040920,
+              homeId: this.state.homeId,
               name: this.state.name,
               stickyOnTop: false,
               devIds: devLists,
@@ -517,3 +519,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
 });
+export default connect((state) => ({
+  homeId:state.reducers.homeId,
+}))(AddAutoPage)
