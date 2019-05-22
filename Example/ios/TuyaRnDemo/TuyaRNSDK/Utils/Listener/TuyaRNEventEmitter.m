@@ -58,6 +58,10 @@ RCT_EXPORT_MODULE()
   return self;
 }
 
++ (BOOL)requiresMainQueueSetup {
+  return YES;
+}
+
 - (void)deviceInfoNotification:(NSNotification *)notification {
   NSDictionary *body = notification.object;
   [self sendEventWithName:notification.name body:body];
