@@ -25,6 +25,8 @@
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 
+@property (nonatomic, strong) TuyaSmartRequest *request;
+
 @end
 
 
@@ -68,6 +70,7 @@ RCT_REMAP_METHOD(apiRequest,
   NSString *version       = [parameters objectForKey:@"version"];
   
   TuyaSmartRequest *request = [TuyaSmartRequest new];
+  self.request = request;
   
   [request requestWithApiName:apiName postData:postData version:version success:^(id result) {
     if ([result isKindOfClass:[NSDictionary class]] || [result isKindOfClass:[NSArray class]]) {
