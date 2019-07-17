@@ -73,7 +73,6 @@ Refer to Details: [Tuya Smart Doc: tuyasmart-home-sdk-react-native](https://tuya
 ## USE AndroidRNSDK
 ###  1. click this `https://github.com/TuyaInc/tuyasmart-home-sdk-react-native/tree/master/Example/android`
 
-![cmd-markdown1](pic/android1.png)
 
 Put this module into your own android （just copy code）
 

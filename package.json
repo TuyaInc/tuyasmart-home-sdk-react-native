@@ -1,48 +1,37 @@
 {
-  "name": "tuyasmart-home-sdk",
-  "version": "1.0.3",
-  "description": "Build TuyaSmart App by React Native",
-  "main": "index.js",
-  "scripts": {},
-  "keywords": ["react-native", "tuyasmart", "iot", "tuya"],
-  "author": "Tuya Inc.",
-  "license": "MIT",
-  "files": ["index.js", "lib", "android", "ios"],
-  "peerDependencies": {
-    "react-native": "^0.57.4"
+  "name": "TuyaRnDemo",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "react": "16.6.0-alpha.8af6728",
+    "react-native": "0.59.0",
+    "react-native-easy-toast": "^1.1.0",
+    "react-native-gesture-handler": "^1.0.8",
+    "react-native-scrollable-tab-view": "^0.8.0",
+    "react-native-svg": "^8.0.8",
+    "react-native-tab-navigator": "^0.3.4",
+    "react-native-wheel-picker": "^1.2.0",
+    "react-navigation": "2.11.2",
+    "react-navigation-redux-helpers": "^2.0.8",
+    "react-redux": "^5.1.0",
+    "redux": "^4.0.1",
+    "redux-actions": "^2.6.3",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
+    "tuya-react-sdk":"git+https://linqw@tuya.com:13586190871@registry.code.tuya-inc.top/linqw/tuya-react-sdk",
+    "rxjs": "^6.3.3"
   },
   "devDependencies": {
-    "@commitlint/cli": "^7.2.1",
-    "@commitlint/config-conventional": "^7.1.2",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.11.1",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-react": "^7.11.1",
-    "husky": "^1.2.1",
-    "lint-staged": "^8.1.0",
-    "prettier": "1.15.3"
+    "babel-jest": "23.6.0",
+    "jest": "^23.6.0",
+    "metro-react-native-babel-preset": "0.48.3",
+    "react-test-renderer": "16.6.0-alpha.8af6728"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "lint-staged": {
-    "*.js": ["eslint --fix", "git add"],
-    "*.{js,json,css,md}": ["prettier --write", "git add"]
-  },
-  "directories": {
-    "doc": "docs"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TuyaInc/tuyasmart-home-sdk-react-native.git"
-  },
-  "bugs": {
-    "url": "https://github.com/TuyaInc/tuyasmart-home-sdk-react-native/issues"
-  },
-  "homepage": "https://github.com/TuyaInc/tuyasmart-home-sdk-react-native#readme"
+  "jest": {
+    "preset": "react-native"
+  }
 }
