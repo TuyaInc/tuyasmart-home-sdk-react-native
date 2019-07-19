@@ -1,30 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  View, StyleSheet, Text, Image, ImageBackground, TextInput, TouchableOpacity, Dimensions,
+  View, StyleSheet, Text, Image, TextInput, TouchableOpacity, Dimensions,
 } from 'react-native';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import {TuyaUserApi} from '../../../sdk'
+
 import NavigationBar from '../../common/NavigationBar';
-import ButtonX from '../../standard/components/buttonX';
 import CheckUtils from '../../utils/CheckUtils';
 import CountDownButton from '../../component/CountDownButton';
 import Strings from '../../i18n';
 import TextButton from '../../component/TextButton';
-import TuyaUserApi from '../../api/TuyaUserApi';
 import DeviceStorage from '../../utils/DeviceStorage';
 import { resetAction } from '../../navigations/AppNavigator';
+import BaseComponent from '../../component/BaseComponet'
+import { userName, password, countryCode } from '../../constant'
+const {  width } = Dimensions.get('window');
 
-const { height, width } = Dimensions.get('window');
-
-export default class RegisterPage extends Component {
+export default class RegisterPage extends BaseComponent {
   constructor(props) {
     super(props);
-
     this.state = {
       codettile: Strings.Verification_code,
       ValidateCode: '',
-      password: '',
-      canreigstr: true,
-      useName: '',
     };
   }
 
@@ -44,89 +40,78 @@ export default class RegisterPage extends Component {
   }
 
   _requestAPI(shouldStartCounting) {
-    if (CheckUtils.registerIsEmail(this.state.useName)) {
+    if (CheckUtils.registerIsEmail(userName)) {
       TuyaUserApi.getRegisterEmailValidateCode({
-        countryCode: '86',
-        email: `${this.state.useName}`,
+        countryCode,
+        email: userName,
       })
-        .then((data) => {
+        .then(() => {
           const requestSucc = true;
           shouldStartCounting && shouldStartCounting(requestSucc);
         })
         .catch((error) => {
           const requestSucc = true;
           shouldStartCounting && shouldStartCounting(requestSucc);
-          this.refs.toast.show(error.toString().slice(7));
+          this.showToast(error.toString())
         });
     } else {
       TuyaUserApi.getValidateCode({
-        countryCode: '86',
-        phoneNumber: `${this.state.useName}`,
+        countryCode,
+        phoneNumber: userName,
       })
-        .then((data) => {
+        .then(() => {
           const requestSucc = true;
           shouldStartCounting && shouldStartCounting(requestSucc);
         })
         .catch((error) => {
           const requestSucc = true;
           shouldStartCounting && shouldStartCounting(requestSucc);
-          this.refs.toast.show(error.toString().slice(7));
+          this.showToast(error.toString())
         });
     }
   }
 
   _registerBtn() {
-    if (CheckUtils.registerIsEmail(this.state.useName)) {
-      if (CheckUtils.isVaValidateCode(this.state.ValidateCode) && CheckUtils.isPassWord(this.state.password)) {
+    if (CheckUtils.registerIsEmail(userName)) {
+      if (CheckUtils.isVaValidateCode(this.state.ValidateCode) && CheckUtils.isPassWord(password)) {
         // email
         TuyaUserApi.registerAccountWithEmail({
-          countryCode: '86',
-          email: this.state.useName,
+          countryCode,
+          email: userName,
           code: this.state.ValidateCode,
-          password: this.state.password,
+          password,
         })
-          .then((data) => {
+          .then(() => {
             // 跳转到创建家庭
-            DeviceStorage.saveUserInfo(this.state.useName, this.state.password, '86');
+            DeviceStorage.saveUserInfo(userName, password, countryCode);
             this.props.navigation.dispatch(resetAction('CreateHomePage'));
           })
           .catch((error) => {
-            if (error.code == '1506' || error.code == 'IS_EXISTS') {
-              this.setState({
-                canreigstr: false,
-              });
-            }
-            this.refs.toast.show(error.toString().slice(7));
+            this.showToast(error.toString())
           });
       } else {
-        this.refs.toast.show('验证码或密码输入有误');
+        this.showToast('Error in validation code or password input')
       }
-    } else if (CheckUtils.isVaValidateCode(this.state.ValidateCode) && CheckUtils.isPassWord(this.state.password)) {
+    } else if (CheckUtils.isVaValidateCode(this.state.ValidateCode) && CheckUtils.isPassWord(password)) {
       TuyaUserApi.registerWithPhone({
-        countryCode: '86',
-        phoneNumber: this.state.useName,
+        countryCode,
+        phoneNumber: userName,
         validateCode: this.state.ValidateCode,
-        password: this.state.password,
+        password,
       })
-        .then((data) => {
-          // 跳转到创建家庭
-          DeviceStorage.saveUserInfo(this.state.useName, this.state.password, '86');
+        .then(() => {
+          DeviceStorage.saveUserInfo(userName, password, countryCode);
           this.props.navigation.dispatch(resetAction('CreateHomePage'));
         })
         .catch((error) => {
-          if (error.code == '1506' || error.code == 'IS_EXISTS') {
-            this.setState({
-              canreigstr: false,
-            });
-          }
-          this.refs.toast.show(error.toString().slice(7));
+          this.showToast(error.toString())
         });
     } else {
-      this.refs.toast.show('验证码或密码输入有误');
+      this.showToast('Error in validation code or password input')
     }
   }
 
-  render() {
+  renderContent() {
     return (
       <View style={styles.container}>
         <NavigationBar style={{ backgroundColor: '#FFFFFF' }} leftButton={this.renderLeftButton()} />
@@ -139,50 +124,10 @@ export default class RegisterPage extends Component {
             marginLeft: 30,
           }}
         >
-          注册
+          Register
         </Text>
-        <ButtonX style={{ height: 40, marginTop: 30 }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              borderBottomWidth: 1,
-              borderColor: '#E6E6E6',
-              paddingBottom: 10,
-              marginLeft: 30,
-              marginRight: 30,
-              width: width * 0.85,
-            }}
-          >
-            <Text>中国+86</Text>
-            <Image source={require('../../res/images/Arrow_right.png')} />
-          </View>
-        </ButtonX>
-        <TextInput
-          onChangeText={(value) => {
-            this.setState({
-              useName: value,
-            });
-          }}
-          placeholder={Strings.phoneNumberOrEmaill}
-          placeholderTextColor="#C3C3C9"
-          style={styles.textInputStyle}
-          multiline={false}
-          underlineColorAndroid="transparent"
-        />
-        <TextInput
-          onChangeText={(value) => {
-            this.setState({
-              password: value,
-            });
-          }}
-          placeholder={Strings.Password}
-          placeholderTextColor="#C3C3C9"
-          style={styles.textInputStyle}
-          multiline={false}
-          underlineColorAndroid="transparent"
-        />
+        <Text style={styles.textStyle}>{'Account: '}{userName}</Text>
+        <Text style={styles.textStyle}>{'Passwrod: '}{password}</Text>
         <View style={styles.rowViewStyle}>
           <TextInput
             style={styles.textInputStyle2}
@@ -202,7 +147,7 @@ export default class RegisterPage extends Component {
               });
             }}
             timerTitle={this.state.codettile}
-            enable={this.state.canreigstr && this.state.codettile == Strings.Verification_code}
+            enable={this.state.codettile == Strings.Verification_code}
             onClick={(shouldStartCounting) => {
               this._requestAPI(shouldStartCounting);
             }}
@@ -220,17 +165,7 @@ export default class RegisterPage extends Component {
             this._registerBtn();
           }}
           disabled={false}
-          title="注册"
-        />
-        <Toast
-          ref="toast"
-          style={{ backgroundColor: '#7DB428' }}
-          position="top"
-          positionValue={200}
-          fadeInDuration={750}
-          fadeOutDuration={1000}
-          opacity={0.8}
-          textStyle={{ color: 'white' }}
+          title="Rregister"
         />
       </View>
     );
@@ -244,23 +179,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     justifyContent: 'flex-start',
   },
-  tips: {
-    fontSize: 29,
-  },
   rowViewStyle: {
     width: width * 0.95,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginTop: 8,
-  },
-  textInputStyle: {
-    height: 40,
-    borderColor: '#EAEAEA',
-    borderBottomWidth: 1,
-    width: width * 0.85,
-    marginLeft: 30,
-    marginRight: 30,
   },
   textInputStyle2: {
     height: 40,
@@ -269,5 +193,15 @@ const styles = StyleSheet.create({
     width: 220,
     marginLeft: 30,
     paddingLeft: 17,
+  },
+  textStyle: {
+    height: 40,
+    marginTop: 20,
+    borderColor: '#EAEAEA',
+    borderBottomWidth: 1,
+    width: width * 0.85,
+    marginLeft: 30,
+    marginRight: 30,
+    color: 'black'
   },
 });

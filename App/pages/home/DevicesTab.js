@@ -4,19 +4,16 @@ import {
   StyleSheet,
   Text,
   Image,
-  ImageBackground,
   Dimensions,
   FlatList,
   RefreshControl,
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import NavigationBar from '../../common/NavigationBar';
-import ButtonX from '../../standard/components/buttonX';
-import TuyaHomeApi from '../../api/TuyaHomeApi';
-import TuyaHomeDataManagerApi from '../../api/TuyaHomeDataManagerApi';
+import {TuyaHomeApi,TuyaHomeDataManagerApi} from '../../../sdk'
 
-const { height, width } = Dimensions.get('window');
+
+const { width } = Dimensions.get('window');
 
 export default class DevicesTab extends Component {
   constructor(props) {
@@ -27,20 +24,24 @@ export default class DevicesTab extends Component {
       meshList: [],
       sharedDeviceList: [],
       sharedGroupList: [],
+      refreshing:false
     };
   }
 
   loadData() {
     if (this.props.isRoom) {
-      console.log('----true');
       TuyaHomeDataManagerApi.getRoomDeviceList({
         roomId: this.props.id,
       })
-        .then((data) => {})
+        .then((data) => {
+          console.log(data)
+          this.setState({refreshing:false})
+        })
         .catch((err) => {
-          console.log('-err', err);
+          this.setState({refreshing:false})
         });
     } else {
+      console.log('------>,homeId', this.props.id),
       TuyaHomeApi.getHomeDetail({
         homeId: this.props.id,
       })
@@ -52,9 +53,10 @@ export default class DevicesTab extends Component {
             meshList: data.meshList,
             sharedDeviceList: data.sharedDeviceList,
             sharedGroupList: data.sharedGroupList,
+            refreshing:false
           });
         })
-        .catch((err) => {});
+        .catch((err) => { this.setState({refreshing:false})});
     }
   }
 
@@ -65,8 +67,10 @@ export default class DevicesTab extends Component {
   _renderEmpty() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{alignItems:'center'}}> 
         <Image style={{ marginTop: 80 }} source={require('../../res/images/empty_bg.png')} />
-        <Text style={{ marginTop: 10, fontSize: 13, color: '#A2A3AA' }}>暂无设备,请添加</Text>
+        <Text style={{ marginTop: 10, fontSize: 13, color: '#A2A3AA' }}>No equipment, Please add</Text>
+        </View>
         <TouchableOpacity
           style={{
             borderRadius: 4,
@@ -84,7 +88,7 @@ export default class DevicesTab extends Component {
             });
           }}
         >
-          <Text style={{ fontSize: 13, color: '#A2A3AA' }}>添加设备</Text>
+          <Text style={{ fontSize: 13, color: '#A2A3AA' }}>add device</Text>
         </TouchableOpacity>
       </View>
     );
@@ -102,7 +106,6 @@ export default class DevicesTab extends Component {
             <TouchableOpacity
               onPress={() => {
                 console.log('--devInfo', item);
-
                 this.props.navigation.navigate('DeviceDetailPage', {
                   devId: item.devId,
                   devInfo: item,
@@ -132,9 +135,8 @@ export default class DevicesTab extends Component {
           ListEmptyComponent={this._renderEmpty(this.props)}
           refreshControl={(
             <RefreshControl
-              refreshing={this.state.isRefreshing}
-              onRefresh={() => {}}
-              tintColor="#ff0000"
+              onRefresh={() => {this.loadData()}}
+              refreshing={this.state.refreshing}
               title="Loading..."
               titleColor="#00ff00"
               colors={['#ff0000', '#00ff00', '#0000ff']}
@@ -150,7 +152,6 @@ export default class DevicesTab extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F7F7F7',
     alignItems: 'center',
   },
   tips: {

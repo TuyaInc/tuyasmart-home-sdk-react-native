@@ -1,1 +1,1 @@
-../../../../TYBluetooth/TYBluetooth.framework/Versions/A/Headers/TYBLEPeripheralManager.h
+../../../../TYBluetooth/ios/TYBluetooth.framework/Versions/A/Headers/TYBLEPeripheralManager.h

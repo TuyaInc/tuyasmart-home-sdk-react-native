@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, Image, ImageBackground, Dimensions, FlatList, TouchableOpacity,
+  View, StyleSheet, Text, Image,Dimensions, FlatList, TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
-import NavigationBar from '../../common/NavigationBar';
-import ButtonX from '../../standard/components/buttonX';
-import ViewUtils from '../../utils/ViewUtils';
-import TuyaShareApi from '../../api/TuyaShareApi';
+import {TuyaShareApi} from '../../../sdk'
 
-const { height, width } = Dimensions.get('window');
+import NavigationBar from '../../common/NavigationBar';
+import ViewUtils from '../../utils/ViewUtils';
+
+const { width } = Dimensions.get('window');
 
 class SharePage extends Component {
   constructor(props) {

@@ -1,30 +1,19 @@
 import React, { Component } from 'react';
 import {
   Text,
-  ScrollView,
   View,
   FlatList,
-  StyleSheet,
-  Image,
   TouchableOpacity,
   Dimensions,
   DeviceEventEmitter,
-  Platform,
 } from 'react-native';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import {TuyaSceneApi} from '../../../sdk';
+
 import ViewUtils from '../../utils/ViewUtils';
 import NavigationBar from '../../common/NavigationBar';
-import { conditionSettingConfig } from '../../config';
-import TuyaSceneApi from '../../api/TuyaSceneApi';
 
-const { height, width } = Dimensions.get('window');
-const Res = {
-  enterScene: require('../../res/images/enterCondition.png'),
-  enterCondition: require('../../res/images/enterScene.png'),
-  exit: require('../../res/images/exit.png'),
-  arrowRight: require('../../res/images/Arrow_right.png'),
-  currentKey: require('../../res/images/currentKey.png'),
-};
+const {  width } = Dimensions.get('window');
+
 
 export default class ConditionPage extends Component {
   constructor(props) {

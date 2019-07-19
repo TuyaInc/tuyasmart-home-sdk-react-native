@@ -1,8 +1,8 @@
 //
 //  TuyaSmartScene.h
-//  TuyaSmartKit
+//  TuyaSmartSceneKit
 //
-//  Created by xuyongbo on 2017/9/4.
+//  Created by TuyaInc on 2017/9/4.
 //  Copyright © 2017年 Tuya. All rights reserved.
 //
 
@@ -13,24 +13,45 @@
 
 @interface TuyaSmartScene : NSObject
 
-//自定义场景根据id初始化
+/**
+ * 使用场景数据对象初始化一个TuyaSmartScene对象。
+ * Initialize method of TuyaSmartScene.
+ *
+ * @param sceneModel scene model.
+ * @return instance of TuyaSmartScene.
+ */
 + (instancetype)sceneWithSceneModel:(TuyaSmartSceneModel *)sceneModel;
+
+/**
+ * 使用场景数据对象初始化一个TuyaSmartScene对象。
+ * Initialize method of TuyaSmartScene.
+ *
+ * @param sceneModel scene model.
+ * @return instance of TuyaSmartScene.
+ */
 - (instancetype)initWithSceneModel:(TuyaSmartSceneModel *)sceneModel;
 
+/**
+ * 不要使用init进行初始化。
+ * Don't initialize an instance with init methed.
+ *
+ * @return    This method will return an unavailable instance.
+ */
 - (instancetype)init NS_UNAVAILABLE;
 
 /**
- 添加场景（旧）
-
- @param name            场景名称
- @param homeId          家庭Id
- @param background      场景背景图片
- @param showFirstPage   是否显示在首页
- @param conditionList   条件list
- @param actionList      任务list
- @param matchType       满足任一条件还是满足所有条件时执行
- @param success         操作成功回调，返回场景
- @param failure         操作失败回调
+ * 添加场景（已废弃)
+ * Add a scene,deprecated.
+ *
+ * @param name               scene name
+ * @param homeId             homeId
+ * @param background         background image url
+ * @param showFirstPage      show the scene in index page or not
+ * @param conditionList      condition list
+ * @param actionList         action list
+ * @param matchType          Match all conditons/any conditon will execute the automation.
+ * @param success            success block
+ * @param failure            failure block
  */
 + (void)addNewSceneWithName:(NSString *)name
                      homeId:(long long)homeId
@@ -40,21 +61,22 @@
                  actionList:(NSArray<TuyaSmartSceneActionModel*> *)actionList
                   matchType:(TuyaSmartConditionMatchType)matchType
                     success:(void (^)(TuyaSmartSceneModel *sceneModel))success
-                    failure:(TYFailureError)failure __deprecated_msg("This method is deprecated, Use - “添加场景(新)” - [TuyaSmartScene addNewSceneWithName:homeId:background:showFirstPage:preConditionList:conditionList:actionList:matchType:success:failure:] instead");
+                    failure:(TYFailureError)failure __deprecated_msg("This method is deprecated, Use -[TuyaSmartScene addNewSceneWithName:homeId:background:showFirstPage:preConditionList:conditionList:actionList:matchType:success:failure:] instead");
 
 /**
- 添加场景(新)
- 
- @param name                场景名称
- @param homeId              家庭Id
- @param background          场景背景图片
- @param showFirstPage       是否显示在首页
- @param preConditionList    前置条件list，如生效时间段条件
- @param conditionList       条件list
- @param actionList          任务list
- @param matchType           满足任一条件还是满足所有条件时执行
- @param success             操作成功回调，返回场景
- @param failure             操作失败回调
+ * 添加场景
+ * Add a new scene.
+ *
+ * @param name                   scene name
+ * @param homeId                 homeId
+ * @param background             background image url
+ * @param showFirstPage          show the scene in index page or not
+ * @param preConditionList       preconditons, like valid time period.
+ * @param conditionList          condition list
+ * @param actionList             action list
+ * @param matchType              Match all conditons/any conditon will execute the automation.
+ * @param success                success block
+ * @param failure                failure block
  */
 + (void)addNewSceneWithName:(NSString *)name
                      homeId:(long long)homeId
@@ -68,16 +90,17 @@
                     failure:(TYFailureError)failure;
 
 /**
- 修改场景(旧)
-
- @param name            场景名称
- @param background      场景背景图片
- @param showFirstPage   是否显示在首页
- @param conditionList   条件list
- @param actionList      任务list
- @param matchType       满足任一条件还是满足所有条件时执行
- @param success         操作成功回调
- @param failure         操作失败回调
+ * 修改场景(已废弃)
+ * Edit a existed scene, deprecated.
+ *
+ * @param name               scene name
+ * @param background         background image url
+ * @param showFirstPage      show the scene in index page or not
+ * @param conditionList      condition list
+ * @param actionList         action list
+ * @param matchType          Match all conditons/any conditon will execute the automation.
+ * @param success            success block
+ * @param failure            failure block
  */
 - (void)modifySceneWithName:(NSString *)name
                  background:(NSString *)background
@@ -86,20 +109,21 @@
                  actionList:(NSArray<TuyaSmartSceneActionModel*> *)actionList
                   matchType:(TuyaSmartConditionMatchType)matchType
                     success:(TYSuccessHandler)success
-                    failure:(TYFailureError)failure __deprecated_msg("This method is deprecated, Use - “修改场景(新)” - [TuyaSmartScene modifySceneWithName:background:showFirstPage:preConditionList:conditionList:actionList:matchType:success:failure:] instead");
+                    failure:(TYFailureError)failure __deprecated_msg("This method is deprecated, Use -[TuyaSmartScene modifySceneWithName:background:showFirstPage:preConditionList:conditionList:actionList:matchType:success:failure:] instead");
 
 /**
- 修改场景(新)
- 
- @param name                场景名称
- @param background          场景背景图片
- @param showFirstPage       是否显示在首页
- @param preConditionList    前置条件list，如生效时间段条件
- @param conditionList       条件list
- @param actionList          任务list
- @param matchType           满足任一条件还是满足所有条件时执行
- @param success             操作成功回调
- @param failure             操作失败回调
+ * 修改场景
+ * Edit a existed scene.
+ *
+ * @param name               scene name
+ * @param background         background image url
+ * @param showFirstPage      show the scene in index page or not
+ * @param preConditionList       preconditons, like valid time period.
+ * @param conditionList      condition list
+ * @param actionList         action list
+ * @param matchType          Match all conditons/any conditon will execute the automation.
+ * @param success            success block
+ * @param failure            failure block
  */
 - (void)modifySceneWithName:(NSString *)name
                  background:(NSString *)background
@@ -112,47 +136,52 @@
                     failure:(TYFailureError)failure;
 
 /**
- 删除场景
-
- @param success 操作成功回调
- @param failure 操作失败回调
+ * 删除场景。
+ * Delete a scene.
+ *
+ * @param success    success callback
+ * @param failure    failure callback
  */
 - (void)deleteSceneWithSuccess:(TYSuccessHandler)success
                        failure:(TYFailureError)failure;
 
 
 /**
- 执行场景
-
- @param success 操作成功回调
- @param failure 操作失败回调
+ * 执行场景
+ * Execute a scene.
+ *
+ * @param success    success callback
+ * @param failure    failure callback
  */
 - (void)executeSceneWithSuccess:(TYSuccessHandler)success
                         failure:(TYFailureError)failure;
 
 
 /**
- 失效场景
- 
- @param success 操作成功回调
- @param failure 操作失败回调
+ * 设置一个自动化为关闭状态，不会自动触发。
+ * Disable an automation, which will not executed automaticaly.
+ *
+ * @param success    success callback
+ * @param failure    failure callback
  */
 - (void)disableSceneWithSuccess:(TYSuccessHandler)success
                         failure:(TYFailureError)failure;
 
 
 /**
- 开启场景
- 
- @param success 操作成功回调
- @param failure 操作失败回调
+ * 设置一个自动化为生效状态。
+ * Enable an automation, which will be executed whild the conditons are matched.
+ *
+ * @param success    success callback
+ * @param failure    failure callback
  */
 - (void)enableSceneWithSuccess:(TYSuccessHandler)success
                        failure:(TYFailureError)failure;
 
 
 /**
- 取消操作
+ * 取消正在进行的操作。
+ * Cancel the request being executed.
  */
 - (void)cancelRequest;
 

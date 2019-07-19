@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, Image, ImageBackground, Dimensions, BackHandler,
+  View, StyleSheet, BackHandler,
 } from 'react-native';
-import TuyaShareApi from '../api/TuyaShareApi';
-import TuyaHomeManagerApi from '../api/TuyaHomeManagerApi';
+import {TuyaShareApi} from '../../sdk'
+
+
 import { connect } from 'react-redux'
 
 class TestPage extends Component {

@@ -1,0 +1,39 @@
+{
+  "name": "tuyasmart-home-sdk",
+  "version": "1.0.1",
+  "description": "Build TuyaSmart App by React Native",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": ["react-native", "tuyasmart", "iot", "tuya"],
+  "author": "Tuya Inc.",
+  "files": ["index.js", "lib", "android", "ios"],
+  "peerDependencies": {
+    "react-native": "0.59"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^7.2.1",
+    "@commitlint/config-conventional": "^7.1.2",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.11.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1",
+    "husky": "^1.2.1",
+    "lint-staged": "^8.1.0",
+    "prettier": "1.15.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.js": ["eslint --fix", "git add"],
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
+  },
+  "directories": {
+    "doc": "docs"
+  }
+}

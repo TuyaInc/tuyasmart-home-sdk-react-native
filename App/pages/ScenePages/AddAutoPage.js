@@ -4,25 +4,17 @@ import {
   StyleSheet,
   Text,
   Image,
-  ImageBackground,
   Dimensions,
   TouchableOpacity,
-  Switch,
-  FlatList,
   SwipeableFlatList,
 } from 'react-native';
+import { TuyaSceneApi } from '../../../sdk';
 import NavigationBar from '../../common/NavigationBar';
-import ButtonX from '../../standard/components/buttonX';
-import { resetAction } from '../../navigations/AppNavigator';
-import TuyaUserApi from '../../api/TuyaUserApi';
 import DeviceStorage from '../../utils/DeviceStorage';
-import TextButton from '../../component/TextButton';
-import Strings from '../../i18n';
-import TuyaSceneApi from '../../api/TuyaSceneApi';
 import EditDialog from '../../component/EditDialog';
 import { connect } from 'react-redux'
 
-const { height, width } = Dimensions.get('window');
+const {  width } = Dimensions.get('window');
 const Res = {
   scenebg: require('../../res/images/scenebg.png'),
   redAdd: require('../../res/images/red_add.png'),
@@ -43,12 +35,12 @@ class AddAutoPage extends Component {
       nameValue: '',
       name: '编辑名称',
       ConditionList: [],
-      homeId:this.props.homeId
+      homeId: this.props.homeId
     };
   }
 
   componentWillMount() {
-    console.log("----->AddAutoPage",this.state.homeId)
+    console.log("----->AddAutoPage", this.state.homeId)
     DeviceStorage.get('Action')
       .then((data) => {
         this.setState({
@@ -61,8 +53,10 @@ class AddAutoPage extends Component {
     DeviceStorage.get('Condition')
       .then((data) => {
         console.log('-->device condition', data);
+        const d = []
+        data.forEach(e => e && d.push(e))
         this.setState({
-          ConditionList: data,
+          ConditionList: d,
         });
       })
       .catch((err) => {
@@ -101,38 +95,41 @@ class AddAutoPage extends Component {
     return (
       <TouchableOpacity
         onPress={() => {
-          console.log('---->this.state', this.state.ConditionList);
-          console.log('--this.stateddd', this.state.ActionList);
           if (this.state.ActionList.length > 0) {
             const ActionLists = this.state.ActionList;
+            const conditionPromise = new Array();
             const devLists = new Array();
-            const conditionList = this.state.ConditionList;
             for (let i = 0, j = ActionLists.length; i < j; i++) {
               devLists.push(ActionLists[i].devId);
             }
-            TuyaSceneApi.createAutoScene({
-              homeId: this.state.homeId,
-              name: this.state.name,
-              stickyOnTop: false,
-              devIds: devLists,
-              background: 'https://images.tuyacn.com/smart/rule/cover/bedroom.png',
-              matchType: 'MATCH_TYPE_OR',
-              tasks: ActionLists,
-              conditionList: this.state.ConditionList,
-            })
-              .then((data) => {
-                console.log('--->data', data);
-                DeviceStorage.delete('Action');
-                DeviceStorage.delete('Condition');
-                this.setState({
-                  ActionList: [],
-                  ConditionList: [],
-                });
-                this.props.navigation.navigate('HomePage');
+            for (let i = 0, j = this.state.ConditionList.length; i < j; i++) {
+              conditionPromise.push(TuyaSceneApi.createWeatherCondition(this.state.ConditionList[i]));
+            }
+            Promise.all(conditionPromise).then((data) => {
+              TuyaSceneApi.createAutoScene({
+                homeId: this.state.homeId,
+                name: this.state.name,
+                stickyOnTop: false,
+                devIds: devLists,
+                background: 'https://images.tuyacn.com/smart/rule/cover/bedroom.png',
+                matchType: 'MATCH_TYPE_OR',
+                tasks: ActionLists,
+                conditionList: data,
               })
-              .catch((err) => {
-                console.log('-->err', err);
-              });
+                .then((data) => {
+                  DeviceStorage.delete('Action');
+                  DeviceStorage.delete('Condition');
+                  this.setState({
+                    ActionList: [],
+                    ConditionList: [],
+                  });
+                  this.props.navigation.navigate('HomePage');
+                })
+                .catch((err) => {
+                  console.log('-->err', err);
+                });
+            })
+
           } else {
             // 未添加动作
           }
@@ -234,11 +231,11 @@ class AddAutoPage extends Component {
     console.log('----->_renderConditionItem', data);
     let text = '';
     if (data.item.type == 'temp') {
-      text = `${data.item.range} ` + ':' + ` ${data.item.rule}`;
+      text = `${data.item.range} ` + ':' + ` ${data.item.value}`;
       console.log('---->data.range', data.item.range);
     } else {
-      console.log('---->data.rule', data.item.rule);
-      text = data.item.rule;
+      console.log('---->data.rule', data.item.value);
+      text = data.item.value;
     }
     return (
       <TouchableOpacity
@@ -282,26 +279,36 @@ class AddAutoPage extends Component {
   }
 
   // 侧滑菜单渲染
-  getQuickActions = item => (
+  getQuickActions = (item, isCondition) => (
     <View style={styles.quickAContent}>
       <TouchableOpacity
         activeOpacity={1}
         onPress={() => {
-          const newArr = new Array();
-          const data = this.state.ActionList;
-          for (let i = 0, j = data.length; i < j; i++) {
-            if (data[i].dpId !== item.dpId) {
-              newArr.push(data[i].dpId);
+          if (!isCondition) {
+            const newArr = new Array();
+            const data = this.state.ActionList;
+            for (let i = 0, j = data.length; i < j; i++) {
+              if (data[i].dpId !== item.dpId) {
+                newArr.push(data[i].dpId);
+              }
             }
+            this.setState({
+              ActionList: newArr,
+            });
+            DeviceStorage.save('Action', newArr);
+          } else {
+            const data = this.state.ConditionList;
+            data.splice(data.indexOf(item), 1)
+            this.setState({
+              ConditionList: data
+            })
+            DeviceStorage.save('Condition', data)
           }
-          this.setState({
-            ActionList: newArr,
-          });
-          DeviceStorage.save('Action', newArr);
+
         }}
       >
         <View style={styles.quick}>
-          <Text style={styles.delete}>{Strings.delete}</Text>
+          <Text style={styles.delete}>{'delete'}</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -395,7 +402,7 @@ class AddAutoPage extends Component {
             }}
             renderItem={this._renderConditionItem}
             style={{ width }}
-            renderQuickActions={({ item }) => this.getQuickActions(item)} // 创建侧滑菜单
+            renderQuickActions={({ item }) => this.getQuickActions(item, true)} // 创建侧滑菜单
             maxSwipeDistance={80} // 可展开（滑动）的距离
             bounceFirstRowOnMount // 进去的时候不展示侧滑效果
             ListEmptyComponent={this._renderConditionFooter(this.props)}
@@ -520,5 +527,5 @@ const styles = StyleSheet.create({
   },
 });
 export default connect((state) => ({
-  homeId:state.reducers.homeId,
+  homeId: state.reducers.homeId,
 }))(AddAutoPage)

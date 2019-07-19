@@ -14,99 +14,106 @@
 
 typedef enum : NSUInteger {
     
-    TuyaSmartDeviceModelTypeWifiDev,         /// 普通 Wi-Fi 设备
+    TuyaSmartDeviceModelTypeWifiDev,         /// Wi-Fi
     
-    TuyaSmartDeviceModelTypeBle,             /// 单点蓝牙设备
+    TuyaSmartDeviceModelTypeBle,             /// Single Point Bluetooth Device
     
-    TuyaSmartDeviceModelTypeGprs,            /// Gprs 设备
+    TuyaSmartDeviceModelTypeGprs,            /// Gprs
     
-    TuyaSmartDeviceModelTypeZigbeeGateway,   /// Zigbee 网关
+    TuyaSmartDeviceModelTypeNBIoT,           /// NB-IoT
     
-    TuyaSmartDeviceModelTypeZigbeeSubDev,    /// Zigbee 子设备
+    TuyaSmartDeviceModelTypeZigbeeGateway,   /// Zigbee Gateway
     
-    TuyaSmartDeviceModelTypeMeshBleSubDev,   /// Mesh 设备
+    TuyaSmartDeviceModelTypeZigbeeSubDev,    /// Zigbee subDevice
     
-    TuyaSmartDeviceModelTypeInfraredGateway, /// 红外网关
+    TuyaSmartDeviceModelTypeMeshBleSubDev,   /// Mesh
     
-    TuyaSmartDeviceModelTypeInfraredSubDev,  /// 红外子设备
+    TuyaSmartDeviceModelTypeInfraredGateway, /// Infrared gateway
     
-    TuyaSmartDeviceModelTypeWifiGateway,     /// Wi-Fi 网关
+    TuyaSmartDeviceModelTypeInfraredSubDev,  /// Infrared subDevice
     
-    TuyaSmartDeviceModelTypeWifiSubDev,      /// Wi-Fi 子设备
+    TuyaSmartDeviceModelTypeWifiGateway,     /// Wi-Fi Gateway
+    
+    TuyaSmartDeviceModelTypeWifiSubDev,      /// Wi-Fi subDevice
+    
+    TuyaSmartDeviceModelTypeSIGMeshGateway,  /// SIG Mesh Gateway
+    
+    TuyaSmartDeviceModelTypeSIGMeshSubDev,   /// SIG Mesh subDevice
     
 } TuyaSmartDeviceModelType;
 
 @interface TuyaSmartDeviceModel : NSObject
 
-//设备唯一标识符
+// device Id
 @property (nonatomic, strong) NSString     *devId;
 
-//设备名称
+// name of device
 @property (nonatomic, strong) NSString     *name;
 
-//设备icon的地址
+// link of device icon
 @property (nonatomic, strong) NSString     *iconUrl;
 
-//设备的能力值
+// ability of device
 @property (nonatomic, assign) NSInteger    ability;
 
-//设备在线状态
+// online of device
 @property (nonatomic, assign) BOOL         isOnline;
 
-//局域网在线状态
+// online status of LAN
 @property (nonatomic, assign) BOOL         isLocalOnline;
 
-//设备是否是分享的
+// whether the device is shared
 @property (nonatomic, assign) BOOL         isShare;
 
-//设备
+//
 @property (nonatomic, strong) NSString     *verSw;
 
-//设备的当前dp点
+// data point of device
 @property (nonatomic, strong) NSDictionary *dps;
 
-//产品唯一标识符
+// peoduct Id
 @property (nonatomic, strong) NSString     *productId;
 
-//是否支持群组
+// whether to support group
 @property (nonatomic, assign) BOOL         supportGroup;
 
-//标记所属群组Id，手动设置之后才有值
-@property (nonatomic, copy) NSString *markedGroupId;
-
-//网关类型
+// type of gateway
 @property (nonatomic, strong) NSString     *gwType;
 
-//网关协议版本
+// protocol version of gateway
 @property (nonatomic, assign) double       pv;
 
-//局域网协议版本号，只有在局域网连着的情况下，才能取到值
+#if TARGET_OS_IOS
+
+// gateway protocol version of LAN
 @property (nonatomic, assign) double       lpv;
 
-//硬件基线版本
+#endif
+
+// hardware baseline version
 @property (nonatomic, assign) double       bv;
 
-//设备经纬度
+// lat, lon
 @property (nonatomic, strong) NSString     *latitude;
 @property (nonatomic, strong) NSString     *longitude;
 
-// dp名字
+// dp name
 @property (nonatomic, strong) NSDictionary *dpName;
 
-//设备的schema定义
+// schema of device
 @property (nonatomic, strong) NSString     *schema;
 @property (nonatomic, strong) NSString     *schemaExt;
 @property (nonatomic, strong) NSArray<TuyaSmartSchemaModel *> *schemaArray;
 
 @property (nonatomic, strong) NSString     *runtimeEnv;
 
-//标位
+// attribute
 @property (nonatomic, assign) NSUInteger    attribute;
 
 @property (nonatomic, strong) NSString     *localKey;
 
 @property (nonatomic, strong) NSString     *uuid;
-// 联网通信能力标位:0.wifi;1.cable;2.gprs;3.nb-iot; 10:bluetooth;11.blemesh;12.zigbee
+// The network communication ability:0.wifi;1.cable;2.gprs;3.nb-iot; 10:bluetooth;11.blemesh;12.zigbee
 @property (nonatomic, assign) NSUInteger   capability;
 
 @property (nonatomic, strong) NSString     *timezoneId;
@@ -114,12 +121,14 @@ typedef enum : NSUInteger {
 @property (nonatomic, assign) long long    homeId;
 @property (nonatomic, assign) long long    roomId;
 
-// 排序
+// order
 @property (nonatomic, assign) NSInteger    displayOrder;
-// 扩展
+// skills
 @property (nonatomic, strong) NSDictionary *skills;
 
-#pragma mark - 涂鸦智能 控制面板相关
+@property (nonatomic, strong) NSString     *cloudId;
+
+#pragma mark - panel
 
 @property (nonatomic, assign) BOOL         rnFind;
 @property (nonatomic, assign) long long    i18nTime;
@@ -132,7 +141,6 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSDictionary *uiConfig;
 @property (nonatomic, strong) NSDictionary *panelConfig;
 @property (nonatomic, strong) NSString     *category;
-
 @property (nonatomic, strong) NSArray      *quickOpDps;
 @property (nonatomic, strong) NSArray      *displayDps;
 @property (nonatomic, strong) NSArray      *faultDps;
@@ -153,19 +161,22 @@ typedef enum : NSUInteger {
 - (BOOL)capabilityIsSupport:(NSUInteger)i;
 - (BOOL)devAttributeIsSupport:(NSUInteger)i;
 
-#pragma mark - 子设备相关
-// 子设备信息
+#pragma mark - subdevice
+// node Id
 @property (nonatomic, strong) NSString     *nodeId;
 @property (nonatomic, strong) NSString     *parentId;
 
-// mesh 融合类 pcc 拓展类型
+// mesh
 @property (nonatomic, strong) NSString     *vendorInfo;
 @property (nonatomic, assign) BOOL         isMeshBleOnline;
 @property (nonatomic, strong) NSString     *pcc;
 
-#pragma mark - 免赔网相关
-// 标位: 1.具有免赔网能力
+#pragma mark - discovery device
+// mark:  0: 1<<0 auto  3：1<<3 route
 @property (nonatomic, assign) NSUInteger devAttribute;
+
+// sig mesh dev key
+@property (nonatomic, strong) NSString     *devKey;
 
 @end
 

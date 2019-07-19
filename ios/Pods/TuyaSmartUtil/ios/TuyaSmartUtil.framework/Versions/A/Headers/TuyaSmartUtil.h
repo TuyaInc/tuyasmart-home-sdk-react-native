@@ -20,10 +20,14 @@
 #import "NSObject+TYCategory.h"
 #import "NSMutableArray+TYCategory.h"
 #import "NSMutableDictionary+TYCategory.h"
-#import "UIDevice+TYUUID.h"
 #import "NSBundle+TYLanguage.h"
 
 #import "TYUtil.h"
+#import "TYDevice.h"
+#import "TYUserDefault.h"
+#import "TYDarwinNotificationCenter.h"
+#import "TYSafeMutableDictionary.h"
+#import "TYSafeMutableArray.h"
 
 #define TY_SINGLETON \
 + (instancetype)sharedInstance;

@@ -4,25 +4,19 @@ import {
   StyleSheet,
   Text,
   Image,
-  ImageBackground,
   Dimensions,
   TouchableOpacity,
   Switch,
-  FlatList,
   SwipeableFlatList,
 } from 'react-native';
 import { connect } from 'react-redux'
+import {TuyaSceneApi} from '../../../sdk';
 import NavigationBar from '../../common/NavigationBar';
-import ButtonX from '../../standard/components/buttonX';
-import { resetAction } from '../../navigations/AppNavigator';
-import TuyaUserApi from '../../api/TuyaUserApi';
 import DeviceStorage from '../../utils/DeviceStorage';
-import TextButton from '../../component/TextButton';
 import Strings from '../../i18n';
-import TuyaSceneApi from '../../api/TuyaSceneApi';
 import EditDialog from '../../component/EditDialog';
 
-const { height, width } = Dimensions.get('window');
+const {width } = Dimensions.get('window');
 const Res = {
   scenebg: require('../../res/images/scenebg.png'),
   redAdd: require('../../res/images/red_add.png'),
@@ -80,6 +74,10 @@ class AddScenePage extends Component {
           dpId: parseInt(key),
           dpName: status[0],
           value,
+          task:{
+            dpId: parseInt(key),
+            value
+          }
         };
         newArr.push(action);
       }

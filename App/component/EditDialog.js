@@ -16,7 +16,7 @@ export default class EditDialog extends Component {
   }
 
   static defaultProps = {
-    title: '编辑',
+    title: 'Edit',
     visible: true,
   }
 

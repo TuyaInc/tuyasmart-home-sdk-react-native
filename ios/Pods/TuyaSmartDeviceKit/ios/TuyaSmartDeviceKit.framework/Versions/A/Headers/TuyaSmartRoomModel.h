@@ -10,13 +10,13 @@
 
 @interface TuyaSmartRoomModel : NSObject
 
-// 房间Id
+// room Id
 @property (nonatomic, assign) long long roomId;
 
-// 房间名称
+// room name
 @property (nonatomic, strong) NSString *name;
 
-// 排序
+// order
 @property (nonatomic, assign) NSInteger displayOrder;
 
 

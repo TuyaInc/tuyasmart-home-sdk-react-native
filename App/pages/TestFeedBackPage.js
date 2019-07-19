@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, Image, ImageBackground, Dimensions, BackHandler,
+  View, StyleSheet,  BackHandler,
 } from 'react-native';
-import TuyaFeedBackApi from '../api/TuyaFeedBackApi';
+import {TuyaFeedBackApi} from '../../sdk'
+
 import TextButton from '../component/TextButton';
 
-const { height, width } = Dimensions.get('window');
 
 export default class TestFeedBackPage extends Component {
   constructor(props) {

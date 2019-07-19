@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, Image, ImageBackground, Dimensions, BackHandler,
+  View, StyleSheet,  BackHandler,
 } from 'react-native';
-import TuyaShareApi from '../api/TuyaShareApi';
-import TuyaHomeManagerApi from '../api/TuyaHomeManagerApi';
-import TuyaSceneApi from '../api/TuyaSceneApi';
-import TuyaGroupApi from '../api/TuyaGroupApi';
+import {TuyaGroupApi} from '../../sdk'
+
 import { connect } from 'react-redux'
 
 class TestGroupPage extends Component {

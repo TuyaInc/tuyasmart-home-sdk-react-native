@@ -4,20 +4,17 @@ import {
   StyleSheet,
   Text,
   Image,
-  ImageBackground,
   Dimensions,
-  FlatList,
-  Switch,
   TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
+import {TuyaDeviceApi} from '../../sdk'
+
 import NavigationBar from '../common/NavigationBar';
 import ViewUtils from '../utils/ViewUtils';
-import TuyaDeviceApi from '../api/TuyaDeviceApi';
-import { resetAction } from '../navigations/AppNavigator';
 import EditDialog from '../component/EditDialog';
 
-const { height, width } = Dimensions.get('window');
+const {  width } = Dimensions.get('window');
 
 const Res = {
   arrowRight: require('../res/images/Arrow_right.png'),

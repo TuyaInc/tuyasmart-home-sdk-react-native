@@ -129,7 +129,7 @@ RCT_EXPORT_METHOD(getDeviceConditionOperationList:(NSDictionary *)params resolve
 
 
 // 创建自动化：
-RCT_EXPORT_METHOD(createAutoScene:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+RCT_EXPORT_METHOD(createDevCondition:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
   NSMutableArray *conditionList = [NSMutableArray array];
   for(NSDictionary *item in params[@"conditionList"]) {

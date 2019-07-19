@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, Image, ImageBackground, Dimensions, TouchableOpacity, FlatList,
+  View, Text, Image, Dimensions, TouchableOpacity, FlatList,
 } from 'react-native';
+import {TuyaSceneApi} from '../../../sdk';
+
 import NavigationBar from '../../common/NavigationBar';
-import ButtonX from '../../standard/components/buttonX';
-import { resetAction } from '../../navigations/AppNavigator';
-import TuyaSceneApi from '../../api/TuyaSceneApi';
-import DeviceStorage from '../../utils/DeviceStorage';
-import TextButton from '../../component/TextButton';
+
 import ViewUtils from '../../utils/ViewUtils';
 
-const { height, width } = Dimensions.get('window');
+const {  width } = Dimensions.get('window');
 const Res = {
   enterScene: require('../../res/images/enterCondition.png'),
   enterCondition: require('../../res/images/enterScene.png'),

@@ -9,7 +9,7 @@ import {
   StyleSheet, Platform, TouchableOpacity, Image, StatusBar, Text, View,
 } from 'react-native';
 
-const NAV_BAR_HEIGHT_IOS = 44;
+const NAV_BAR_HEIGHT_IOS = 56;
 const NAV_BAR_HEIGHT_ANDROID = 50;
 const STATUS_BAR_HEIGHT = 20;
 const StatusBarShape = {

@@ -13,9 +13,13 @@ void ty_dispatch_sync_on_main_thread(dispatch_block_t block);
 
 @interface TYUtil : NSObject
 
+#if TARGET_OS_IOS
+
 + (NSString *)currentWifiSSID;
 
 + (NSString *)currentWifiBSSID;
+
+#endif
 
 + (uint32_t)getIntValueByHex:(NSString *)str;
 
@@ -23,10 +27,28 @@ void ty_dispatch_sync_on_main_thread(dispatch_block_t block);
 
 + (BOOL)compareVesionWithDeviceVersion:(NSString *)deviceVersion appVersion:(NSString *)appVersion;
 
-+ (NSString *)md5WithString:(NSString *)string;
+@end
 
-+ (NSString *)md5WithData:(NSData *)data;
 
-+ (NSString *)md5hex:(NSString *)string;
+extern NSString * const TYUtilHostAppExtensionString;
+extern NSString * const TYUtilTodayWidgetExtensionString;
+extern NSString * const TYUtilIntentExtensionString;
+extern NSString * const TYUtilIntentUIExtensionString;
+extern NSString * const TYUtilWatchKitExtensionString;
+
+/**
+ *  @category TYUtil(AppExtension)
+ *  To determine which process the code runs in (App/AppExtension/WatchKitExtension).
+ *  运行时判断当前代码运行在哪个进程
+ */
+@interface TYUtil (AppExtension)
+
++ (NSString *)currentExtensionString;
+
++ (BOOL)isHostApp;
+
++ (BOOL)isAppExtension;
+
++ (BOOL)isWatchKitExtension;
 
 @end

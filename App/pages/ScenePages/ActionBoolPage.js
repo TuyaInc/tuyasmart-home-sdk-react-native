@@ -1,25 +1,16 @@
 import React, { Component } from 'react';
 import {
   View,
-  StyleSheet,
   Text,
-  Image,
-  ImageBackground,
   Dimensions,
   TouchableOpacity,
-  Switch,
-  FlatList,
 } from 'react-native';
 import NavigationBar from '../../common/NavigationBar';
-import ButtonX from '../../standard/components/buttonX';
 import { resetAction, resetActionWithParams } from '../../navigations/AppNavigator';
-import TuyaUserApi from '../../api/TuyaUserApi';
 import DeviceStorage from '../../utils/DeviceStorage';
-import TextButton from '../../component/TextButton';
 import ViewUtils from '../../utils/ViewUtils';
-import TuyaSceneApi from '../../api/TuyaSceneApi';
 
-const { height, width } = Dimensions.get('window');
+const {  width } = Dimensions.get('window');
 
 export default class ActionBoolPage extends Component {
   constructor(props) {

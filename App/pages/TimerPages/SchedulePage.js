@@ -2,20 +2,18 @@ import React, { Component } from 'react';
 import {
   Text, View, StyleSheet, Dimensions,
 } from 'react-native';
+import {TuyaTimerApi} from '../../../sdk'
+
 import Picker from 'react-native-wheel-picker';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast from 'react-native-easy-toast';
 import Strings from '../../i18n';
 import ButtonX from '../../standard/components/buttonX';
 import NavigationBar from '../../common/NavigationBar';
 import ViewUtils from '../../utils/ViewUtils';
-import TuyaTimerApi from '../../api/TuyaTimerApi';
 
-const { height, width } = Dimensions.get('window');
+const {  width } = Dimensions.get('window');
 const PickerItem = Picker.Item;
-const Res = {
-  // close: require('../res/timerclose.png'),
-  // open: require('../res/timerOpen.png')
-};
+
 const WEEKS = ['S', 'M', 'T', 'W', 'Th', 'F', 'S'];
 let hours = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
 let mins = [
@@ -130,7 +128,7 @@ export default class SchedulePage extends Component {
           leftButton={ViewUtils.getLeftButton(() => {
             this.props.navigation.pop();
           })}
-          title="创建定时"
+          title="Create Timer"
         />
         <View style={styles.item}>
           <ButtonX text={Strings.CANCEL} textStyle={styles.text} onPress={() => this.props.navigation.pop()} />

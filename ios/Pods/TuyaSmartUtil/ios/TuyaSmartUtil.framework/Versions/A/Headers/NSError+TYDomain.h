@@ -80,8 +80,6 @@ typedef enum {
     
 } TYErrorCode;
 
-//TYErrorCode ty_getErrorCode(NSString *codeString);
-
 @interface NSError (TYDomain)
 
 + (instancetype)ty_errorWithErrorCode:(TYErrorCode)errorCode errorMsg:(NSString *)errorMsg;

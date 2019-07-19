@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, Image, ImageBackground, Dimensions, BackHandler, TouchableOpacity,
+  View, StyleSheet, Text,  Dimensions, BackHandler, TouchableOpacity,
 } from 'react-native';
-import TuyaShareApi from '../api/TuyaShareApi';
-import TuyaHomeManagerApi from '../api/TuyaHomeManagerApi';
-import TuyaSceneApi from '../api/TuyaSceneApi';
+import {TuyaSceneApi,TuyaTimerApi} from '../../sdk'
 import DeviceStorage from '../utils/DeviceStorage';
-import TuyaTimerApi from '../api/TuyaTimerApi';
 import { connect } from 'react-redux'
 
-const { height, width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 class TestScenePage extends Component {
   constructor(props) {
     super(props);
@@ -140,9 +137,7 @@ class TestScenePage extends Component {
         <TouchableOpacity
           onPress={() => {
             console.log('---->this.state.ActionLists', this.state.ActionLists);
-            const ActionLists = this.state.ActionList;
             const devLists = new Array();
-            const conditionList = this.state.ConditionList;
             devLists.push('vdevo154287002022850');
             const arr = new Array();
             const placeBean = {
@@ -175,7 +170,7 @@ class TestScenePage extends Component {
             //   timezoneId:"Asia/Shanghai",
             //   entityType: 6, // 创建天气类型需要 3，设备传1,定时传6
             // });
-            // TuyaSceneApi.createAutoScene({
+            // TuyaSceneApi.createDevCondition({
             //   homeId: this.state.homeId,
             //   name: '测试1111',
             //   stickyOnTop: false,
@@ -186,7 +181,7 @@ class TestScenePage extends Component {
             //   conditionList: arr,
             // })
             //   .then(data => {
-            //     console.log('--->createAutoScene', data);
+            //     console.log('--->createDevCondition', data);
             //   })
             //   .catch(err => {
             //     console.log('-->err', err);
@@ -203,7 +198,7 @@ class TestScenePage extends Component {
               conditionList: arr,
             })
               .then((data) => {
-                console.log('--->createAutoScene', data);
+                console.log('--->createDevCondition', data);
               })
               .catch((err) => {
                 console.log('-->err', err);

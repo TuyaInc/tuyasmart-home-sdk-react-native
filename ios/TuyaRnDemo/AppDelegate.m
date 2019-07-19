@@ -15,19 +15,15 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   
-#ifdef DEBUG
-  [[TuyaSmartSDK sharedInstance] setDebugMode:YES];
-#endif
 
-  [[TuyaSmartSDK sharedInstance] startWithAppKey:@"AppKey" secretKey:@"AppSecret"];
   
   NSURL *jsCodeLocation;
-
 //  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+//   [[TuyaSmartSDK sharedInstance] setDebugMode:YES];
+//   [[TuyaSmartSDK sharedInstance] startWithAppKey:@"" secretKey:@""];
+  jsCodeLocation = [NSURL URLWithString:@"http://192.168.21.246:8081/index.bundle?platform=ios&dev=true"];
   
-//  jsCodeLocation = [NSURL URLWithString:@"http://192.168.14.228:8081/index.bundle?platform=ios&dev=true"];
-  
-    jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.bundle?platform=ios&dev=true"];
+//    jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.bundle?platform=ios&dev=true"];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"TuyaRnDemo"

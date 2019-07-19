@@ -3,70 +3,42 @@ import {
   View,
   StyleSheet,
   Text,
-  Image,
-  ImageBackground,
   SwipeableFlatList,
   TouchableOpacity,
   Dimensions,
-  DeviceEventEmitter,
+  RefreshControl
 } from 'react-native';
+import { TuyaHomeApi } from '../../../sdk'
+
 import NavigationBar from '../../common/NavigationBar';
 import ViewUtils from '../../utils/ViewUtils';
-import ButtonX from '../../standard/components/buttonX';
-import TuyaHomeManagerApi from '../../api/TuyaHomeManagerApi';
-import TuyaHomeApi from '../../api/TuyaHomeApi';
-// import from '../../../node_modules/tuyasdk-react-native/src/index'
-const { height, width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 export default class RoomSettingPage extends Component {
   constructor(props) {
     super(props);
-
     const params = this.props.navigation.state.params;
     this.state = {
-      roomList: params.roomList,
-      homeId: params.homeId,
+      ...params
     };
   }
 
-  componentDidMount() {
-    this.refreshListener = DeviceEventEmitter.addListener('refresh', () => {
-      console.warn('hahahahaha  shuashuaahsuhaushu');
-      // IOS没有queryHomelist ,这里该用gethomeDetail（）
-      TuyaHomeManagerApi.queryHomeList()
-        .then((data) => {
-          console.log('--->queryHomeList', data);
-          this.setState({
-            roomList: data[0].rooms,
-          });
-        })
-        .catch((err) => {
-          console.warn('--->err', err);
+  componentDidMount(){
+    this.getRoomList()
+  }
+  componentWillUnmount(){
+    this.state.refreshHome()
+  }
+  getRoomList() {
+    TuyaHomeApi.queryRoomList({
+      homeId: this.state.homeId,
+    })
+      .then((data) => {
+        this.setState({
+          roomList: data,
         });
-    });
+      })
   }
-
-  componentWillUnmount() {
-    this.refreshListener.remove();
-  }
-
-  renderRightButton(name) {
-    return (
-      <TouchableOpacity onPress={() => {}}>
-        <Text
-          style={{
-            fontSize: 14,
-            fontWeight: 'bold',
-            color: 'black',
-            marginRight: 15,
-          }}
-        >
-          {name}
-        </Text>
-      </TouchableOpacity>
-    );
-  }
-
   // 侧滑菜单渲染
   getQuickActions = item => (
     <View style={styles.quickAContent}>
@@ -77,7 +49,7 @@ export default class RoomSettingPage extends Component {
             homeId: this.state.homeId,
             roomId: item.roomId,
           })
-            .then((data) => {
+            .then(() => {
               const list = this.state.roomList;
               const newArr = new Array();
               for (let i = 0, j = list.length; i < j; i++) {
@@ -85,25 +57,21 @@ export default class RoomSettingPage extends Component {
                   newArr.push(list[i]);
                 }
               }
-
               this.setState({
                 roomList: newArr,
               });
             })
-            .catch((err) => {
-              console.log('-->Err', err);
-            });
         }}
       >
         <View style={styles.quick}>
-          <Text style={styles.delete}>删除</Text>
+          <Text style={styles.delete}>delete</Text>
         </View>
       </TouchableOpacity>
     </View>
   )
 
   _renderFooter() {
-    return <Text style={{ fontSize: 18, color: 'black' }}>当前没有设置房间 (^_^)v</Text>;
+    return <Text style={{ fontSize: 18, color: 'black' }}>No room is currently set up</Text>;
   }
 
   _renderItem(data) {
@@ -118,7 +86,7 @@ export default class RoomSettingPage extends Component {
     return (
       <View style={styles.container}>
         <NavigationBar
-          title="房间管理"
+          title="Room management"
           style={{ backgroundColor: '#FFFFFF', width }}
           leftButton={ViewUtils.getLeftButton(() => {
             this.props.navigation.pop();
@@ -135,6 +103,17 @@ export default class RoomSettingPage extends Component {
           maxSwipeDistance={80} // 可展开（滑动）的距离
           bounceFirstRowOnMount // 进去的时候不展示侧滑效果
           ListEmptyComponent={this._renderFooter(this.props)}
+          refreshControl={(
+            <RefreshControl
+              onRefresh={() => { this.getRoomList()}}
+              refreshing={false}
+              tintColor="#ff0000"
+              title="Loading..."
+              titleColor="#00ff00"
+              colors={['#ff0000', '#00ff00', '#0000ff']}
+              progressBackgroundColor="#ffff00"
+            />
+          )}
         />
         <TouchableOpacity
           style={{
@@ -151,7 +130,7 @@ export default class RoomSettingPage extends Component {
             });
           }}
         >
-          <Text style={{ fontSize: 18, color: '#FF4800', marginLeft: 15 }}>添加房间</Text>
+          <Text style={{ fontSize: 18, color: '#FF4800', marginLeft: 15 }}>Adding rooms</Text>
         </TouchableOpacity>
       </View>
     );

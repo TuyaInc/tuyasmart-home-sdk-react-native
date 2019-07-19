@@ -11,7 +11,9 @@
     "react-native": "0.59.0",
     "react-native-easy-toast": "^1.1.0",
     "react-native-gesture-handler": "^1.0.8",
-    "react-native-scrollable-tab-view": "^0.8.0",
+    "react-native-loading-spinner-overlay": "^1.0.1",
+    "react-native-root-toast": "^3.1.2",
+    "react-native-scrollable-tab-view": "0.10.0",
     "react-native-svg": "^8.0.8",
     "react-native-tab-navigator": "^0.3.4",
     "react-native-wheel-picker": "^1.2.0",
@@ -22,7 +24,6 @@
     "redux-actions": "^2.6.3",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "tuya-react-sdk":"git+https://linqw@tuya.com:13586190871@registry.code.tuya-inc.top/linqw/tuya-react-sdk",
     "rxjs": "^6.3.3"
   },
   "devDependencies": {

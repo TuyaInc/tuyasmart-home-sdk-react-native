@@ -1,25 +1,19 @@
 import React, { Component } from 'react';
 import {
   View,
-  StyleSheet,
   Text,
   Image,
-  ImageBackground,
   Dimensions,
   TouchableOpacity,
-  Switch,
   FlatList,
 } from 'react-native';
-import NavigationBar from '../../common/NavigationBar';
-import ButtonX from '../../standard/components/buttonX';
-import { resetAction } from '../../navigations/AppNavigator';
-import TuyaUserApi from '../../api/TuyaUserApi';
-import DeviceStorage from '../../utils/DeviceStorage';
-import TextButton from '../../component/TextButton';
-import ViewUtils from '../../utils/ViewUtils';
-import TuyaSceneApi from '../../api/TuyaSceneApi';
+import {TuyaSceneApi} from '../../../sdk';
 
-const { height, width } = Dimensions.get('window');
+import NavigationBar from '../../common/NavigationBar';
+
+import ViewUtils from '../../utils/ViewUtils';
+
+const {  width } = Dimensions.get('window');
 const Res = {
   scenebg: require('../../res/images/scenebg.png'),
   redAdd: require('../../res/images/red_add.png'),

@@ -124,7 +124,7 @@ export default class ConditionPage extends Component {
                   arr.push({
                     type: this.state.type,
                     cityId: 793409505965772800,
-                    rule: this.state.currentValue,
+                    value: this.state.currentValue,
                     localCity: this.state.localCity,
                     placeBean: this.state.placeBean,
                     entityType: 3, // 创建天气类型需要 6，设备传1,定时传3
@@ -135,7 +135,7 @@ export default class ConditionPage extends Component {
                   arr.push({
                     type: this.state.type,
                     cityId: 793409505965772800,
-                    rule: this.state.currentValue,
+                    value: this.state.currentValue,
                     localCity: this.state.localCity,
                     placeBean: this.state.placeBean,
                     entityType: 3, // 创建天气类型需要 6，设备传1,定时传3
@@ -154,7 +154,7 @@ export default class ConditionPage extends Component {
                   arr.push({
                     type: this.state.type,
                     cityId: 793409505965772800,
-                    rule: this.state.currentTempValue,
+                    value: this.state.currentTempValue,
                     localCity: this.state.localCity,
                     placeBean: this.state.placeBean,
                     range: this.state.range,
@@ -166,7 +166,7 @@ export default class ConditionPage extends Component {
                   arr.push({
                     type: this.state.type,
                     cityId: 793409505965772800,
-                    rule: this.state.currentTempValue,
+                    value: this.state.currentTempValue,
                     localCity: this.state.localCity,
                     placeBean: this.state.placeBean,
                     range: this.state.range,
@@ -270,7 +270,7 @@ export default class ConditionPage extends Component {
           }}
         >
           <Picker
-            style={{ width: 150, height: 180, backgroundColor: 'red' }}
+            style={{ width: 150, height: 180,  }}
             selectedValue={this.state.selectedItem}
             itemStyle={{ color: 'black', fontSize: 26 }}
             onValueChange={(index) => {
@@ -284,7 +284,7 @@ export default class ConditionPage extends Component {
             {this.state.symbolList.map((value, i) => <PickerItem label={value} value={i} key={value} />)}
           </Picker>
           <Picker
-            style={{ width: 150, height: 180, backgroundColor: 'red' }}
+            style={{ width: 150, height: 180,  }}
             selectedValue={this.state.selectedItem}
             itemStyle={{ color: 'black', fontSize: 26 }}
             onValueChange={(index) => {

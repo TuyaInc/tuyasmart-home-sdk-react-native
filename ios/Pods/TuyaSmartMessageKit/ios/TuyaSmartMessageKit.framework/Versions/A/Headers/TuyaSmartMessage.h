@@ -18,7 +18,7 @@
  @param failure 操作失败回调
  */
 - (void)getMessageList:(void (^)(NSArray<TuyaSmartMessageListModel *> *list))success
-               failure:(TYFailureError)failure __deprecated_msg("This method is deprecated, Use - “获取消息列表(新)” - [TuyaSmartMessage getMessageListWithType:limit:offset:success:failure:] or - “获取分类消息列表(新)” - [TuyaSmartMessage getMessageDetailListWithType:msgSrcId:limit:offset:success:failure:] instead");
+               failure:(TYFailureError)failure __deprecated_msg("This method is deprecated, Use -[TuyaSmartMessage getMessageListWithType:limit:offset:success:failure:] or -[TuyaSmartMessage getMessageDetailListWithType:msgSrcId:limit:offset:success:failure:] instead");
 
 
 
@@ -33,7 +33,7 @@
 - (void)getMessageList:(NSInteger)limit
                 offset:(NSInteger)offset
                success:(void (^)(NSArray<TuyaSmartMessageListModel *> *list))success
-               failure:(TYFailureError)failure __deprecated_msg("This method is deprecated, Use - “获取消息列表(新)” - [TuyaSmartMessage getMessageListWithType:limit:offset:success:failure:] or - “获取分类消息列表(新)” - [TuyaSmartMessage getMessageDetailListWithType:msgSrcId:limit:offset:success:failure:] instead");
+               failure:(TYFailureError)failure __deprecated_msg("This method is deprecated, Use -[TuyaSmartMessage getMessageListWithType:limit:offset:success:failure:] or -[TuyaSmartMessage getMessageDetailListWithType:msgSrcId:limit:offset:success:failure:] instead");
 
 
 /**
@@ -45,7 +45,7 @@
  */
 - (void)deleteMessage:(NSArray <NSString *> *)messgeIdList
               success:(TYSuccessHandler)success
-              failure:(TYFailureError)failure __deprecated_msg("This method is deprecated, Use - “批量删除数据(新)” - [TuyaSmartMessage deleteMessageWithType:ids:msgSrcIds:success:failure:] instead");
+              failure:(TYFailureError)failure __deprecated_msg("This method is deprecated, Use -[TuyaSmartMessage deleteMessageWithType:ids:msgSrcIds:success:failure:] instead");
 
 /**
  获取最新一条消息的时间戳(旧)
@@ -54,7 +54,7 @@
  @param failure 操作失败回调
  */
 - (void)getMessageMaxTime:(TYSuccessInt)success
-                  failure:(TYFailureError)failure __deprecated_msg("This method is deprecated, Use - “获取三类消息是否有新消息(新)” - [TuyaSmartMessage getLatestMessageWithSuccess:failure:] instead");
+                  failure:(TYFailureError)failure __deprecated_msg("This method is deprecated, Use -[TuyaSmartMessage getLatestMessageWithSuccess:failure:] instead");
 
 /// 取消未完成的操作
 - (void)cancelRequest;

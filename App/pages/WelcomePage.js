@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, Platform,
+  View, StyleSheet, Text, 
 } from 'react-native';
-import { StackNavigator, StackActions, NavigationActions } from 'react-navigation';
+import { TuyaCoreApi } from '../../sdk'
+import { StackActions, NavigationActions } from 'react-navigation';
 import NavigationBar from '../common/NavigationBar';
-import TuyaCoreApi from '../api/TuyaCoreApi';
+import { appKey, appSecret } from '../constant'
 import DeviceStorage from '../utils/DeviceStorage';
 
 const TIME = 2000;
@@ -26,43 +27,29 @@ const resetActionLogin = StackActions.reset({
 export default class WelcomePage extends Component {
   constructor(props) {
     super(props);
-    if (Platform.OS == 'ios') {
-      TuyaCoreApi.initWithOptions({
-        appKey: 'xxxxxxxxxxxxxxxxxxxxxxx',
-        appSecret: 'xxxxxxxxxxxxxxxxxxxxxxx',
-      });
-    } else {
-      TuyaCoreApi.initWithOptions({
-        appKey: '7u3u79vtewjckdwv3cmp',
-        appSecret: '5t3s4ja9hhnvnrph55ugnjx5pnn5k39d',
-      });
-    }
+    TuyaCoreApi.initWithOptions({
+      appKey: appKey,
+      appSecret: appSecret,
+    });
   }
 
   componentDidMount() {
     DeviceStorage.getUserInfo()
       .then((data) => {
-        console.log('DeviceStorage.getUserInfo', data);
         if (data != null) {
-          console.log('data1', data);
           this.props.navigation.dispatch(resetAction);
         } else {
-          console.log('data2', data);
           this.timer = setTimeout(() => {
             this.props.navigation.dispatch(resetActionLogin);
           }, TIME);
         }
       })
-      .catch((error) => {
-        console.log('DeviceStorage.getUserInfo', error);
+      .catch(() => {
         this.timer = setTimeout(() => {
           this.props.navigation.dispatch(resetActionLogin);
         }, TIME);
       });
 
-    // this.timer=setTimeout(()=> {
-    //    this.props.navigation.navigate('HomePage');
-    // }, 2000);
   }
 
   componentWillUnmount() {
@@ -72,8 +59,7 @@ export default class WelcomePage extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <NavigationBar title="欢迎" style={{ backgroundColor: '#6495ED' }} />
-        <Text style={styles.tips}>欢迎</Text>
+        <Text style={styles.tips}>Welcome</Text>
       </View>
     );
   }
@@ -81,6 +67,8 @@ export default class WelcomePage extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent:'center',
+    alignItems:'center'
   },
   tips: {
     fontSize: 29,

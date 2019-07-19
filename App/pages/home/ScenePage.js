@@ -12,12 +12,12 @@ import {
   ScrollView,
   DeviceEventEmitter,
   Modal,
+  RefreshControl
 } from 'react-native';
 import { connect } from 'react-redux'
+import { TuyaSceneApi } from '../../../sdk'
+
 import NavigationBar from '../../common/NavigationBar';
-import ButtonX from '../../standard/components/buttonX';
-import TuyaSceneApi from '../../api/TuyaSceneApi';
-import NormalDialog from '../../component/NormalDialog';
 
 const { height, width } = Dimensions.get('window');
 const Res = {
@@ -36,16 +36,12 @@ class ScenePage extends Component {
       isDialogShow: false,
       dialogText: '',
       dialogActions: [],
+      refreshing: false
     };
   }
 
-  componentDidMount() {
-    console.log('--->', this.state.homeId);
-
-    this.setHomeIdListener = DeviceEventEmitter.addListener('setHomeId', (value) => {
-      console.warn('--->value', value);
-    });
-
+  getData() {
+    this.setState({ refreshing: true })
     TuyaSceneApi.getSceneList({ homeId: this.state.homeId })
       .then((data) => {
         console.log('-getSceneList--->', data);
@@ -61,11 +57,23 @@ class ScenePage extends Component {
         this.setState({
           sceneList: SceneList,
           conditionList,
+          refreshing: false
         });
       })
       .catch((err) => {
         console.log('---getSceneList->', err);
+        this.setState({ refreshing: false })
       });
+  }
+  componentDidMount() {
+    console.log('--->', this.state.homeId);
+
+    this.setHomeIdListener = DeviceEventEmitter.addListener('setHomeId', (value) => {
+      console.warn('--->value', value);
+    });
+    this.getData()
+
+
   }
 
   componentWillUnmount() {
@@ -225,7 +233,7 @@ class ScenePage extends Component {
                       color: '#FFFFFF',
                     }}
                   >
-                      ...
+                    ...
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -248,12 +256,24 @@ class ScenePage extends Component {
 
     return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView
+          refreshControl={(
+            <RefreshControl
+              onRefresh={() => { this.getData() }}
+              refreshing={this.state.refreshing}
+              tintColor="#ff0000"
+              title="Loading..."
+              titleColor="#00ff00"
+              colors={['#ff0000', '#00ff00', '#0000ff']}
+              progressBackgroundColor="#ffff00"
+            />
+          )}
+        >
           <NavigationBar
             style={{ backgroundColor: '#FFFFFF', width }}
-            leftButton={this.renderLeftButton('编辑', this.props)}
+            leftButton={this.renderLeftButton('Delete', this.props)}
             rightButton={this.renderRightButton()}
-            title="智能"
+            title="scene"
           />
           <TouchableOpacity
             onPress={() => {
@@ -263,7 +283,7 @@ class ScenePage extends Component {
             }}
           >
             <View style={styles.btnStyle}>
-              <Text>场景</Text>
+              <Text>scene</Text>
               <Image
                 source={Res.arrow_down}
                 style={this.state.isSceneListShow ? {} : { transform: [{ rotate: '-90deg' }] }}
@@ -279,7 +299,7 @@ class ScenePage extends Component {
             }}
           >
             <View style={styles.btnStyle}>
-              <Text>自动化</Text>
+              <Text>automation</Text>
               <Image
                 source={Res.arrow_down}
                 style={this.state.isAutoListShow ? {} : { transform: [{ rotate: '-90deg' }] }}
@@ -287,83 +307,80 @@ class ScenePage extends Component {
             </View>
           </TouchableOpacity>
           {isAutoList}
-        </ScrollView>
-        {this.state.isDialogShow && (
-          <Modal
-            animationType="slide"
-            transparent
-            visible
-            onRequestClose={() => {
-              this.setState({
-                isDialogShow: false,
-              });
-            }}
-          >
-            <View style={styles.allview}>
-              <View style={styles.halfview}>
-                <View
-                  style={{
-                    width: 0.8 * width,
-                    backgroundColor: 'transparent',
-                    height: 48,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Text
+        </ScrollView >
+        {
+          this.state.isDialogShow && (
+            <Modal
+              animationType="slide"
+              transparent
+              visible
+              onRequestClose={() => {
+                this.setState({
+                  isDialogShow: false,
+                });
+              }}
+            >
+              <View style={styles.allview}>
+                <View style={styles.halfview}>
+                  <View
                     style={{
-                      color: '#22242C',
-                      fontSize: 16,
-                      fontWeight: 'bold',
+                      width: 0.8 * width,
+                      backgroundColor: 'transparent',
+                      height: 48,
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
-                    {this.state.dialogText}
-                  </Text>
-                </View>
-                <View style={{ flex: 1 }}>
-                  <FlatList
-                    data={this.state.dialogActions}
-                    renderItem={({ item }) => {
-                      let newArr;
-                      for (const i in item.actionDisplayNew) {
-                        newArr = item.actionDisplayNew[i];
-                      }
-                      return (
-                        <View style={{ width: 0.8 * width, flexDirection: 'row' }}>
-                          <Text style={{ color: 'black', fontSize: 16 }}>{item.entityName}</Text>
-                          <Text style={{ color: 'black', fontSize: 16, marginLeft: 10 }}>{newArr[0]}</Text>
-                          <Text style={{ color: 'black', fontSize: 16 }}>{newArr[1]}</Text>
-                        </View>
-                      );
-                    }}
-                  />
-                </View>
-                <View
-                  style={{
-                    width,
-                    height: 56,
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: 'transparent',
-                  }}
-                >
-                  <TouchableOpacity
-                    style={styles.comfirmbtn}
-                    onPress={() => {
-                      this.setState({
-                        isDialogShow: false,
-                      });
+                    <Text
+                      style={{
+                        color: '#22242C',
+                        fontSize: 16,
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      {this.state.dialogText}
+                    </Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <FlatList
+                      data={this.state.dialogActions}
+                      renderItem={({ item }) => {
+                     
+                        return (
+                          <View style={{ width: 0.8 * width, flexDirection: 'row' }}>
+                            <Text style={{ color: 'black', fontSize: 16 }}>{item.entityName}</Text>
+                          </View>
+                        );
+                      }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      width,
+                      height: 56,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: 'transparent',
                     }}
                   >
-                    <Text style={styles.comfirmText}>确认</Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.comfirmbtn}
+                      onPress={() => {
+                        this.setState({
+                          isDialogShow: false,
+                        });
+                      }}
+                    >
+                      <Text style={styles.comfirmText}>confirm</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </View>
-          </Modal>
-        )}
-      </View>
+            </Modal>
+          )
+        }
+      </View >
     );
   }
 }
@@ -455,5 +472,5 @@ const styles = StyleSheet.create({
   },
 });
 export default connect((state) => ({
-  homeId:state.reducers.homeId,
+  homeId: state.reducers.homeId,
 }))(ScenePage)

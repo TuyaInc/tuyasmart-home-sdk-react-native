@@ -6,10 +6,10 @@
 
 import React, { Component } from 'react';
 import {
-  StyleSheet, Text, Navigator, Image, View, DeviceEventEmitter,
+  StyleSheet, Image, View, DeviceEventEmitter,
 } from 'react-native';
 import TabNavigator from 'react-native-tab-navigator';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import Toast from 'react-native-easy-toast';
 import DevicesListPage from './home/DevicesListPage';
 import MyPage from './home/MyPage';
 import ScenePage from './home/ScenePage';
@@ -64,7 +64,6 @@ export default class HomePage extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'red',
   },
   image: {
     height: 22,

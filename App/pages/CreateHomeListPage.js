@@ -1,30 +1,36 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  View, StyleSheet, Text, Image, ImageBackground, Dimensions, TouchableOpacity,
+  View, StyleSheet, Text, Image, Dimensions, TouchableOpacity,
 } from 'react-native';
+import { TuyaHomeManagerApi } from '../../sdk/index'
+import Item from '../common/Item'
 import NavigationBar from '../common/NavigationBar';
+import BaseComponet from '../component/BaseComponet';
+
 import ButtonX from '../standard/components/buttonX';
 import ViewUtils from '../utils/ViewUtils';
-import TuyaHomeManagerApi from '../api/TuyaHomeManagerApi';
-
-const { height, width } = Dimensions.get('window');
-export default class CreateHomeListPage extends Component {
-  constructor(props) {
-    super(props);
-  }
+const { width } = Dimensions.get('window');
+import {
+  lon,
+  lat,
+  geoName,
+  homeName,
+  rooms
+} from '../constant'
+export default class CreateHomeListPage extends BaseComponet {
 
   _renderRightBtn() {
     return (
       <ButtonX
         onPress={() => {
           TuyaHomeManagerApi.createHome({
-            name: '我的家',
-            lon: 80.99,
-            lat: 80.99,
-            geoName: '北京',
-            rooms: ['客厅', '主卧'],
+            name: homeName,
+            lon,
+            lat,
+            geoName,
+            rooms,
           })
-            .then((data) => {
+            .then(() => {
               this.props.navigation.navigate('HomePage');
             })
             .catch((err) => {
@@ -32,109 +38,42 @@ export default class CreateHomeListPage extends Component {
             });
         }}
       >
-        <Text style={{ fontSize: 18, color: 'black', marginRight: 10 }}>保存</Text>
+        <Text style={{ fontSize: 18, color: 'black', marginRight: 10 }}>Save</Text>
       </ButtonX>
     );
   }
 
-  render() {
+  renderHeaderView() {
+    return <NavigationBar
+      style={{ backgroundColor: '#FFFFFF', width }}
+      leftButton={ViewUtils.getLeftButton(() => {
+        this.props.navigation.pop();
+      })}
+      rightButton={this._renderRightBtn()}
+      title="Home Setting"
+      
+    />
+  }
+  renderContent() {
     return (
       <View style={styles.container}>
-        <NavigationBar
-          style={{ backgroundColor: '#FFFFFF', width }}
-          leftButton={ViewUtils.getLeftButton(() => {
-            this.props.navigation.pop();
-          })}
-          rightButton={this._renderRightBtn()}
-          title="家庭设置"
+        <Item
+          leftText={'Home name'}
+          rightText={homeName}
         />
-        <TouchableOpacity
-          style={{
-            width,
-            height: 60,
-            marginTop: 30,
-            backgroundColor: 'red',
-          }}
-        >
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              backgroundColor: '#FFFFFF',
-            }}
-          >
-            <Text style={{ color: '#A2A3AA', fontSize: 16, marginLeft: 10 }}>家庭名称</Text>
-            <Text style={{ fontSize: 16, color: 'black', marginRight: 80 }}>我的家</Text>
-            <Image style={{ marginRight: 10 }} source={require('../res/images/Arrow_right.png')} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            width,
-            height: 60,
-            marginTop: 1,
-            backgroundColor: 'red',
-          }}
-        >
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              backgroundColor: '#FFFFFF',
-            }}
-          >
-            <Text style={{ color: '#A2A3AA', fontSize: 16, marginLeft: 10 }}>家庭位置</Text>
-            <Text style={{ fontSize: 16, color: 'black', marginRight: 80 }}>浙江杭州</Text>
-            <Image style={{ marginRight: 10 }} source={require('../res/images/Arrow_right.png')} />
-          </View>
-        </TouchableOpacity>
-        <Text style={{ color: '#81828B', fontSize: 13, marginTop: 10 }}>在哪些房间有智能设备:</Text>
-        <TouchableOpacity
-          style={{
-            width,
-            height: 60,
-            marginTop: 10,
-            backgroundColor: 'red',
-          }}
-        >
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              backgroundColor: '#FFFFFF',
-            }}
-          >
-            <Text style={{ color: 'black', fontSize: 16, marginLeft: 10 }}>客厅</Text>
-            <Image style={{ marginRight: 10 }} source={require('../res/images/select.png')} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            width,
-            height: 60,
-            marginTop: 1,
-            backgroundColor: 'red',
-          }}
-        >
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              backgroundColor: '#FFFFFF',
-            }}
-          >
-            <Text style={{ color: 'black', fontSize: 16, marginLeft: 10 }}>主卧</Text>
-            <Image style={{ marginRight: 10 }} source={require('../res/images/select.png')} />
-          </View>
-        </TouchableOpacity>
+        <Item
+          leftText={'Home location'}
+          rightText={geoName}
+        />
+        <Text style={{ color: '#81828B', fontSize: 13, marginTop: 10 }}>Which rooms have smart devices?:</Text>
+        <Item
+          leftText={rooms[0]}
+          rightImage={require('../res/images/select.png')}
+        />
+        <Item
+          leftText={rooms[1]}
+          rightImage={require('../res/images/select.png')}
+        />
       </View>
     );
   }

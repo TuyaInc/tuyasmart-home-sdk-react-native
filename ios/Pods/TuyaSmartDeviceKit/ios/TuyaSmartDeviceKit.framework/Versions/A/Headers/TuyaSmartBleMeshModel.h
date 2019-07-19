@@ -13,10 +13,10 @@
 
 @interface TuyaSmartBleMeshModel : NSObject
 
-//mesh网络名称
+//generic mesh info
 @property (nonatomic, strong) NSString     *name;
 
-//mesh网络云端标识
+//mesh id
 @property (nonatomic, strong) NSString     *meshId;
 
 //localKey
@@ -32,6 +32,11 @@
 @property (nonatomic, assign) BOOL         share;
 
 @property (nonatomic, assign) long long    homeId;
+
+// --------- sig mesh info
+@property (nonatomic, strong) NSString *netKey;
+
+@property (nonatomic, strong) NSString *appKey;
 
 @end
 

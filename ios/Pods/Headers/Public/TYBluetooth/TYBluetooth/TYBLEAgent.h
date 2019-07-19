@@ -1,1 +1,1 @@
-../../../../TYBluetooth/TYBluetooth.framework/Versions/A/Headers/TYBLEAgent.h
+../../../../TYBluetooth/ios/TYBluetooth.framework/Versions/A/Headers/TYBLEAgent.h

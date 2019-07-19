@@ -20,22 +20,22 @@ typedef enum : NSUInteger {
 
 @interface TuyaSmartGroupModel : NSObject
 
-//群组唯一标识符
+// group Id
 @property (nonatomic, strong) NSString  *groupId;
 
-//产品唯一标识符
+// product Id
 @property (nonatomic, strong) NSString  *productId;
 
-//群组创建时间
+// group creation time
 @property (nonatomic, assign) long long    time;
 
-//群组名称
+// name of group
 @property (nonatomic, strong) NSString  *name;
 
-//群组iconUrl
+// iconUrl
 @property (nonatomic, strong) NSString  *iconUrl;
 
-// 群组类型
+// type of group
 @property (nonatomic, assign) TuyaSmartGroupType  type;
 
 @property (nonatomic, assign) BOOL      isShare;
@@ -61,19 +61,22 @@ typedef enum : NSUInteger {
 // roomId
 @property (nonatomic, assign) long long    roomId;
 
-// 排序
+// customize DP name
+@property (nonatomic, copy)   NSDictionary *dpName;
+
+// order
 @property (nonatomic, assign) NSInteger displayOrder;
 
-// 设备列表
+// device list
 @property (nonatomic, strong) NSArray<TuyaSmartDeviceModel *> *deviceList;
 
-//群组的本地短地址
+// local Short Address of Groups
 @property (nonatomic, strong) NSString     *localId;
 
-//大小类
+// subclass
 @property (nonatomic, strong) NSString     *pcc;
 
-// meshId 或者 gwId
+// meshId or gwId
 @property (nonatomic, strong) NSString     *meshId;
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "TuyaRNActivatorModule.h"
-#import <TuyaSmartDeviceKit/TuyaSmartActivator.h>
+#import <TuyaSmartActivatorKit/TuyaSmartActivator.h>
 #import <TuyaSmartBaseKit/TuyaSmartBaseKit.h>
 #import <TuyaSmartDeviceKit/TuyaSmartDeviceKit.h>
 #import "TuyaRNUtils+Network.h"
@@ -114,6 +114,7 @@ RCT_EXPORT_METHOD(stopNewGwSubDevActivatorConfig:(NSDictionary *)params resolver
  */
 RCT_EXPORT_METHOD(getCurrentWifi:(NSDictionary *)params success:(RCTResponseSenderBlock)succ failure:(RCTResponseErrorBlock)fail) {
   NSString *ssid = [TuyaSmartActivator currentWifiSSID];
+
   if ([ssid isKindOfClass:[NSString class]] && ssid.length > 0) {
     succ(@[ssid]);
   } else {
@@ -123,7 +124,7 @@ RCT_EXPORT_METHOD(getCurrentWifi:(NSDictionary *)params success:(RCTResponseSend
 
 
 //判断网络
-RCT_EXPORT_METHOD(openNetworkSettings:(NSDictionary *)params resolver :(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+RCT_EXPORT_METHOD(openNetworkSettings) {
   
    [TuyaRNUtils openNetworkSettings];
   

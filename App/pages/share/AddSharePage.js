@@ -4,20 +4,16 @@ import {
   StyleSheet,
   Text,
   Image,
-  ImageBackground,
   Dimensions,
-  FlatList,
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import { connect } from 'react-redux';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import {TuyaShareApi} from '../../../sdk'
+import Toast  from 'react-native-easy-toast';
 import NavigationBar from '../../common/NavigationBar';
-import ButtonX from '../../standard/components/buttonX';
 import ViewUtils from '../../utils/ViewUtils';
-import TuyaShareApi from '../../api/TuyaShareApi';
 
-const { height, width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const Res = {
   arrowRight: require('../../res/images/Arrow_right.png'),

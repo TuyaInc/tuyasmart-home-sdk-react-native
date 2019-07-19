@@ -11,47 +11,123 @@
 
 #import <TuyaSmartUtil/TuyaSmartUtil.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface TuyaSmartRequest : NSObject
 
-
 /**
- *  请求服务端接口
- *
- *  @param apiName	接口名称
- *  @param postData 业务入参
- *  @param version  接口版本号
- *  @param success  操作成功回调
- *  @param failure  操作失败回调
+ Network request for Tuya server API.
+ 调用服务端API
+
+ @param apiName API name
+ @param postData API params
+ @param version API version
+ @param success Success block
+ @param failure Failure block
  */
 - (void)requestWithApiName:(NSString *)apiName
-                  postData:(NSDictionary *)postData
+                  postData:(nullable NSDictionary *)postData
                    version:(NSString *)version
-                   success:(TYSuccessID)success
-                   failure:(TYFailureError)failure;
-
-
+                   success:(nullable TYSuccessID)success
+                   failure:(nullable TYFailureError)failure;
 
 /**
- *  请求服务端接口
- *
- *  @param apiName  接口名称
- *  @param postData 业务入参
- *  @param getData  公共入参
- *  @param version  接口版本号
- *  @param success  操作成功回调
- *  @param failure  操作失败回调
+ Network request for Tuya server API.
+ 调用服务端API
+ 
+ @param apiName API name
+ @param postData API params
+ @param getData Common params
+ @param version API version
+ @param success Success block
+ @param failure Failure block
  */
 - (void)requestWithApiName:(NSString *)apiName
-                  postData:(NSDictionary *)postData
-                   getData:(NSDictionary *)getData
+                  postData:(nullable NSDictionary *)postData
+                   getData:(nullable NSDictionary *)getData
                    version:(NSString *)version
-                   success:(TYSuccessID)success
-                   failure:(TYFailureError)failure;
+                   success:(nullable TYSuccessID)success
+                   failure:(nullable TYFailureError)failure;
 
-
-/// 取消网络请求
+/// Cancel network request
 - (void)cancel;
 
+/// Remove network cache
++ (void)removeAllCache;
+
 @end
+
+
+@interface TuyaSmartRequest (ApiMerge)
+
+/**
+ Invoke multiple api in one network request.
+ 一次网络请求调用多个API
+
+ @param apiName API name
+ @param postData API params
+ @param version API version
+ @param success Success block
+ @param failure Failure block
+ */
+- (void)addMergeRequestWithApiName:(NSString *)apiName
+                          postData:(nullable NSDictionary *)postData
+                           version:(NSString *)version
+                           success:(nullable TYSuccessID)success
+                           failure:(nullable TYFailureError)failure;
+
+
+/**
+ Send multiple api request.
+ 发送合并API请求
+ 
+ @param success Success block
+ @param failure Failure block
+ */
+- (void)sendMergeRequestWithSuccess:(nullable TYSuccessList)success
+                            failure:(nullable TYFailureError)failure;
+
+/**
+ Send multiple api request.
+ 发送合并API请求
+ 
+ @param getData Common params
+ @param success Success block
+ @param failure Failure block
+ */
+- (void)sendMergeRequestWithGetData:(nullable NSDictionary *)getData
+                            success:(nullable TYSuccessList)success
+                            failure:(nullable TYFailureError)failure;
+
+
+/**
+ Remove all multiple api request.
+ 清空合并API请求
+ */
+- (void)removeAllMergeRequest;
+
+@end
+
+@interface TuyaSmartRequest (Encryption)
+
+/**
+ Network request for Tuya server API with post data encrypt.
+ 调用服务端API
+ 
+ @param apiName API name
+ @param postData API params
+ @param version API version
+ @param success Success block
+ @param failure Failure block
+ */
+- (void)requestPostDataEncryptWithApiName:(NSString *)apiName
+                                 postData:(nullable NSDictionary *)postData
+                                  version:(NSString *)version
+                                  success:(nullable TYSuccessID)success
+                                  failure:(nullable TYFailureError)failure;
+
+@end
+
+NS_ASSUME_NONNULL_END
 
 #endif

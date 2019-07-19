@@ -10,17 +10,11 @@ Hardware functions (network configuration, control, status reporting, regular ta
 Account system (phone number, email registration, login, password reset and other general account functions)
 Tuya Cloud HTTP API interface package
 
-## Getting started
-* （This has not been updated yet. Please refer to the following method）
 
-`$ npm install tuyasmart-home-sdk --save`
-
-`$ react-native link tuyasmart-home-sdk`
 
 ## Examples
 
-See the demo in https://github.com/TuyaInc/tuyasmart-home-sdk-react-native/tree/master/Example before using.
-
+See the demo in https://github.com/TuyaInc/tuyasmart-home-sdk-react-native
 ## Doc
 
 Refer to Details: [Tuya Smart Doc: tuyasmart-home-sdk-react-native](https://tuyakae.gitbook.io/tuyasmart-home-sdk-react-native)
@@ -59,74 +53,44 @@ Refer to Details: [Tuya Smart Doc: tuyasmart-home-sdk-react-native](https://tuya
     pod 'Folly', :podspec => 'path/to/node_modules/react-native/third-party-podspecs/Folly.podspec'
     end
 ```
-#### 2. Drag the files in [TuyaRNSDK](https://github.com/TuyaInc/tuyasmart-home-sdk-react-native/tree/master/Example/ios/TuyaRnDemo/TuyaRNSDK) to your project.
-#### 3. put the secure image into the root path of your project and configure your AppKey and AppSecret in AppDelegate.m like this(refer to [SDK doc](https://tuyainc.github.io/tuyasmart_home_ios_sdk_doc/zh-hans/resource/Preparation.html)):
+#### 2. Drag the files in [TuyaRNSDK](https://github.com/TuyaInc/tuyasmart-home-sdk-react-native/) to your project.
+#### 3. put the secure image into the root path of your project and configure your AppKey and AppSecret in AppDelegate.m like this(refer to [SDK doc](https://tuyainc.github.io/tuyasmart_home_ios_sdk_doc/en/)):
 
-``` objective-c
-  [[TuyaSmartSDK sharedInstance] startWithAppKey:@"" secretKey:@""];
 ```
 
+```
+#### 2. compile sdk/android in your project
+#### 3. put the secure image into the root path of your project and configure your AppKey and AppSecret in AppDelegate.m like this(refer to [SDK doc](https://tuyainc.github.io/tuyasmart_home_android_sdk_doc/en/)):
 
-
-
-
-## USE AndroidRNSDK
-###  1. click this `https://github.com/TuyaInc/tuyasmart-home-sdk-react-native/tree/master/Example/android`
-
-
-Put this module into your own android （just copy code）
-
-###  2. in your app build.gradle add implementation
 
 ```
 dependencies {
     ……
-    implementation project(':tuyasmart-sdk-react-native')
+     implementation project(':tuya-react-sdk')
     ……
 }
+
+setting.gradle
+
+include ':tuya-react-sdk'
+project(':tuya-react-sdk').projectDir = new File(rootProject.projectDir, '../sdk/android')
 ```
 
-###  3. in your app MainApplication ,you should initSDK 
+###  3.TIPS
 
-You can choose one of the following two ways to go initSDK
-
-* the first one
+* in App/constant File
 
 ```
+const appKey=""
+const appSecret=""
 
-Appkey and appSecret are configured in the AndroidManifest.xml file, and corresponding permissions are also configured
+//login Account
+const countryCode=""
+const userName=""
+const password=""
 
-<meta-data
-android:name="TUYA_SMART_APPKEY"
-android:value="Appkey" />
-<meta-data
-android:name="TUYA_SMART_SECRET"
-android:value="AppSecret" />
 
-TuyaCoreModule.Companion.initTuyaSDKWithoutOptions()
+There are many constants that are applied to App to fill in before it starts.
 ```
 
-* the second one
-
-```
-TuyaCoreModule.Companion.initTuyaSDk("xxxxxxxxxxxxxxxxxxxxx","xxxxxxxxxxxxxxxxxxxxx",this);
-
-```
-
-* how to use
-
-```
-
-@Override
-  public void onCreate() {
-    super.onCreate();
-    SoLoader.init(this, /* native exopackage */ false);
-    // Fill in appkey and appsecret of the application below
-   // TuyaCoreModule.Companion.initTuyaSDKWithoutOptions();
-  //TuyaCoreModule.Companion.initTuyaSDk("xxxxxxxxxxxxxxxxxxxxx","xxxxxxxxxxxxxxxxxxxxx",this);
-  //TuyaCoreModule.setSDKDebug(true) //if you have some problem ,You can grab the log for us
-  }
-
-
-```
-
+### 4.**At present, the project is still in the process of perfection, and there are still some problems.**

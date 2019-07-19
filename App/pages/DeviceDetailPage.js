@@ -4,18 +4,17 @@ import {
   StyleSheet,
   Text,
   Image,
-  ImageBackground,
   Dimensions,
   FlatList,
   Switch,
   TouchableOpacity,
 } from 'react-native';
+import {TuyaDeviceApi} from '../../sdk/index'
+
 import NavigationBar from '../common/NavigationBar';
 import ViewUtils from '../utils/ViewUtils';
-import TuyaDeviceApi from '../api/TuyaDeviceApi';
-import { resetAction } from '../navigations/AppNavigator';
 
-const { height, width } = Dimensions.get('window');
+const {  width } = Dimensions.get('window');
 
 export default class DeviceDetailPage extends Component {
   constructor(props) {
@@ -202,7 +201,7 @@ export default class DeviceDetailPage extends Component {
             });
           }}
         >
-          <Text style={{ color: 'black' }}>进入定时页面</Text>
+          <Text style={{ color: 'black' }}>Timing Page</Text>
         </TouchableOpacity>
       </View>
     );

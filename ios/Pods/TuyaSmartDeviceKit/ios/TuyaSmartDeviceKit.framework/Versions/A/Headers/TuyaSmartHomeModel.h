@@ -16,34 +16,34 @@ typedef NS_ENUM(NSUInteger, TYHomeStatus) {
 
 @interface TuyaSmartHomeModel : NSObject
 
-// 家庭Id
+// home Id
 @property (nonatomic, assign) long long homeId;
 
-// 家庭名称
+// home name
 @property (nonatomic, strong) NSString *name;
 
-// 家庭地理位置
+// home geographic location
 @property (nonatomic, strong) NSString *geoName;
 
-// 纬度
+// latitude
 @property (nonatomic, assign) double latitude;
 
-// 经度
+// longitude
 @property (nonatomic, assign) double longitude;
 
-// 家庭背景图
+// home Background Pictures
 @property (nonatomic, strong) NSString *backgroundUrl;
 
-// 排序
+// order
 @property (nonatomic, assign) NSInteger displayOrder;
 
-// 是否是家庭管理员
+// admin or not
 @property (nonatomic, assign) BOOL admin;
 
-// 处理状态
+// state of deal
 @property (nonatomic, assign) TYHomeStatus dealStatus;
 
-// 邀请人名称
+// inviter's name
 @property (nonatomic, strong) NSString *nickName;
 
 @end

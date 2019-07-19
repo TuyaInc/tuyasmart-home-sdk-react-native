@@ -20,10 +20,16 @@
 
 #import <TuyaSmartBaseKit/TuyaSmartBaseKit.h>
 
-#import "TuyaSmartActivator.h"
+#if TARGET_OS_IOS
+    #import <TuyaSmartMQTTChannelKit/TuyaSmartMQTTChannelKit.h>
+    #import <TuyaSmartSocketChannelKit/TuyaSmartSocketChannelKit.h>
+#elif TARGET_OS_WATCH
+    #define TuyaSmartMQTTChannelDelegate NSObject
+    #define TuyaSmartSocketChannelDelegate NSObject
+#endif
+
 #import "TuyaSmartDevice.h"
 #import "TuyaSmartGroup.h"
-
 #import "TuyaSmartHome.h"
 #import "TuyaSmartHomeManager.h"
 #import "TuyaSmartHomeMember.h"
@@ -34,5 +40,6 @@
 #import "TuyaSmartHomeDeviceShare.h"
 
 #import "TuyaSmartBleMeshModel.h"
+#import "TuyaSmartSingleTransfer.h"
 
 #endif /* TuyaSmartDeviceKit_h */

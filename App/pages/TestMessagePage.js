@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, Image, ImageBackground, Dimensions, BackHandler,
+  View, StyleSheet, Dimensions, BackHandler,
 } from 'react-native';
-import TuyaMessageApi from '../api/TuyaMessageApi';
+import {TuyaMessageApi} from '../../sdk'
+
 import TextButton from '../component/TextButton';
 
-const { height, width } = Dimensions.get('window');
+const {  width } = Dimensions.get('window');
 export default class TestMessagePage extends Component {
   constructor(props) {
     super(props);

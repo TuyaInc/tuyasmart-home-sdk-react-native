@@ -13,86 +13,94 @@
 
 @interface TuyaSmartRoom : NSObject
 
-// 房间Model
+// room model
 @property (nonatomic, strong, readonly) TuyaSmartRoomModel *roomModel;
 
-// 房间下的设备列表
+// device list
 @property (nonatomic, strong, readonly) NSArray <TuyaSmartDeviceModel *> *deviceList;
 
-// 房间下的群组列表
+// group list
 @property (nonatomic, strong, readonly) NSArray <TuyaSmartGroupModel *> *groupList;
 
 
 /**
- 获取 room 对象
- 
- @param roomId 房间Id
- @param homeId 家庭Id
+ *  Get room instance
+ *  获取 room 对象
+ *
+ *  @param roomId Room ID
+ *  @param homeId Home ID
  */
 + (instancetype)roomWithRoomId:(long long)roomId homeId:(long long)homeId;
 
 /**
- 获取 room 对象
- 
- @param roomId 房间Id
- @param homeId 家庭Id
+ *  Get room instance
+ *  获取 room 对象
+ *
+ *  @param roomId Room ID
+ *  @param homeId Home ID
  */
 - (instancetype)initWithRoomId:(long long)roomId homeId:(long long)homeId NS_DESIGNATED_INITIALIZER;
 
 - (instancetype)init NS_UNAVAILABLE;
 
 /**
- 更新房间名字
- 
- @param roomName    房间名字
- @param success     操作成功回调
- @param failure     操作失败回调
+ *  Rename the room
+ *  更新房间名字
+ *
+ *  @param roomName    Room name
+ *  @param success     Success block
+ *  @param failure     Failure block
  */
 - (void)updateRoomName:(NSString *)roomName success:(TYSuccessHandler)success failure:(TYFailureError)failure;
 
 /**
- 添加设备到房间
- 
- @param deviceId    设备Id
- @param success     操作成功回调
- @param failure     操作失败回调
+ *  Add device to the room
+ *  添加设备到房间
+ *
+ *  @param deviceId    Device ID
+ *  @param success     Success block
+ *  @param failure     Failure block
  */
 - (void)addDeviceWithDeviceId:(NSString *)deviceId success:(TYSuccessHandler)success failure:(TYFailureError)failure;
 
 /**
- 从设备中移除设备
- 
- @param deviceId    设备Id
- @param success     操作成功回调
- @param failure     操作失败回调
+ *  Remove device from the room
+ *  从房间中移除设备
+ *
+ *  @param deviceId    Device ID
+ *  @param success     Success block
+ *  @param failure     Failure block
  */
 - (void)removeDeviceWithDeviceId:(NSString *)deviceId success:(TYSuccessHandler)success failure:(TYFailureError)failure;
 
 
 /**
- 添加群组到房间
- 
- @param groupId     群组Id
- @param success     操作成功回调
- @param failure     操作失败回调
+ *  Add group to the room
+ *  添加群组到房间
+ *
+ *  @param groupId     Group ID
+ *  @param success     Success block
+ *  @param failure     Failure block
  */
 - (void)addGroupWithGroupId:(NSString *)groupId success:(TYSuccessHandler)success failure:(TYFailureError)failure;
 
 /**
- 从设备中移除群组
- 
- @param groupId     群组Id
- @param success     操作成功回调
- @param failure     操作失败回调
+ *  Remove group from the room
+ *  从房间中移除群组
+ *
+ *  @param groupId     Group ID
+ *  @param success     Success block
+ *  @param failure     Failure block
  */
 - (void)removeGroupWithGroupId:(NSString *)groupId success:(TYSuccessHandler)success failure:(TYFailureError)failure;
 
 /**
- 批量修改房间与群组、设备的关系
- 
- @param deviceGroupList  设备或者群组list
- @param success     操作成功回调
- @param failure     操作失败回调
+ *  Batch modification of the relationship between rooms, groups and devices
+ *  批量修改房间与群组、设备的关系
+ *
+ *  @param deviceGroupList  List of devices or groups
+ *  @param success          Success block
+ *  @param failure          Failure block
  */
 - (void)saveBatchRoomRelationWithDeviceGroupList:(NSArray <NSString *> *)deviceGroupList
                                          success:(TYSuccessHandler)success

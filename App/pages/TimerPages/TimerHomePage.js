@@ -12,10 +12,11 @@ import {
   SwipeableFlatList,
   Platform,
 } from 'react-native';
+
+import {TuyaTimerApi} from '../../../sdk'
 import Toast, { DURATION } from 'react-native-easy-toast';
 import Strings from '../../i18n';
 import ButtonX from '../../standard/components/buttonX';
-import TuyaTimerApi from '../../api/TuyaTimerApi';
 import NavigationBar from '../../common/NavigationBar';
 import ViewUtils from '../../utils/ViewUtils';
 
@@ -256,7 +257,7 @@ export default class TimerHomePage extends Component {
               timeId: item.timerId,
             })
               .then((data) => {
-                this.refs.toast.show('删除成功了');
+                this.refs.toast.show('delete success');
                 const timeList = this.state.timerList;
                 const id = item.timerId;
                 const newArr = new Array();

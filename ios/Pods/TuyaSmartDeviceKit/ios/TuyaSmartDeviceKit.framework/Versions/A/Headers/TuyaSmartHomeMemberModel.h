@@ -10,31 +10,31 @@
 
 @interface TuyaSmartHomeMemberModel : NSObject
 
-// 成员Id
+// member Id
 @property (nonatomic, assign) long long memberId;
 
-// 成员头像
+// Head portraits of members
 @property (nonatomic, strong) NSString *headPic;
 
-// 成员名字
+// name of members
 @property (nonatomic, strong) NSString *name;
 
-// 是否管理员
+// admin or not
 @property (nonatomic, assign) BOOL isAdmin;
 
-// 家庭Id
+// home Id
 @property (nonatomic, assign) long long homeId;
 
-// 账号
+// mobile
 @property (nonatomic, strong) NSString *mobile;
 
-// 用户名
+// user name
 @property (nonatomic, strong) NSString *userName;
 
-// 用户Id
+// uid
 @property (nonatomic, strong) NSString *uid;
 
-// 处理状态
+// state of deal
 @property (nonatomic, assign) NSInteger dealStatus;
 
 @end

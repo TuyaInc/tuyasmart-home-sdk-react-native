@@ -2,6 +2,7 @@ package com.tuyarndemo;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.support.multidex.MultiDex;
 
 import com.facebook.react.BuildConfig;
@@ -57,5 +58,6 @@ public class MainApplication extends Application implements ReactApplication {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
     // Fill in appkey and appsecret of the application below
+
   }
 }

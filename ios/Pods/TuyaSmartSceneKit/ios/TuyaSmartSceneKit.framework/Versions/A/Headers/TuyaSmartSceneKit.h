@@ -2,7 +2,7 @@
 //  TuyaSmartSceneKit.h
 //  TuyaSmartSceneKit
 //
-//  Created by 高森 on 2018/9/3.
+//  Created by TuyaInc on 2018/9/3.
 //
 
 #ifndef TuyaSmartSceneKit_h

@@ -1,34 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  View, StyleSheet, Text, Image, ImageBackground, TextInput, TouchableOpacity, Dimensions,
+  View, StyleSheet, Text, Image, TouchableOpacity, Dimensions,
 } from 'react-native';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import { TuyaUserApi } from '../../../sdk'
+
 import NavigationBar from '../../common/NavigationBar';
-import ButtonX from '../../standard/components/buttonX';
 import CheckUtils from '../../utils/CheckUtils';
-import CountDownButton from '../../component/CountDownButton';
-import Strings from '../../i18n';
 import TextButton from '../../component/TextButton';
-import TuyaUserApi from '../../api/TuyaUserApi';
 import DeviceStorage from '../../utils/DeviceStorage';
 import { resetAction } from '../../navigations/AppNavigator';
-import EditDialog from '../../component/EditDialog'
+import BaseComponent from '../../component/BaseComponet'
+import { userName, password, countryCode } from '../../constant'
 
-const { height, width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
-export default class LoginPage extends Component {
+export default class LoginPage extends BaseComponent {
   constructor(props) {
     super(props);
-
-    this.state = {
-      codettile: Strings.Verification_code,
-      ValidateCode: '',
-      password: '',
-      canreigstr: true,
-      useName: '',
-      cityCode: '86',
-      editVisible:false,
-    };
   }
 
   renderLeftButton() {
@@ -47,46 +35,48 @@ export default class LoginPage extends Component {
   }
 
   _loginConfirm() {
-    if (this.state.useName.indexOf('@') >= 0) {
+    if (userName.indexOf('@') >= 0) {
       TuyaUserApi.loginWithEmail({
-        email: `${this.state.useName}`,
-        password: this.state.password,
-        countryCode: this.state.cityCode,
+        email: userName,
+        password,
+        countryCode,
       })
-        .then((data) => {
-          DeviceStorage.saveUserInfo(`${this.state.useName}`, this.state.password, `${this.state.cityCode}`).then(
+        .then(() => {
+          DeviceStorage.saveUserInfo(userName, password, countryCode).then(
             () => {
               this.props.navigation.dispatch(resetAction('HomePage'));
             },
           );
         })
         .catch((error) => {
-          this.refs.toast.show(error.toString().slice(7));
+          this.showToast(error.toString())
         });
     } else {
-      const LoginEnable = CheckUtils.isPoneAvailable(this.state.useName) && CheckUtils.isPassWord(this.state.password);
+      const LoginEnable = CheckUtils.isPoneAvailable(userName) && CheckUtils.isPassWord(password);
       if (LoginEnable) {
         TuyaUserApi.loginWithPhonePassword({
-          phoneNumber: this.state.useName,
-          password: this.state.password,
-          countryCode: this.state.cityCode,
+          phoneNumber: userName,
+          password,
+          countryCode,
         })
-          .then((data) => {
-            DeviceStorage.saveUserInfo(this.state.useName, this.state.password, this.state.cityCode).then(() => {
-              this.props.navigation.dispatch(resetAction('HomePage'));
-            });
+          .then(() => {
+            DeviceStorage.saveUserInfo(userName, password, countryCode).then(
+              () => {
+                this.props.navigation.dispatch(resetAction('HomePage'));
+              },
+            );
           })
           .catch((error) => {
-            this.refs.toast.show(error.toString().slice(7));
+            this.showToast(error.toString())
           });
       } else {
-        this.refs.toast.show('密码格式有误');
+        this.showToast("Format error")
       }
     }
   }
 
-  render() {
-    const disabled = !(this.state.useName.length > 5 && this.state.password.length > 5);
+  renderContent() {
+    const disabled = !(userName.length > 5 && password.length > 5);
     return (
       <View style={styles.container}>
         <NavigationBar style={{ backgroundColor: '#FFFFFF' }} leftButton={this.renderLeftButton()} />
@@ -99,91 +89,17 @@ export default class LoginPage extends Component {
             marginLeft: 30,
           }}
         >
-          登陆
+          login
         </Text>
-        <ButtonX style={{ height: 40, marginTop: 30 }} onPress={()=>{
-            this.setState({
-              editVisible:true
-            })
-          }
-        }>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              borderBottomWidth: 1,
-              borderColor: '#E6E6E6',
-              paddingBottom: 10,
-              marginLeft: 30,
-              marginRight: 30,
-              width: width * 0.85,
-            }}
-          >
-            <Text>中国+86</Text>
-            <Image source={require('../../res/images/Arrow_right.png')} />
-          </View>
-        </ButtonX>
-        <TextInput
-          onChangeText={(value) => {
-            this.setState({
-              useName: value,
-            });
-          }}
-          placeholder={Strings.phoneNumberOrEmaill}
-          placeholderTextColor="#C3C3C9"
-          style={styles.textInputStyle}
-          multiline={false}
-          underlineColorAndroid="transparent"
-        />
-        <TextInput
-          onChangeText={(value) => {
-            this.setState({
-              password: value,
-            });
-          }}
-          placeholder={Strings.Password}
-          placeholderTextColor="#C3C3C9"
-          style={styles.textInputStyle}
-          multiline={false}
-          underlineColorAndroid="transparent"
-        />
+        <Text style={styles.textStyle}>{'Account: '}{userName}</Text>
+        <Text style={styles.textStyle}>{'Passwrod: '}{password}</Text>
         <TextButton
           style={{ marginTop: 50 }}
           onPress={() => {
             this._loginConfirm();
           }}
           disabled={disabled}
-          title="登陆"
-        />
-        <Toast
-          ref="toast"
-          style={{ backgroundColor: '#7DB428' }}
-          position="top"
-          positionValue={200}
-          fadeInDuration={750}
-          fadeOutDuration={1000}
-          opacity={0.8}
-          textStyle={{ color: 'white' }}
-        />
-          <EditDialog
-          title="更改区号"
-          visible={this.state.editVisible}
-          textValue={(value) => {
-            this.setState({
-              cityCode: value,
-            });
-          }}
-          save={() => {
-            this.setState({
-              editVisible: false,
-            });
-          }}
-          cancel={() => {
-            this.setState({
-              editVisible: false,
-            });
-          }}
+          title="login"
         />
       </View>
     );
@@ -197,30 +113,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     justifyContent: 'flex-start',
   },
-  tips: {
-    fontSize: 29,
-  },
-  rowViewStyle: {
-    width: width * 0.95,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  textInputStyle: {
+  textStyle: {
     height: 40,
+    marginTop: 20,
     borderColor: '#EAEAEA',
     borderBottomWidth: 1,
     width: width * 0.85,
     marginLeft: 30,
     marginRight: 30,
-  },
-  textInputStyle2: {
-    height: 40,
-    borderColor: '#EAEAEA',
-    borderWidth: 1,
-    width: 220,
-    marginLeft: 30,
-    paddingLeft: 17,
+    color: 'black'
   },
 });

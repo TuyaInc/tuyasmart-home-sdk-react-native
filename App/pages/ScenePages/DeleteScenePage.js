@@ -4,25 +4,20 @@ import {
   StyleSheet,
   Text,
   Image,
-  ImageBackground,
   Dimensions,
-  FlatList,
   SwipeableFlatList,
   TouchableOpacity,
 } from 'react-native';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import {TuyaSceneApi} from '../../../sdk';
+
+import Toast from 'react-native-easy-toast';
 import NavigationBar from '../../common/NavigationBar';
-import ButtonX from '../../standard/components/buttonX';
-import { resetAction } from '../../navigations/AppNavigator';
-import TuyaUserApi from '../../api/TuyaUserApi';
-import TuyaSceneApi from '../../api/TuyaSceneApi';
-import DeviceStorage from '../../utils/DeviceStorage';
-import TextButton from '../../component/TextButton';
+
 import ViewUtils from '../../utils/ViewUtils';
 import Strings from '../../i18n';
 import { connect } from 'react-redux'
 
-const { height, width } = Dimensions.get('window');
+const {  width } = Dimensions.get('window');
 const Res = {
   setting: require('../../res/images/scene_settings.png'),
 };
@@ -119,7 +114,7 @@ class DeleteScenePage extends Component {
           justifyContent: 'center',
         }}
       >
-        <Text style={{ color: '#A2A3AA', fontSize: 13 }}>当前没有任何场景 ^ _ ^</Text>
+        <Text style={{ color: '#A2A3AA', fontSize: 13 }}>There are no scenarios at present.</Text>
       </View>
     );
   }
@@ -140,7 +135,7 @@ class DeleteScenePage extends Component {
           leftButton={ViewUtils.getLeftButton(() => {
             this.props.navigation.pop();
           })}
-          title="删除智能"
+          title="delete "
         />
         <SwipeableFlatList
           data={this.state.sceneList}

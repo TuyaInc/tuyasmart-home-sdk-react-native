@@ -18,13 +18,13 @@
 
 @optional
 
-// 添加一个家庭
+// the delegate when a new home is added.
 - (void)homeManager:(TuyaSmartHomeManager *)manager didAddHome:(TuyaSmartHomeModel *)home;
 
-// 删除一个家庭
+// the delegate when an existing home is removed.
 - (void)homeManager:(TuyaSmartHomeManager *)manager didRemoveHome:(long long)homeId;
 
-// MQTT连接成功
+// MQTT connected success
 - (void)serviceConnectedSuccess;
 
 
@@ -38,24 +38,26 @@
 
 
 /**
+ *  get homes list. if you want to get home deatails, need to initialize a home, call getHomeDetailWithSuccess: failure:
  *  获取家庭列表，如果要获取具体家庭的详情，需要去初始化一个home，调用接口getHomeDetailWithSuccess:failure:
  *
- *  @param success 操作成功回调
- *  @param failure 操作失败回调
+ *  @param success Success block
+ *  @param failure Failure block
  */
 - (void)getHomeListWithSuccess:(void(^)(NSArray <TuyaSmartHomeModel *> *homes))success
                        failure:(TYFailureError)failure;
 
 /**
+ *  Adds a new home
  *  添加家庭
  *
- *  @param homeName    家庭名字
- *  @param geoName     城市名字
- *  @param rooms       房间列表
- *  @param latitude    维度
- *  @param longitude   经度
- *  @param success     操作成功回调
- *  @param failure     操作失败回调
+ *  @param homeName    Home name
+ *  @param geoName     City name
+ *  @param rooms       Rooms list
+ *  @param latitude    Lat
+ *  @param longitude   Lon
+ *  @param success     Success block
+ *  @param failure     Failure block
  */
 - (void)addHomeWithName:(NSString *)homeName
                 geoName:(NSString *)geoName
@@ -66,27 +68,29 @@
                 failure:(TYFailureError)failure;
 
 /**
+ *  Home sort
  *  家庭排序
  *
- *  @param homeList    家庭列表
- *  @param success     操作成功回调
- *  @param failure     操作失败回调
+ *  @param homeList    Homes list
+ *  @param success     Success block
+ *  @param failure     Failure block
  */
 - (void)sortHomeList:(NSArray <TuyaSmartHomeModel *> *)homeList
              success:(TYSuccessHandler)success
              failure:(TYFailureError)failure;
 
 /**
- *  接受或拒绝加⼊家庭
+ *  Accept or reject to shared home
+ *  接受或拒绝加⼊分享过来的家庭
  *
- *  @param homeId       家庭Id
- *  @param isAccept     是否接受邀请
- *  @param success      操作成功回调
- *  @param failure      操作失败回调
+ *  @param homeId       Home Id
+ *  @param isAccept     Whether to accept the invitation
+ *  @param success      Success block
+ *  @param failure      Failure block
  */
 - (void)joinFamilyWithHomeId:(long long)homeId
                       action:(BOOL)isAccept
                      success:(TYSuccessBOOL)success
-                     failure:(TYFailureError)failure;
+                     failure:(TYFailureError)failure __deprecated_msg("This method is deprecated, Use -[TuyaSmartHome - (void)joinFamilyWithAccept:success:failure:] instead");
 
 @end

@@ -99,15 +99,14 @@ RCT_EXPORT_METHOD(createHome:(NSDictionary *)params resolver:(RCTPromiseResolveB
  *
  * @param listener
  */
-RCT_EXPORT_METHOD(registerTuyaHomeChangeListener:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-  
-  NSNumber *homeIdNum = params[kTuyaHomeManagerModuleHomeId];
-  if (!homeIdNum || homeIdNum.longLongValue <= 0) {
-    return;
-  }
-  //开始监听家庭的情况
-  [[TuyaRNHomeManagerListener sharedInstance] registerSmartHomeManager:[TuyaSmartHomeManager new]];
-  [[TuyaRNHomeListener shareInstance] registerHomeChangeWithSmartHome:[TuyaSmartHome homeWithHomeId:homeIdNum.longLongValue]];
+RCT_EXPORT_METHOD(registerTuyaHomeChangeListener) {
+//  NSNumber *homeIdNum = params[kTuyaHomeManagerModuleHomeId];
+//  if (!homeIdNum || homeIdNum.longLongValue <= 0) {
+//    return;
+//  }
+//  //开始监听家庭的情况
+//  [[TuyaRNHomeManagerListener sharedInstance] registerSmartHomeManager:[TuyaSmartHomeManager new]];
+//  [[TuyaRNHomeListener shareInstance] registerHomeChangeWithSmartHome:[TuyaSmartHome homeWithHomeId:homeIdNum.longLongValue]];
 }
 
 /**

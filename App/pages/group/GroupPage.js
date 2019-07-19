@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, Image, ImageBackground, Dimensions, FlatList, TouchableOpacity,
+  View, StyleSheet, Text, Image,  Dimensions, FlatList, TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
+import {TuyaHomeApi,TuyaGroupApi} from '../../../sdk'
+
 import NavigationBar from '../../common/NavigationBar';
-import ButtonX from '../../standard/components/buttonX';
 import ViewUtils from '../../utils/ViewUtils';
-import TuyaShareApi from '../../api/TuyaShareApi';
-import TuyaHomeApi from '../../api/TuyaHomeApi';
-import TuyaGroupApi from '../../api/TuyaGroupApi';
 import EditDialog from '../../component/EditDialog';
 
-const { height, width } = Dimensions.get('window');
+const {  width } = Dimensions.get('window');
 
 const Res = {
   choose: require('../../res/images/choose.png'),

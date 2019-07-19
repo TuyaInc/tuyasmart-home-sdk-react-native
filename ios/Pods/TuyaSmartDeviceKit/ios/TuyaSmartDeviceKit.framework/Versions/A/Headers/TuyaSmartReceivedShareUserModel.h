@@ -8,13 +8,13 @@
 
 @interface TuyaSmartReceivedShareUserModel : NSObject
 
-// 用户name
+// user name
 @property (nonatomic, strong) NSString *name;
 
-// 手机号
+// mobile
 @property (nonatomic, strong) NSString *mobile;
 
-// 邮箱
+// email
 @property (nonatomic, strong) NSString *email;
 
 
