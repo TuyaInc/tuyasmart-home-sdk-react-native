@@ -27,7 +27,6 @@ export default class DeviceDetailPage extends Component {
       }
     }
     const dps = params.devInfo.dps;
-    console.log('---->dps', dps);
     const newData = [];
     for (let i = 0, j = newArr.length; i < j; i++) {
       newArr[i].dpValue = dps[newArr[i].id];
@@ -40,6 +39,7 @@ export default class DeviceDetailPage extends Component {
       schema: newData,
       title: params.devInfo.name,
     };
+
   }
 
   componentDidMount() {
