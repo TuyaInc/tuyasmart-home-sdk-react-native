@@ -5,20 +5,16 @@ import {
   FlatList,
   TouchableOpacity,
   Dimensions,
-  DeviceEventEmitter,
 } from 'react-native';
 import {TuyaSceneApi} from '../../../sdk';
-
-import ViewUtils from '../../utils/ViewUtils';
-import NavigationBar from '../../common/NavigationBar';
-
+import HeadView from '../../common/HeadView'
+import BaseComponent from '../../common/BaseComponent'
 const {  width } = Dimensions.get('window');
 
 
-export default class ConditionPage extends Component {
+export default class CityListPage extends BaseComponent {
   constructor(props) {
     super(props);
-
     this.state = {
       cityList: [],
     };
@@ -27,17 +23,19 @@ export default class ConditionPage extends Component {
   componentDidMount() {
     TuyaSceneApi.getCityListByCountryCode({ countryCode: 'cn' })
       .then((data) => {
-        console.log('--->getcontry', data);
         this.setState({
           cityList: data,
         });
       })
-      .catch((err) => {
-        console.warn('--->err', err);
-      });
   }
 
-  render() {
+  renderHeaderView(){
+    return <HeadView
+    centerText={'Choosing the City'}
+    leftOnPress={()=>this.props.navigation.pop()}
+    />
+  }
+  renderContent() {
     return (
       <View
         style={{
@@ -48,21 +46,13 @@ export default class ConditionPage extends Component {
           flex: 1,
         }}
       >
-        <NavigationBar
-          style={{ backgroundColor: '#F4F4F5', width }}
-          leftButton={ViewUtils.getLeftButton(() => {
-            this.props.navigation.pop();
-          })}
-          title="选择城市"
-        />
-
         <FlatList
           data={this.state.cityList}
           style={{ width }}
-          renderItem={({ item, index }) => (
+          renderItem={({ item,  }) => (
             <TouchableOpacity
               onPress={() => {
-                DeviceEventEmitter.emit('chooseCity', { item });
+                this.props.navigation.state.params.success(item)
                 this.props.navigation.pop();
               }}
               style={{

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, Image, ImageBackground,
+  View, StyleSheet, Image, ImageBackground,
 } from 'react-native';
-import ButtonX from '../../standard/components/buttonX';
+import ButtonX from '../../common/ButtonX';
 
 export default class LoginHomePage extends Component {
   constructor(props) {

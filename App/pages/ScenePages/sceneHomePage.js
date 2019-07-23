@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, Image, ImageBackground, Dimensions, TouchableOpacity, BackHandler,
+  View, Text, Image, Dimensions, TouchableOpacity,
 } from 'react-native';
 
-
-const { height, width } = Dimensions.get('window');
+import ButtonX from '../../common/ButtonX'
+const { width } = Dimensions.get('window');
 const Res = {
   enterScene: require('../../res/images/enterCondition.png'),
   enterCondition: require('../../res/images/enterScene.png'),
@@ -13,19 +13,6 @@ const Res = {
 };
 
 export default class sceneHomePage extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {};
-  }
-
-  componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      this.props.navigation.pop();
-      return true;
-    });
-  }
-
   render() {
     return (
       <View
@@ -45,104 +32,80 @@ export default class sceneHomePage extends Component {
             marginTop: 80,
           }}
         >
-          添加智能
+          add scen
         </Text>
-        <Text style={{ color: '#A2A3AA', fontSize: 17, marginTop: 10 }}>请选择类型</Text>
-        <TouchableOpacity
-          onPress={() => {
-            this.props.navigation.navigate('AddScenePage', {
-              item: {},
-              isEdit: false,
-            });
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: '#3C4173',
-              height: 140,
-              width: width * 0.95,
-              borderRadius: 8,
-              marginTop: 50,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
+        <Text style={{ color: '#A2A3AA', fontSize: 17, marginTop: 10 }}>Please select the type</Text>
+        {
+          [
+            {
+              key: '1',
+              onPress: () => {
+                this.props.navigation.pop()
+                this.props.navigation.navigate('AddScenePage', {
+                  item: {},
+                  isEdit: false,
+                });
+              },
+              image: Res.enterScene,
+              lable: 'scene',
+              desc: 'One key controls multiple devices, or voice control via intelligent speakers'
+            },
+            {
+              key: '2',
+              onPress: () => {
+                this.props.navigation.pop()
+                this.props.navigation.navigate('AddAutoPage');
+              },
+              image: Res.enterCondition,
+              lable: 'automation',
+              desc: 'Automatically execute according to weather, equipment, time, etc.'
+            }
+          ].map(d => <TouchableOpacity
+            onPress={() => d.onPress()}
+            key={d.key}
           >
-            <Image style={{ marginLeft: 20 }} source={Res.enterScene} />
             <View
               style={{
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-
-                width: 180,
+                backgroundColor: '#3C4173',
+                height: 140,
+                width: width * 0.95,
+                borderRadius: 8,
+                marginTop: 50,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
-              <Text
+              <Image style={{ marginLeft: 20 }} source={d.image} />
+              <View
                 style={{
-                  fontSize: 20,
-                  color: '#FFFFFF',
-                  fontWeight: 'bold',
-                  textAlign: 'left',
+                  flexDirection: 'column',
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-start',
+                  width: 180,
                 }}
               >
-                场景
-              </Text>
-              <Text style={{ color: '#FFFFFF', fontSize: 13 }}>一键控制多设备，或通过智能音箱语音控制</Text>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: '#FFFFFF',
+                    fontWeight: 'bold',
+                    textAlign: 'left',
+                  }}
+                >
+                  {d.lable}
+                </Text>
+                <Text style={{ color: '#FFFFFF', fontSize: 13 }}>{d.desc}</Text>
+              </View>
+              <Image style={{ marginRight: 30 }} source={Res.Arrow_right} />
             </View>
-            <Image style={{ marginRight: 30 }} source={Res.Arrow_right} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            this.props.navigation.navigate('AddAutoPage');
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: '#6684EF',
-              height: 140,
-              width: width * 0.95,
-              borderRadius: 8,
-              marginTop: 20,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Image style={{ marginLeft: 20 }} source={Res.enterCondition} />
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-
-                width: 180,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 20,
-                  color: '#FFFFFF',
-                  fontWeight: 'bold',
-                  textAlign: 'left',
-                }}
-              >
-                自动化
-              </Text>
-              <Text style={{ color: '#FFFFFF', fontSize: 13 }}>根据天气、设备、时间等条件，自动执行</Text>
-            </View>
-            <Image style={{ marginRight: 30 }} source={Res.Arrow_right} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
+          </TouchableOpacity>)
+        }
+        <ButtonX
           style={{ marginTop: 30 }}
-          onPress={() => {
-            this.props.navigation.pop();
-          }}
-        >
-          <Image source={Res.exit} style={{ resizeMode: 'stretch' }} />
-        </TouchableOpacity>
+          onPress={() => this.props.navigation.pop()}
+          image={Res.exit}
+        />
       </View>
     );
   }

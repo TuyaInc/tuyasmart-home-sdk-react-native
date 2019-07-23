@@ -4,7 +4,6 @@ import com.facebook.react.bridge.*
 import com.tuya.smart.home.sdk.TuyaHomeSdk
 import android.content.Intent
 import android.provider.Settings
-import android.support.v4.content.ContextCompat.startActivity
 import com.tuya.smart.android.common.utils.WiFiUtil
 import com.tuya.smart.home.sdk.builder.ActivatorBuilder
 import com.tuya.smart.rnsdk.utils.*
@@ -34,15 +33,11 @@ class TuyaActivatorModule(reactContext: ReactApplicationContext?) : ReactContext
 
 
    @ReactMethod
-    fun getCurrentWifi(params: ReadableMap, successCallback: Callback,
+    fun getCurrentWifi(successCallback: Callback,
                        errorCallback: Callback) {
         successCallback.invoke(WiFiUtil.getCurrentSSID(reactApplicationContext))
     }
 
-    @ReactMethod
-    fun openNetworkSettings() {
-         startActivity(reactApplicationContext,Intent(Settings.ACTION_WIRELESS_SETTINGS),null)
-    }
 
     @ReactMethod
     fun initActivator(params: ReadableMap, promise: Promise) {

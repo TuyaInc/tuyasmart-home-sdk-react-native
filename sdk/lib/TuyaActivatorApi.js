@@ -8,10 +8,7 @@ const TuyaActivatorApi = {
      ActivatorNativeApi.newGwSubDevActivator(params)
   },
   getCurrentWifi(success,error) {
-    return ActivatorNativeApi.getCurrentWifi({},success,error)
-  },
-  openNetworkSettings() {
-    return ActivatorNativeApi.openNetworkSettings()
+    return ActivatorNativeApi.getCurrentWifi(success,error)
   },
   stopConfig () {
     ActivatorNativeApi.stopConfig()

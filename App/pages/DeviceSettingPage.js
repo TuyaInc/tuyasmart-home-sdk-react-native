@@ -1,26 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
-  Text,
-  Image,
   Dimensions,
-  TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
-import {TuyaDeviceApi} from '../../sdk'
 
-import NavigationBar from '../common/NavigationBar';
-import ViewUtils from '../utils/ViewUtils';
-import EditDialog from '../component/EditDialog';
+import Item from '../common/Item'
+import HeadView from '../common/HeadView'
+import BaseComponent from '../common/BaseComponent'
+import TuyaDeviceApi from '../../sdk/lib/TuyaDeviceApi'
 
-const {  width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
-const Res = {
-  arrowRight: require('../res/images/Arrow_right.png'),
-};
 
-class DeviceSettingPage extends Component {
+class DeviceSettingPage extends BaseComponent {
   constructor(props) {
     super(props);
     const params = this.props.navigation.state.params;
@@ -29,58 +23,35 @@ class DeviceSettingPage extends Component {
       devId: params.devId,
       devInfo: params.devInfo,
       devName: params.devInfo.name,
-      editVisible: false,
-      nameValue: '',
       homeId: this.props.reducers.homeId,
     };
   }
 
-  componentDidMount() {}
+  renderHeaderView() {
+    return <HeadView
+      leftOnPress={() => this.props.navigation.pop()}
+      centerText={'Device Setting'}
+    />
+  }
 
-  render() {
+  renderContent() {
     return (
       <View style={styles.container}>
-        <NavigationBar
-          style={{ backgroundColor: '#F4F4F5', width }}
-          leftButton={ViewUtils.getLeftButton(() => {
-            this.props.navigation.pop();
-          })}
-          title="设备设置"
+        <Item
+          leftText={'Device name'}
+          rightText={this.state.devName}
         />
-        <Text style={styles.tips}>基本信息</Text>
-        <TouchableOpacity
-          style={styles.itemStyle}
-          onPress={() => {
-            this.setState({ editVisible: true });
-          }}
-        >
-          <Text>设备名称</Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Text style={{ marginRight: 10 }}>{this.state.devName}</Text>
-            <Image source={Res.arrowRight} />
-          </View>
-        </TouchableOpacity>
-        <Text style={styles.tips}>其他</Text>
-        <TouchableOpacity
-          style={styles.itemStyle}
+        <Item
+          leftText={'Shared devices'}
           onPress={() => {
             this.props.navigation.navigate('SharePage', {
               homeId: this.state.homeId,
               devId: this.state.devId,
             });
           }}
-        >
-          <Text>共享设备</Text>
-          <Image source={Res.arrowRight} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.itemStyle}
+        />
+        <Item
+          leftText={'Create Group'}
           onPress={() => {
             this.props.navigation.navigate('GroupPage', {
               homeId: this.state.homeId,
@@ -88,51 +59,20 @@ class DeviceSettingPage extends Component {
               productId: this.state.devInfo.productId,
             });
           }}
-        >
-          <Text>创建群组</Text>
-          <Image source={Res.arrowRight} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.itemStyle}>
-          <Text>设备信息</Text>
-          <Image source={Res.arrowRight} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.itemStyle}>
-          <Text>意见反馈</Text>
-          <Image source={Res.arrowRight} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.itemStyle2} onPress={() => {}}>
-          <Text>移除设备</Text>
-        </TouchableOpacity>
-        <EditDialog
-          title="编辑名称"
-          visible={this.state.editVisible}
-          textValue={(value) => {
-            this.setState({
-              nameValue: value,
-            });
-          }}
-          save={() => {
-            TuyaDeviceApi.renameDevice({
-              devId: this.state.devId,
-              name: this.state.nameValue,
+        />
+        <Item
+          leftText={'Feedback'}
+        />
+        <Item
+          leftText={'Remove device'}
+          onPress={()=>{
+            TuyaDeviceApi.removeDevice({
+              devId:this.state.devId
             })
-              .then((data) => {
-                console.log('--->data', data);
-                this.setState({
-                  devName: this.state.nameValue,
-                  editVisible: false,
-                });
-              })
-              .catch((err) => {
-                console.warn('-->err', err);
-              });
-          }}
-          cancel={() => {
-            this.setState({
-              editVisible: false,
-            });
+            this.props.navigation.pop(2)
           }}
         />
+
       </View>
     );
   }

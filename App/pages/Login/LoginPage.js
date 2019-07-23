@@ -9,7 +9,7 @@ import CheckUtils from '../../utils/CheckUtils';
 import TextButton from '../../component/TextButton';
 import DeviceStorage from '../../utils/DeviceStorage';
 import { resetAction } from '../../navigations/AppNavigator';
-import BaseComponent from '../../component/BaseComponet'
+import BaseComponent from '../../common/BaseComponent'
 import { userName, password, countryCode } from '../../constant'
 
 const { width } = Dimensions.get('window');

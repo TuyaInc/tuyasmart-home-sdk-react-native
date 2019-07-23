@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -7,47 +7,46 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import {TuyaSceneApi} from '../../../sdk';
+import { TuyaSceneApi } from '../../../sdk';
 import { connect } from 'react-redux'
-import NavigationBar from '../../common/NavigationBar';
-import ViewUtils from '../../utils/ViewUtils';
+import HeadView from '../../common/HeadView'
+import BaseComponent from '../../common/BaseComponent'
 
 
-const {  width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const Res = {
   scenebg: require('../../res/images/scenebg.png'),
   redAdd: require('../../res/images/red_add.png'),
   plug: require('../../res/images/plug.png'),
 };
 
-class AddActionPage extends Component {
+class AddActionPage extends BaseComponent {
   constructor(props) {
     super(props);
-
     const params = this.props.navigation.state.params;
     this.state = {
-      onTop: true,
       DevicesLists: [],
       isFromScene: params.isFromScene,
-      homeId:this.props.homeId,
+      homeId: this.props.homeId,
     };
   }
 
   componentDidMount() {
-    console.log("---->AddActionPage homeId",this.state.homeId);
     TuyaSceneApi.getConditionDevList({ homeId: this.state.homeId })
       .then((data) => {
-        console.log('--->getConditionDevList', data);
         this.setState({
           DevicesLists: data,
         });
       })
-      .catch((err) => {
-        console.log('--->err', err);
-      });
   }
 
-  render() {
+  renderHeaderView() {
+    return <HeadView
+      leftOnPress={() => { this.props.navigation.pop() }}
+      centerText={'Selective action'}
+    />
+  }
+  renderContent() {
     return (
       <View
         style={{
@@ -58,13 +57,6 @@ class AddActionPage extends Component {
           flex: 1,
         }}
       >
-        <NavigationBar
-          style={{ backgroundColor: '#F4F4F5', width }}
-          leftButton={ViewUtils.getLeftButton(() => {
-            this.props.navigation.pop();
-          })}
-          title="选择动作"
-        />
         <View
           style={{
             backgroundColor: '#FFFFFF',
@@ -82,7 +74,7 @@ class AddActionPage extends Component {
             }}
           >
             <Image source={Res.plug} style={{ marginLeft: 20 }} />
-            <Text style={{ color: '#22242C', fontSize: 16, marginLeft: 20 }}>控制智能设备</Text>
+            <Text style={{ color: '#22242C', fontSize: 16, marginLeft: 20 }}>Control Intelligent Equipment</Text>
           </View>
           <FlatList
             data={this.state.DevicesLists}
@@ -118,5 +110,5 @@ class AddActionPage extends Component {
   }
 }
 export default connect((state) => ({
-  homeId:state.reducers.homeId,
+  homeId: state.reducers.homeId,
 }))(AddActionPage)

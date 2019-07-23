@@ -5,9 +5,8 @@ import {
 import { TuyaHomeManagerApi } from '../../sdk/index'
 import Item from '../common/Item'
 import NavigationBar from '../common/NavigationBar';
-import BaseComponet from '../component/BaseComponet';
-
-import ButtonX from '../standard/components/buttonX';
+import BaseComponent from '../common/BaseComponent';
+import ButtonX from '../common/ButtonX';
 import ViewUtils from '../utils/ViewUtils';
 const { width } = Dimensions.get('window');
 import {
@@ -17,7 +16,7 @@ import {
   homeName,
   rooms
 } from '../constant'
-export default class CreateHomeListPage extends BaseComponet {
+export default class CreateHomeListPage extends BaseComponent {
 
   _renderRightBtn() {
     return (

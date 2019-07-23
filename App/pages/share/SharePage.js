@@ -14,7 +14,6 @@ class SharePage extends Component {
   constructor(props) {
     super(props);
     const params = this.props.navigation.state.params;
-    console.log('share params', params);
     this.state = {
       homeId: params.homeId,
       shareList: [],
@@ -29,9 +28,6 @@ class SharePage extends Component {
           shareList: data,
         });
       })
-      .catch((err) => {
-        console.warn('-->err', err);
-      });
   }
 
   render() {
@@ -42,7 +38,6 @@ class SharePage extends Component {
           leftButton={ViewUtils.getLeftButton(() => {
             this.props.navigation.pop();
           })}
-          // rightButton={this._renderRightBtn()}
           title="共享设备"
         />
         <Text
@@ -53,7 +48,7 @@ class SharePage extends Component {
             marginTop: 8,
           }}
         >
-          设备以单独共享给这些用户
+          Devices are shared separately to these users
         </Text>
         <FlatList
           data={this.state.shareList}
@@ -93,7 +88,7 @@ class SharePage extends Component {
             });
           }}
         >
-          <Text style={{ fontSize: 16, color: '#FF4800', fontWeight: 'bold' }}>添加共享</Text>
+          <Text style={{ fontSize: 16, color: '#FF4800', fontWeight: 'bold' }}>add a share</Text>
         </TouchableOpacity>
       </View>
     );

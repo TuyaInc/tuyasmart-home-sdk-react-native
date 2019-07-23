@@ -1,41 +1,30 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
   Text,
   Image,
-  ImageBackground,
   Dimensions,
-  TouchableOpacity,
   FlatList,
-  Switch,
   ScrollView,
   DeviceEventEmitter,
-  Modal,
   RefreshControl
 } from 'react-native';
 import { connect } from 'react-redux'
+import Item from '../../common/Item'
 import { TuyaSceneApi } from '../../../sdk'
+import HeadView from '../../common/HeadView'
+import BaseComponent from '../../common/BaseComponent'
 
-import NavigationBar from '../../common/NavigationBar';
+const {  width } = Dimensions.get('window');
 
-const { height, width } = Dimensions.get('window');
-const Res = {
-  arrow_down: require('../../res/images/arrow_down.png'),
-};
-class ScenePage extends Component {
+class ScenePage extends BaseComponent {
   constructor(props) {
     super(props);
-
     this.state = {
-      isSceneListShow: false,
-      isAutoListShow: false,
       sceneList: [],
       conditionList: [],
       homeId: this.props.homeId,
-      isDialogShow: false,
-      dialogText: '',
-      dialogActions: [],
       refreshing: false
     };
   }
@@ -44,7 +33,6 @@ class ScenePage extends Component {
     this.setState({ refreshing: true })
     TuyaSceneApi.getSceneList({ homeId: this.state.homeId })
       .then((data) => {
-        console.log('-getSceneList--->', data);
         const SceneList = new Array();
         const conditionList = new Array();
         for (let i = 0, j = data.length; i < j; i++) {
@@ -60,200 +48,53 @@ class ScenePage extends Component {
           refreshing: false
         });
       })
-      .catch((err) => {
-        console.log('---getSceneList->', err);
+      .catch(() => {
         this.setState({ refreshing: false })
       });
   }
   componentDidMount() {
-    console.log('--->', this.state.homeId);
-
     this.setHomeIdListener = DeviceEventEmitter.addListener('setHomeId', (value) => {
-      console.warn('--->value', value);
+      this.setState({ homeId: value }, () => this.getData())
     });
     this.getData()
-
-
   }
 
   componentWillUnmount() {
     this.setHomeIdListener && this.setHomeIdListener.remove();
   }
 
-  renderLeftButton(name) {
+  _renderItem(item) {
     return (
-      <TouchableOpacity
-        onPress={() => {
-          this.props.navigation.navigate('DeleteScenePage');
-        }}
-      >
-        <Text
+      <View>
+        <Image
           style={{
-            fontSize: 14,
-            fontWeight: 'bold',
-            color: 'black',
-            marginLeft: 15,
+            height: 120,
+            width: 163,
+            marginLeft: 10,
+            marginTop: 5,
+            borderRadius: 8,
           }}
-        >
-          {name}
-        </Text>
-      </TouchableOpacity>
-    );
-  }
-
-  renderRightButton() {
-    return (
-      <TouchableOpacity
-        style={{ width: 30, height: 25 }}
-        onPress={() => {
-          this.props.navigation.navigate('sceneHomePage');
-        }}
-      >
-        <Image source={require('../../res/images/ic_add.png')} style={{ width: 20, height: 20 }} />
-      </TouchableOpacity>
-    );
-  }
-
-  _renderConditionItem(data) {
-    return (
-      <View
-        style={{
-          width,
-          height: 140,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 8,
-        }}
-      >
-        <ImageBackground
-          style={{ width: 0.85 * width, height: 140, borderRadius: 8 }}
           resizeMode="stretch"
-          source={{ uri: data.item.background }}
-        >
-          <View
-            style={{
-              height: 140,
-              width: 0.85 * width,
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 20,
-                color: '#FFFFFF',
-                marginTop: 10,
-                marginLeft: 10,
-                fontWeight: 'bold',
-              }}
-            >
-              {data.item.name}
-            </Text>
-            <Switch
-              style={{
-                fontWeight: 'bold',
-                position: 'absolute',
-                right: 10,
-                bottom: 10,
-              }}
-              value={data.item.enabled}
-            />
-          </View>
-        </ImageBackground>
+          source={{ uri: item.background }}
+        />
+        <Text style={{position:'absolute',left:10,top:10,color:'black'}}>{item.name}</Text>
       </View>
-    );
+    )
   }
 
-  render() {
-    const sceneList = this.state.isSceneListShow ? (
-      <FlatList
-        data={this.state.sceneList}
-        // data={[{ title: 'aaa' }, { title: 'bbb' }]}
-        renderItem={({ item }) => (
-          <ImageBackground
-            style={{
-              height: 120,
-              width: 163,
-              marginLeft: 10,
-              marginTop: 5,
-              borderRadius: 8,
-            }}
-            resizeMode="stretch"
-            source={{ uri: item.background }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                console.warn('--->diandiandi');
-                this.setState({
-                  isDialogShow: true,
-                  dialogText: item.name,
-                  dialogActions: item.actions,
-                });
-              }}
-            >
-              <View
-                style={{
-                  height: 120,
-                  width: 163,
-                  flexDirection: 'column',
-                  justifyContent: 'flex-start',
-                  marginTop: 5,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 16,
-                    color: '#FFFFFF',
-                    marginTop: 10,
-                    marginLeft: 10,
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {item.name}
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    position: 'absolute',
-                    right: 10,
-                    bottom: 10,
-                    width: 30,
-                  }}
-                  onPress={() => {
-                    console.warn('---->Zz');
-                    this.props.navigation.navigate('AddScenePage', {
-                      item,
-                      isEdit: true,
-                    });
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontWeight: 'bold',
-                      fontSize: 18,
-                      color: '#FFFFFF',
-                    }}
-                  >
-                    ...
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
-          </ImageBackground>
-        )}
-        style={{ width, flex: 1 }}
-        // horizontal={true}
-        numColumns={2}
-      />
-    ) : null;
-    const isAutoList = this.state.isAutoListShow ? (
-      <FlatList
-        data={this.state.conditionList}
-        // data={[{ title: 'aaa' }, { title: 'bbb' }]}
-        renderItem={this._renderConditionItem}
-        style={{ width }}
-      />
-    ) : null;
-
+  renderHeaderView() {
+    return <HeadView
+      centerText={'scene'}
+      leftText={'delete'}
+      leftOnPress={() => { this.props.navigation.navigate('DeleteScenePage'); }}
+      rightText={'add scene'}
+      rightVisable={true}
+      rightOnPress={() => {
+        this.props.navigation.navigate('sceneHomePage');
+      }}
+    />
+  }
+  renderContent() {
     return (
       <View style={styles.container}>
         <ScrollView
@@ -269,117 +110,19 @@ class ScenePage extends Component {
             />
           )}
         >
-          <NavigationBar
-            style={{ backgroundColor: '#FFFFFF', width }}
-            leftButton={this.renderLeftButton('Delete', this.props)}
-            rightButton={this.renderRightButton()}
-            title="scene"
+          <Item leftText={'scene'} />
+          <FlatList
+            data={this.state.sceneList}
+            renderItem={({ item }) => this._renderItem(item)}
+            style={{ width, flex: 1 }}
+            numColumns={2}
           />
-          <TouchableOpacity
-            onPress={() => {
-              this.setState({
-                isSceneListShow: !this.state.isSceneListShow,
-              });
-            }}
-          >
-            <View style={styles.btnStyle}>
-              <Text>scene</Text>
-              <Image
-                source={Res.arrow_down}
-                style={this.state.isSceneListShow ? {} : { transform: [{ rotate: '-90deg' }] }}
-              />
-            </View>
-          </TouchableOpacity>
-          {sceneList}
-          <TouchableOpacity
-            onPress={() => {
-              this.setState({
-                isAutoListShow: !this.state.isAutoListShow,
-              });
-            }}
-          >
-            <View style={styles.btnStyle}>
-              <Text>automation</Text>
-              <Image
-                source={Res.arrow_down}
-                style={this.state.isAutoListShow ? {} : { transform: [{ rotate: '-90deg' }] }}
-              />
-            </View>
-          </TouchableOpacity>
-          {isAutoList}
+          <Item leftText={'automation'} />
+          <FlatList
+            data={this.state.conditionList}
+            renderItem={({ item }) => this._renderItem(item)}
+          />
         </ScrollView >
-        {
-          this.state.isDialogShow && (
-            <Modal
-              animationType="slide"
-              transparent
-              visible
-              onRequestClose={() => {
-                this.setState({
-                  isDialogShow: false,
-                });
-              }}
-            >
-              <View style={styles.allview}>
-                <View style={styles.halfview}>
-                  <View
-                    style={{
-                      width: 0.8 * width,
-                      backgroundColor: 'transparent',
-                      height: 48,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: '#22242C',
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                      }}
-                    >
-                      {this.state.dialogText}
-                    </Text>
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <FlatList
-                      data={this.state.dialogActions}
-                      renderItem={({ item }) => {
-                     
-                        return (
-                          <View style={{ width: 0.8 * width, flexDirection: 'row' }}>
-                            <Text style={{ color: 'black', fontSize: 16 }}>{item.entityName}</Text>
-                          </View>
-                        );
-                      }}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      width,
-                      height: 56,
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      backgroundColor: 'transparent',
-                    }}
-                  >
-                    <TouchableOpacity
-                      style={styles.comfirmbtn}
-                      onPress={() => {
-                        this.setState({
-                          isDialogShow: false,
-                        });
-                      }}
-                    >
-                      <Text style={styles.comfirmText}>confirm</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            </Modal>
-          )
-        }
       </View >
     );
   }
@@ -393,82 +136,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#F8F8F8',
-  },
-  tips: {
-    fontSize: 29,
-  },
-  btnStyle: {
-    width,
-    height: 50,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F8F8F8',
-    paddingLeft: 15,
-    paddingRight: 15,
-  },
-  allview: {
-    width,
-    height,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  halfview: {
-    backgroundColor: '#FFFFFF',
-    position: 'absolute',
-    bottom: height * 0.4,
-    height: 0.3 * height,
-    width: width * 0.8,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flexDirection: 'column',
-    borderRadius: 16,
-  },
-  cancelbtn: {
-    width: width * 0.8 / 2,
-    height: 56,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRightWidth: 1,
-    borderTopWidth: 1,
-    borderColor: '#E6E6E6',
-    backgroundColor: 'transparent',
-  },
-  comfirmbtn: {
-    width: width * 0.8,
-    height: 56,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderLeftWidth: 1,
-    borderTopWidth: 1,
-    borderColor: '#E6E6E6',
-    backgroundColor: 'transparent',
-  },
-  cancelText: {
-    fontSize: 15,
-    color: '#22242C',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  comfirmText: {
-    fontSize: 15,
-    color: 'green',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  textInputStyle: {
-    fontSize: 15,
-    color: '#666666',
-    width: width * 0.8,
-    borderColor: 'gray',
-    paddingLeft: 15,
-    paddingRight: 15,
-    paddingTop: 4,
-    textAlign: 'center',
   },
 });
 export default connect((state) => ({

@@ -1,16 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Text, View, StyleSheet, Dimensions,
 } from 'react-native';
 import {TuyaTimerApi} from '../../../sdk'
 
 import Picker from 'react-native-wheel-picker';
-import Toast from 'react-native-easy-toast';
 import Strings from '../../i18n';
-import ButtonX from '../../standard/components/buttonX';
-import NavigationBar from '../../common/NavigationBar';
-import ViewUtils from '../../utils/ViewUtils';
+import ButtonX from '../../common/ButtonX';
 
+import HeadView from '../../common/HeadView'
+import BaseComponent from '../../common/BaseComponent'
+
+import {taskName,dps} from '../../constant'
 const {  width } = Dimensions.get('window');
 const PickerItem = Picker.Item;
 
@@ -46,17 +47,10 @@ let mins = [
   '26',
 ];
 
-// let mins = () => {
-//   let arr = new Array();
-//   for (let i = 0, j = 60; i < j; i++) {
-//     arr.push(i + "");
-//   }
-//   console.log('-->arr',arr)
-//   return arr
-// };
+
 const time = ['AM', 'PM'];
 
-export default class SchedulePage extends Component {
+export default class SchedulePage extends BaseComponent {
   constructor(props) {
     super(props);
 
@@ -64,8 +58,6 @@ export default class SchedulePage extends Component {
     // this.getMins();
     const s = this.props.navigation.state.params;
     d = s.data;
-    console.log('-------s', d);
-    console.log('-------s devinfo', s.devInfo);
     const mIndex = this.renderIndex(undefined != d ? d.m : '00', mins);
     const hIndex = this.renderIndex(undefined != d ? d.h : '00', hours);
     // console.log({
@@ -91,8 +83,6 @@ export default class SchedulePage extends Component {
       category: s.category,
       ...d,
     };
-    console.log('--->mmmm', this.state.m);
-    console.log('-->mings Index', mins.indexOf(this.state.m));
   }
 
   getHours() {
@@ -120,16 +110,15 @@ export default class SchedulePage extends Component {
     return 0;
   }
 
-  render() {
+  renderHeaderView(){
+    return <HeadView
+    centerText={'Create Timer'}
+    leftOnPress={()=>this.props.navigation.pop()}
+    />
+  }
+  renderContent() {
     return (
       <View style={styles.container}>
-        <NavigationBar
-          style={{ backgroundColor: '#F4F4F5', width }}
-          leftButton={ViewUtils.getLeftButton(() => {
-            this.props.navigation.pop();
-          })}
-          title="Create Timer"
-        />
         <View style={styles.item}>
           <ButtonX text={Strings.CANCEL} textStyle={styles.text} onPress={() => this.props.navigation.pop()} />
           <ButtonX text={Strings.SAVE} textStyle={styles.text} onPress={() => this.save()} />
@@ -146,7 +135,6 @@ export default class SchedulePage extends Component {
             selectedValue={hours.indexOf(this.state.h)}
             itemStyle={{ color: 'black', fontSize: 20 }}
             onValueChange={(index) => {
-              console.log('h', index);
               this.setState({
                 h: hours[index],
               });
@@ -160,7 +148,6 @@ export default class SchedulePage extends Component {
             selectedValue={mins.indexOf(this.state.m)}
             itemStyle={{ color: 'black', fontSize: 20 }}
             onValueChange={(index) => {
-              console.log('min', index);
               this.setState({
                 m: mins[index],
               });
@@ -221,44 +208,6 @@ export default class SchedulePage extends Component {
             />
           ))}
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 48,
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Text style={styles.Repeat}>{Strings.Action}</Text>
-          <View style={{ flexDirection: 'row', paddingRight: 24 }}>
-            <ButtonX
-              // image={Res.open}
-              imageStyle={this.state.Power == 'open' ? { opacity: 1 } : { opacity: 0.5 }}
-              onPress={() => this.setState({
-                Power: 'open',
-              })
-              }
-            />
-            <ButtonX
-              // image={Res.close}
-              imageStyle={this.state.Power == 'close' ? { opacity: 1 } : { opacity: 0.5 }}
-              onPress={() => this.setState({
-                Power: 'close',
-              })
-              }
-            />
-          </View>
-        </View>
-        <Toast
-          ref="toast"
-          style={{ backgroundColor: 'black' }}
-          position="bottom"
-          positionValue={200}
-          fadeInDuration={750}
-          fadeOutDuration={1000}
-          opacity={0.8}
-          textStyle={{ color: 'white' }}
-        />
       </View>
     );
   }
@@ -277,43 +226,40 @@ export default class SchedulePage extends Component {
   }
 
   save() {
-    const s = this.props.navigation.state.params;
     const d = this.getTime();
     const instruct = [];
-    instruct.push({ dps: { 0: true }, time: d });
+    instruct.push({ dps, time: d });
     const jsonstr = `${JSON.stringify(instruct)}`;
-    console.log('---->instruct', jsonstr);
     if (this.state.isFirst) {
-      TuyaTimerApi.addTimerWithTask({
-        taskName: 'timer22',
+      TuyaTimerApi.addTimerWithTaskDps({
+        taskName,
         loops: this.state.repeat.join(''),
         devId: this.state.devInfo.devId,
-        dpId: '0',
-        time: d,
+        //example
+        dps,
       })
-        .then((data) => {
-          console.log('--->data', data);
-          this.refs.toast.show('创建成功了');
+        .then(() => {
+          this.showToast('创建成功了');
           this.props.navigation.pop();
         })
         .catch((err) => {
-          console.log('--->err', err);
+          this.showToast(err.toString())
         });
     } else {
-      console.log('--->this.state.category', this.state.category);
       TuyaTimerApi.updateTimerWithTaskInstruct({
-        taskName: 'timer',
+        taskName,
         loops: this.state.repeat.join(''),
         devId: this.state.devId,
         timeId: this.state.timerId,
         instruct: jsonstr,
+        time:d,
+        dps,
       })
-        .then((data) => {
-          console.log('--->data', data);
+        .then(() => {
           this.props.navigation.pop();
         })
         .catch((err) => {
-          console.log('---->err', err);
+          this.showToast(err.toString())
         });
     }
   }
@@ -322,9 +268,6 @@ export default class SchedulePage extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#F7F7F7',
-    // marginTop: 25,
-    // marginLeft: 8,
-    // marginRight: 8
   },
   item: {
     flexDirection: 'row',

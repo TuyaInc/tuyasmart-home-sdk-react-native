@@ -13,7 +13,6 @@ const { width } = Dimensions.get('window')
 export default class Item extends Component {
   static propTypes = {
     onPress: PropTypes.func,
-    onLongPress: PropTypes.func,
     showRightImage: PropTypes.bool,
     leftText: PropTypes.string,
     rightText: PropTypes.string,
@@ -26,7 +25,6 @@ export default class Item extends Component {
 
   static defaultProps = {
     onPress: () => { },
-    onLongPress:()=>{},
     showRightImage: true,
     leftText: '',
     rightText: '',
@@ -44,9 +42,6 @@ export default class Item extends Component {
         activeOpacity={1}
         onPress={() => {
           this.props.onPress()
-        }}
-        onLongPress={()=>{
-          this.props.onLongPress()
         }}
       >
         <View style={[styles.item, this.props.style]}>

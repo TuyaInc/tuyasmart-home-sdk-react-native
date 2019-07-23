@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text, 
+  View, StyleSheet, Text,Platform,
 } from 'react-native';
 import { TuyaCoreApi } from '../../sdk'
 import { StackActions, NavigationActions } from 'react-navigation';
-import NavigationBar from '../common/NavigationBar';
-import { appKey, appSecret } from '../constant'
+import { iosAppKey, iosAppSecret,androidAppKey,androidAppSecret } from '../constant'
 import DeviceStorage from '../utils/DeviceStorage';
 
 const TIME = 2000;
@@ -28,9 +27,10 @@ export default class WelcomePage extends Component {
   constructor(props) {
     super(props);
     TuyaCoreApi.initWithOptions({
-      appKey: appKey,
-      appSecret: appSecret,
+      appKey:Platform.OS=='ios'?iosAppKey:androidAppKey,
+      appSecret:Platform.OS=='ios'?iosAppSecret:androidAppSecret,
     });
+    TuyaCoreApi.setDebugMode()
   }
 
   componentDidMount() {

@@ -34,7 +34,7 @@ class TuyaGroupModule(reactContext: ReactApplicationContext?) : ReactContextBase
                                     String::class.java) as MutableList<String>?,
                             object : ITuyaResultCallback<Long> {
                                 override fun onSuccess(p0: Long) {
-                                    promise.resolve(p0)
+                                    promise.resolve(p0.toString())
                                 }
 
                                 override fun onError(p0: String?, p1: String?) {

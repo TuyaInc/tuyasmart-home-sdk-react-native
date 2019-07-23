@@ -37,7 +37,7 @@ class TuyaShareModule(reactContext: ReactApplicationContext?) : ReactContextBase
                 list.add(params.getArray(Constant.DEVIDS)!!.getString(index)!!)
             }
             TuyaHomeSdk.getDeviceShareInstance().addShareWithHomeId(params.getDouble(HOMEID).toLong()
-                    , params.getString(COUNTRYCODE),
+                    , params.getDouble(COUNTRYCODE).toString(),
                     params.getString(USERACCOUNT),
                     list,
                     getITuyaResultCallbackSingle(promise))

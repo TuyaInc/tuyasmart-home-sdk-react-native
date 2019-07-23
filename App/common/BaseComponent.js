@@ -57,7 +57,7 @@ export default class BaseComponent extends Component {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="dark-content"/>
-        <Spinner visible={this.state.loading}/>
+        <Spinner visible={this.state.loading} cancelable={true}/>
         {this.renderHeaderView()}
         {this.renderContent()}
         {this.renderExpendView()}

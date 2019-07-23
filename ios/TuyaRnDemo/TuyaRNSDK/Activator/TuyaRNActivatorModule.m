@@ -123,12 +123,7 @@ RCT_EXPORT_METHOD(getCurrentWifi:(NSDictionary *)params success:(RCTResponseSend
 }
 
 
-//判断网络
-RCT_EXPORT_METHOD(openNetworkSettings) {
-  
-   [TuyaRNUtils openNetworkSettings];
-  
-}
+
 
 RCT_EXPORT_METHOD(onDestory:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   

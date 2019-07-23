@@ -1,6 +1,6 @@
 import React from 'react';
 import { TuyaHomeApi } from '../../../sdk'
-import BaseComponet from '../../component/BaseComponet';
+import BaseComponet from '../../common/BaseComponent';
 import HeadView from '../../common/HeadView';
 import Item from '../../common/Item'
 import { homeName } from '../../constant'

@@ -9,18 +9,17 @@ import {
   Switch,
   TouchableOpacity,
 } from 'react-native';
-import {TuyaDeviceApi} from '../../sdk/index'
+import { TuyaDeviceApi } from '../../sdk/index'
 
 import NavigationBar from '../common/NavigationBar';
 import ViewUtils from '../utils/ViewUtils';
 
-const {  width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 export default class DeviceDetailPage extends Component {
   constructor(props) {
     super(props);
     const params = this.props.navigation.state.params;
-
     const newArr = new Array();
     for (let i = 0, j = params.schema.length; i < j; i++) {
       if (params.schema[i].property !== undefined) {
@@ -44,41 +43,41 @@ export default class DeviceDetailPage extends Component {
   }
 
   componentDidMount() {
-    TuyaDeviceApi.registerDevListener(
-      { devId: this.state.devId },
-      (data) => {
-        console.log('onDpUpdate', data);
-        const dpStr = data.dpStr;
-        const dps = JSON.parse(dpStr);
-        const initData = this.state.initScheme;
-        const newData = [];
-        for (let i = 0, j = initData.length; i < j; i++) {
-          initData[i].dpValue = dps[initData[i].id];
-          newData.push(initData[i]);
-        }
-        console.log('onDpUpdate ---newData', newData);
-        this.setState({
-          schema: newData,
-        });
-      },
-      (data) => {
-        console.warn('onRemoved', data);
-      },
-      (data) => {
-        console.warn('onStatusChanged', data);
-      },
-      (data) => {
-        // Android 是bool值， ios传的是 string
-        console.warn('onNetworkStatusChanged', data);
-      },
-      (data) => {
-        console.warn('onDevInfoUpdate', data);
-      },
-    );
+    // TuyaDeviceApi.registerDevListener(
+    //   { devId: this.state.devId },
+    //   (data) => {
+    //     console.log('onDpUpdate', data);
+    //     const dpStr = data.dpStr;
+    //     const dps = JSON.parse(dpStr);
+    //     const initData = this.state.initScheme;
+    //     const newData = [];
+    //     for (let i = 0, j = initData.length; i < j; i++) {
+    //       initData[i].dpValue = dps[initData[i].id];
+    //       newData.push(initData[i]);
+    //     }
+    //     console.log('onDpUpdate ---newData', newData);
+    //     this.setState({
+    //       schema: newData,
+    //     });
+    //   },
+    //   (data) => {
+    //     console.warn('onRemoved', data);
+    //   },
+    //   (data) => {
+    //     console.warn('onStatusChanged', data);
+    //   },
+    //   (data) => {
+    //     // Android 是bool值， ios传的是 string
+    //     console.warn('onNetworkStatusChanged', data);
+    //   },
+    //   (data) => {
+    //     console.warn('onDevInfoUpdate', data);
+    //   },
+    // );
   }
 
-  componentWillUnmount(){
-    TuyaDeviceApi.unRegisterDevListener({devId: this.state.devId });
+  componentWillUnmount() {
+    // TuyaDeviceApi.unRegisterDevListener({ devId: this.state.devId });
   }
 
   getRightView(mode, type, range, dpId, dpValue) {
@@ -92,7 +91,6 @@ export default class DeviceDetailPage extends Component {
               onValueChange={(value) => {
                 const command = {};
                 command[dpId] = !dpValue;
-                console.log('--->command', command);
                 TuyaDeviceApi.send({
                   devId: this.state.devId,
                   command,
@@ -101,10 +99,9 @@ export default class DeviceDetailPage extends Component {
                     console.warn('--->data', data);
                   })
                   .catch((err) => {
-                    console.warn('--->err', err);
                   });
               }}
-              value={dpValue}
+              value={dpValue==1}
               thumbColor="white"
               trackColor="#7DB428"
               trackColor="#A09E9B"
@@ -141,7 +138,6 @@ export default class DeviceDetailPage extends Component {
       <TouchableOpacity
         style={{ width: 30, height: 25 }}
         onPress={() => {
-          // console.log("--->this", this.state.devInfo);
           this.props.navigation.navigate('DeviceSettingPage', {
             devId: this.state.devId,
             devInfo: this.state.devInfo,
@@ -167,23 +163,23 @@ export default class DeviceDetailPage extends Component {
         <FlatList
           data={this.state.schema}
           renderItem={// console.log("---->detail item", item);
-                      ({ item }) => (
-                        <View
-                          style={{
-                            width: 0.9 * width,
-                            height: 50,
-                            borderRadius: 6,
-                            backgroundColor: '#FFFFFF',
-                            flexDirection: 'row',
-                            marginTop: 10,
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Text style={{ color: '#444444', fontSize: 15, marginLeft: 10 }}>{item.name}</Text>
-                          {this.getRightView(item.mode, item.property.type, item.property.range, item.id, item.dpValue)}
-                        </View>
-                      )
+            ({ item }) => (
+              <View
+                style={{
+                  width: 0.9 * width,
+                  height: 50,
+                  borderRadius: 6,
+                  backgroundColor: '#FFFFFF',
+                  flexDirection: 'row',
+                  marginTop: 10,
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <Text style={{ color: '#444444', fontSize: 15, marginLeft: 10 }}>{item.name}</Text>
+                {this.getRightView(item.mode, item.property.type, item.property.range, item.id, item.dpValue)}
+              </View>
+            )
           }
         />
         <TouchableOpacity

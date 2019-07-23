@@ -1,11 +1,6 @@
 package com.tuya.smart.rnsdk.scene
 
-import android.annotation.TargetApi
-import android.os.Build
-import android.support.annotation.RequiresApi
-import android.text.TextUtils
-import android.util.Log
-import com.alibaba.fastjson.JSON
+
 import com.facebook.react.bridge.*
 import com.tuya.smart.home.sdk.TuyaHomeSdk
 import com.tuya.smart.home.sdk.api.ITuyaHomeScene
@@ -26,9 +21,7 @@ import com.tuya.smart.rnsdk.utils.Constant.CONDITIONLIST
 import com.tuya.smart.rnsdk.utils.Constant.CONDITIONS
 import com.tuya.smart.rnsdk.utils.Constant.COUNTRYCODE
 import com.tuya.smart.rnsdk.utils.Constant.DEVID
-import com.tuya.smart.rnsdk.utils.Constant.DEVIDS
 import com.tuya.smart.rnsdk.utils.Constant.DISPLAY
-import com.tuya.smart.rnsdk.utils.Constant.DPID
 import com.tuya.smart.rnsdk.utils.Constant.HOMEID
 import com.tuya.smart.rnsdk.utils.Constant.ID
 import com.tuya.smart.rnsdk.utils.Constant.LAT
@@ -37,7 +30,6 @@ import com.tuya.smart.rnsdk.utils.Constant.MATCHTYPE
 import com.tuya.smart.rnsdk.utils.Constant.NAME
 import com.tuya.smart.rnsdk.utils.Constant.RANGE
 import com.tuya.smart.rnsdk.utils.Constant.RULE
-import com.tuya.smart.rnsdk.utils.Constant.RULES
 import com.tuya.smart.rnsdk.utils.Constant.SCENEID
 import com.tuya.smart.rnsdk.utils.Constant.SCENEIDS
 import com.tuya.smart.rnsdk.utils.Constant.SHOWFAHRENHEIT
@@ -49,13 +41,9 @@ import com.tuya.smart.rnsdk.utils.Constant.VALUE
 import com.tuya.smart.rnsdk.utils.JsonUtils
 import com.tuya.smart.rnsdk.utils.ReactParamsCheck
 import com.tuya.smart.rnsdk.utils.TuyaReactUtils
-import com.tuya.smart.sdk.api.IRequestCallback
-import com.tuya.smart.sdk.api.ITuyaDataCallback
 import com.tuya.smart.sdk.bean.DeviceBean
 import java.util.*
-import java.util.stream.Stream
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 class TuyaSceneModule(reactContext: ReactApplicationContext?) : ReactContextBaseJavaModule(reactContext!!) {
@@ -328,42 +316,37 @@ class TuyaSceneModule(reactContext: ReactApplicationContext?) : ReactContextBase
     }
 
     @ReactMethod
-    fun modifyDevCondition(params: ReadableMap, promise: Promise) {
-        if (ReactParamsCheck.checkParams(arrayOf(ID, HOMEID, RULE,DISPLAY, TASKS, NAME, TYPE), params)) {
-            TuyaHomeSdk.getSceneManagerInstance().getSceneList(params.getDouble(HOMEID).toLong(),
-                    object : ITuyaResultCallback<List<SceneBean>> {
-                        override fun onSuccess(p0: List<SceneBean>) {
-                            for (item in p0) {
-                                if (item.id == params.getString(ID)) {
-                                    if (params.hasKey(NAME)) {
-                                        item.name = params.getString(NAME)
-                                    }
-                                    if (params.hasKey(TASKS)) {
-                                        item.actions = createTasks(params)
-                                    }
-                                    if (params.hasKey(CONDITIONS)) {
-                                        item.conditions = Arrays.asList(SceneCondition.createTimerCondition(
-                                                params.getString(DISPLAY),
-                                                params.getString(NAME),
-                                                params.getString(TYPE),
-                                                getRule(params.getMap(RULE)))
-                                        )
-                                    }
-                                    getScene(item.id)?.modifyScene(
-                                            item, //修改后的场景数据类
-                                            object : ITuyaResultCallback<SceneBean> {
-                                                override fun onSuccess(sceneBean: SceneBean) {
-                                                    promise.resolve(TuyaReactUtils.parseToWritableMap(sceneBean))
-                                                }
-
-                                                override fun onError(errorCode: String, errorMessage: String) {
-                                                    promise.reject(errorCode, errorMessage)
-                                                }
-                                            })
-                                    return
+    fun modifyScene(params: ReadableMap, promise: Promise) {
+        if (ReactParamsCheck.checkParams(arrayOf(SCENEID, HOMEID), params)) {
+            TuyaHomeSdk.getSceneManagerInstance().getSceneDetail(params.getString(SCENEID),
+                    object : ITuyaResultCallback<SceneBean> {
+                        override fun onSuccess(scene: SceneBean) {
+                            if (params.hasKey(NAME)) {
+                                scene.name = params.getString(NAME)
+                            }
+                            if (params.hasKey(TASKS)) {
+                                scene.actions = createTasks(params)
+                            }
+                            if (params.hasKey(MATCHTYPE)) {
+                                scene.matchType = SceneBean.MATCH_TYPE_AND
+                                if (params.getString(MATCHTYPE)!! == "MATCH_TYPE_OR") {
+                                    scene.matchType = SceneBean.MATCH_TYPE_OR
+                                } else if (params.getString(MATCHTYPE)!! == ("MATCH_TYPE_BY_EXPR")) {
+                                    scene.matchType = SceneBean.MATCH_TYPE_BY_EXPR
                                 }
                             }
-                            promise.reject("-1", "no find SceneBean")
+                            getScene(scene.id)?.modifyScene(
+                                    scene, //修改后的场景数据类
+                                    object : ITuyaResultCallback<SceneBean> {
+                                        override fun onSuccess(sceneBean: SceneBean) {
+                                            promise.resolve(TuyaReactUtils.parseToWritableMap(sceneBean))
+                                        }
+
+                                        override fun onError(errorCode: String, errorMessage: String) {
+                                            promise.reject(errorCode, errorMessage)
+                                        }
+                                    })
+                            return
                         }
 
                         override fun onError(code: String?, error: String?) {
@@ -375,13 +358,12 @@ class TuyaSceneModule(reactContext: ReactApplicationContext?) : ReactContextBase
     }
 
 
-
-  //    暂不支持多任务一起
+    //    暂不支持多任务一起
     @ReactMethod
     fun createWeatherCondition(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(CITYID), params)) {
             TuyaHomeSdk.getSceneManagerInstance().getCityByCityIndex(
-                    params.getDouble(CITYID).toLong(), //经度
+                    params.getDouble(CITYID).toLong(), 
                     object : ITuyaResultCallback<PlaceFacadeBean> {
                         override fun onSuccess(placeFacadeBean: PlaceFacadeBean) {
                             val weatherCondition = SceneCondition.createWeatherCondition(
@@ -403,16 +385,16 @@ class TuyaSceneModule(reactContext: ReactApplicationContext?) : ReactContextBase
     //    暂不支持多任务一起
     @ReactMethod
     fun createScene(params: ReadableMap, promise: Promise) {
-        if (ReactParamsCheck.checkParams(arrayOf(HOMEID,NAME, STICKYONTOP, DEVIDS, BACKGROUND, MATCHTYPE, TASKS), params)) {
+        if (ReactParamsCheck.checkParams(arrayOf(HOMEID, NAME, STICKYONTOP, BACKGROUND, MATCHTYPE, TASKS), params)) {
             val tasks = createTasks(params)
             var b = false
-            if (params.hasKey(STICKYONTOP)&&params.getBoolean(STICKYONTOP)) {
+            if (params.hasKey(STICKYONTOP) && params.getBoolean(STICKYONTOP)) {
                 b = true
             }
             var mathType = SceneBean.MATCH_TYPE_AND
             if (params.getString(MATCHTYPE)!! == "MATCH_TYPE_OR") {
                 mathType = SceneBean.MATCH_TYPE_OR
-            } else if (params.getString(MATCHTYPE)!! ==("MATCH_TYPE_BY_EXPR")) {
+            } else if (params.getString(MATCHTYPE)!! == ("MATCH_TYPE_BY_EXPR")) {
                 mathType = SceneBean.MATCH_TYPE_BY_EXPR
             }
             TuyaHomeSdk.getSceneManagerInstance().createScene(
@@ -437,21 +419,21 @@ class TuyaSceneModule(reactContext: ReactApplicationContext?) : ReactContextBase
 
     @ReactMethod
     fun createAutoScene(params: ReadableMap, promise: Promise) {
-        if (ReactParamsCheck.checkParams(arrayOf(HOMEID,TASKS, BACKGROUND, MATCHTYPE,CONDITIONLIST), params)) {
+        if (ReactParamsCheck.checkParams(arrayOf(HOMEID, TASKS, BACKGROUND, MATCHTYPE, CONDITIONLIST), params)) {
             val tasks = createTasks(params)
-            val conditionLists=TuyaReactUtils.parseToList(params.getArray(CONDITIONLIST))
-            val list=ArrayList<SceneCondition>()
+            val conditionLists = TuyaReactUtils.parseToList(params.getArray(CONDITIONLIST))
+            val list = ArrayList<SceneCondition>()
             for (conditionList in conditionLists) {
-                list.add(JsonUtils.parse(JsonUtils.toString(conditionList!!),SceneCondition::class.java) as SceneCondition)
+                list.add(JsonUtils.parse(JsonUtils.toString(conditionList!!), SceneCondition::class.java) as SceneCondition)
             }
             var b = false
-            if (params.hasKey(STICKYONTOP)&&params.getBoolean(STICKYONTOP)) {
+            if (params.hasKey(STICKYONTOP) && params.getBoolean(STICKYONTOP)) {
                 b = true
             }
             var mathType = SceneBean.MATCH_TYPE_AND
             if (params.getString(MATCHTYPE)!! == "MATCH_TYPE_OR") {
                 mathType = SceneBean.MATCH_TYPE_OR
-            } else if (params.getString(MATCHTYPE)!! ==("MATCH_TYPE_BY_EXPR")) {
+            } else if (params.getString(MATCHTYPE)!! == ("MATCH_TYPE_BY_EXPR")) {
                 mathType = SceneBean.MATCH_TYPE_BY_EXPR
             }
             TuyaHomeSdk.getSceneManagerInstance().createScene(
@@ -488,11 +470,11 @@ class TuyaSceneModule(reactContext: ReactApplicationContext?) : ReactContextBase
             var mathType = SceneBean.MATCH_TYPE_AND
             if (params.getString(MATCHTYPE)!! == "MATCH_TYPE_OR") {
                 mathType = SceneBean.MATCH_TYPE_OR
-            } else if (params.getString(MATCHTYPE)!! ==("MATCH_TYPE_BY_EXPR")) {
+            } else if (params.getString(MATCHTYPE)!! == ("MATCH_TYPE_BY_EXPR")) {
                 mathType = SceneBean.MATCH_TYPE_BY_EXPR
             }
             var b = false
-            if (params.hasKey(STICKYONTOP)&&params.getBoolean(STICKYONTOP)) {
+            if (params.hasKey(STICKYONTOP) && params.getBoolean(STICKYONTOP)) {
                 b = true
             }
             TuyaHomeSdk.getSceneManagerInstance().createScene(
@@ -585,7 +567,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext?) : ReactContextBase
         return tasks
     }
 
-    fun getRule(params: ReadableMap?): Rule{
+    fun getRule(params: ReadableMap?): Rule {
         val enumRule: Rule
         if (params?.getString(TYPE)!! == "temp") {
             enumRule = ValueRule.newInstance(

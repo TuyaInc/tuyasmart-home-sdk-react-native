@@ -15,7 +15,7 @@ import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab
 import { connect } from 'react-redux';
 import { TuyaHomeManagerApi, TuyaHomeApi, } from '../../../sdk'
 import HeadView from '../../common/HeadView';
-import BaseComponet from '../../component/BaseComponet';
+import BaseComponet from '../../common/BaseComponent';
 
 import { storeHomeId } from '../../redux/action';
 import { resetAction } from '../../navigations/AppNavigator';
@@ -108,7 +108,7 @@ class DevicesListPage extends BaseComponet {
     return <HeadView
       leftText={this.state.homeName}
       style={{ backgroundColor: 'white', marginBottom: 10 }}
-      leftOnPress={() =>  this.setState({ showHomeSetting: true })}
+      leftOnPress={() => this.setState({ showHomeSetting: true })}
       rightOnPress={() => this.props.navigation.navigate('ConfigPage', {
         homeId: this.state.homeId,
       })}
@@ -119,32 +119,24 @@ class DevicesListPage extends BaseComponet {
 
   _renderHomeItem(data) {
     return (
-      <Item
-        onLongPress={() => {
-          Alert.alert(
-            'delete',
-            'delete home',
-            [
-              {
-                text: 'OK', onPress: () => {
-                  TuyaHomeApi.dismissHome({ homeId: data.homeId }).then(() => this.getData())
-                }
-              },
-              { text: 'Cancel', onPress: () => { } },
-            ],
-            { cancelable: false }
-          )
-        }}
-        onPress={() => {
-          DeviceEventEmitter.emit('setHomeId', data.homeId);
-          this.props.dispatch(storeHomeId(data.homeId));
-          this.getRoomList(data.homeId)
-          this.setState({
-            showHomeSetting: false,
-          });
-        }}
-        leftText={data.name}
-      />
+        <Item
+          onPress={() => {
+            Alert.alert(
+              'delete',
+              'delete home',
+              [
+                {
+                  text: 'OK', onPress: () => {
+                    TuyaHomeApi.dismissHome({ homeId: data.homeId }).then(() => this.getData())
+                  }
+                },
+                { text: 'Cancel', onPress: () => { } },
+              ],
+              { cancelable: false }
+            )
+          }}
+          leftText={data.name}
+        />
     );
   }
 
@@ -232,7 +224,7 @@ class DevicesListPage extends BaseComponet {
               this.props.navigation.navigate('RoomSettingPage', {
                 roomList: this.state.roomList,
                 homeId: this.state.homeId,
-                refreshHome:()=>this.getRoomList(this.state.homeId)
+                refreshHome: () => this.getRoomList(this.state.homeId)
               });
             }}
           >

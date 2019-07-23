@@ -111,6 +111,20 @@ RCT_EXPORT_METHOD(updateTimerStatusWithTask:(NSDictionary *)params resolver:(RCT
     }];
 }
 
+
+RCT_EXPORT_METHOD(updateTimerWithTaskInstruct:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  TuyaSmartTimer *timer = [[TuyaSmartTimer alloc] init];
+  self.timer = timer;
+
+  NSString *tz = [[[NSTimeZone systemTimeZone] localizedName:NSTimeZoneNameStyleStandard locale:nil] stringByReplacingOccurrencesOfString:@"GMT" withString:@""];
+  [timer updateTimerWithTask:params[@"taskName"]  loops:params[@"loops"] devId:params[@"devId"] timerId:params[@"timeId"] time:params[@"time"] dps:params[@"dps"]  timeZone:tz success:^{
+    resolver(@"updateTimer success");
+  } failure:^(NSError *error) {
+   [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
+
 // 删除定时器：
 RCT_EXPORT_METHOD(removeTimerWithTask:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
     TuyaSmartTimer *timer = [[TuyaSmartTimer alloc] init];

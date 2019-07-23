@@ -88,12 +88,7 @@ RCT_REMAP_METHOD(apiRequest,
   }];
 }
 
-//判断网络
-RCT_EXPORT_METHOD(openNetworkSettings:(NSDictionary *)params) {
-  
-  [TuyaRNUtils openNetworkSettings];
-  
-}
+
 //判断网络
 RCT_EXPORT_METHOD(setDebugMode) {
   

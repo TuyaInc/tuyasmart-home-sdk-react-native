@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   View, StyleSheet, Text, Dimensions,
 } from 'react-native';
 import {TuyaUserApi} from '../../sdk'
-
-import ButtonX from '../standard/components/buttonX';
+import ButtonX from '../common/ButtonX';
 import TextButton from '../component/TextButton';
 import { resetAction } from '../navigations/AppNavigator';
-import BaseComponet from '../component/BaseComponet';
+import BaseComponent from '../common/BaseComponent';
 
 const {  width } = Dimensions.get('window');
 
-export default class CreateHomePage extends BaseComponet {
+export default class CreateHomePage extends BaseComponent {
 
   renderContent() {
     return (

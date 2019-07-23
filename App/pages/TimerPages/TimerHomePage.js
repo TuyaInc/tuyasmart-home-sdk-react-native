@@ -1,40 +1,33 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Text,
   View,
   StyleSheet,
-  Image,
   TouchableOpacity,
-  FlatList,
   Switch,
   Dimensions,
   RefreshControl,
   SwipeableFlatList,
-  Platform,
+  Platform
 } from 'react-native';
 
-import {TuyaTimerApi} from '../../../sdk'
-import Toast, { DURATION } from 'react-native-easy-toast';
+import { TuyaTimerApi } from '../../../sdk'
 import Strings from '../../i18n';
-import ButtonX from '../../standard/components/buttonX';
-import NavigationBar from '../../common/NavigationBar';
-import ViewUtils from '../../utils/ViewUtils';
-
-const { height, width } = Dimensions.get('window');
+import HeadView from '../../common/HeadView';
+import BaseComponet from '../../common/BaseComponent';
+import ButtonX from '../../common/ButtonX';
+import {taskName} from '../../constant'
+const { width } = Dimensions.get('window');
 
 const Res = {
-  // close: require('../res/whitewindowclose.png'),
-  // open: require('../res/whitewindowopen.png'),
   addSchedule: require('../../res/images/addSchedule.png'),
 };
-export default class TimerHomePage extends Component {
+export default class TimerHomePage extends BaseComponet {
   constructor(props) {
     super(props);
     const params = this.props.navigation.state.params;
-    console.log('---params', params);
     this.state = {
       data: [],
-      isRefreshing: false,
       devId: params.devId,
       allTimer: [],
       timerList: [],
@@ -42,31 +35,32 @@ export default class TimerHomePage extends Component {
       status: 1,
       devInfo: params.devInfo,
     };
-    // this.getDatas();
   }
+
 
   getDatas() {
-    const s = this.props.navigation.state.params;
-    this.setState({
-      isRefreshing: true,
-    });
-  }
-
-  componentDidMount() {
     TuyaTimerApi.getAllTimerWithDeviceId({ devId: this.state.devId })
       .then((data) => {
-        console.log('----getAllTimerWithDeviceId', data);
-        let newArrTimerList = new Array();
-        newArrTimerList = data.timer;
-        console.log('---->data---', data.timer);
-        console.log('----->newArrTimerList', newArrTimerList);
+        const list = []
+        if(Platform.OS=='ios'){
+          for (key in data) {
+            data[key].forEach(e => {
+              list.push(e)
+            })
+          }
+        }else{
+          data.forEach((e)=>{
+            e.timerList&&e.timerList.forEach(a=>list.push(a))
+          })
+        }
+       
         this.setState({
-          timerList: newArrTimerList,
+          timerList: list,
         });
       })
-      .catch((err) => {
-        console.log('--->err');
-      });
+  }
+  componentDidMount() {
+    this.getDatas()
   }
 
   toAddSchedules(data, isFirst, category) {
@@ -118,15 +112,12 @@ export default class TimerHomePage extends Component {
   updateTimerStatus(item, index) {
     // 控制某个定时器的开关
     TuyaTimerApi.updateTimerStatusWithTask({
-      taskName: 'timers',
+      taskName,
       devId: `${this.state.devId}`,
       timeId: item.timerId,
-      isOpen: !item.open,
-    }).then((data) => {
-      this.state.timerList[index].open = !item.open;
-      this.setState({
-        timerList: this.state.timerList,
-      });
+      isOpen: !this.getOpenStatus(item.status),
+    }).then(() => {
+     this.getDatas()
     });
   }
 
@@ -165,57 +156,54 @@ export default class TimerHomePage extends Component {
     return false;
   }
 
-  render() {
+  renderHeaderView() {
+    return <HeadView
+      centerText={'timer'}
+      leftOnPress={() => this.props.navigation.pop()}
+    />
+  }
+  renderContent() {
     return (
       <View style={styles.container}>
-        <NavigationBar
-          style={{ backgroundColor: '#F4F4F5', width }}
-          leftButton={ViewUtils.getLeftButton(() => {
-            this.props.navigation.pop();
-          })}
-          title="定时"
-        />
         <SwipeableFlatList
           data={this.state.timerList}
-          renderItem={({ item, index }) => (
-            <TouchableOpacity
-              onPress={() => {
-                // 先屏蔽进入的入口
-                console.log('--->onPressitem', item);
-                const time = this.getParseTimeArray(item.time);
-                this.toAddSchedules(
-                  {
-                    h: time[0],
-                    time: time[2],
-                    m: time[1],
-                    repeat: item.loops.split(''),
-                    timerId: item.timerId,
-                  },
-                  false,
-                  item.category,
-                );
-              }}
-            >
-              <View style={styles.item}>
-                <Text style={{ color: 'black', fontSize: 16 }}>{item.time}</Text>
-                <Switch
-                  style={{ marginRight: 20 }}
-                  onValueChange={(value) => {
-                    console.log('---->Switch value');
-                    this.updateTimerStatus(item, index);
-                  }}
-                  value={item.open}
-                  thumbColor="white"
-                  trackColor="#7DB428"
-                  trackColor="#A09E9B"
-                />
-              </View>
-            </TouchableOpacity>
-          )}
+          renderItem={({ item, index }) => <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => {
+              //先屏蔽进入的入口
+              const time = this.getParseTimeArray(item.time);
+              this.toAddSchedules(
+                {
+                  h: time[0],
+                  time: time[2],
+                  m: time[1],
+                  repeat: item.loops.split(''),
+                  timerId: item.timerId,
+                },
+                false,
+                item.category,
+              );
+            }}
+          >
+            <View style={styles.item}>
+              <Text style={{ color: 'black', fontSize: 16 }}>{item.time}</Text>
+              <Switch
+                style={{ marginRight: 20 }}
+                onValueChange={() => {
+                  this.updateTimerStatus(item, index);
+                }}
+                value={this.getOpenStatus(item.status)}
+                thumbColor="white"
+                trackColor="#7DB428"
+                trackColor="#A09E9B"
+              />
+            </View>
+          </TouchableOpacity>
+          }
           style={{ marginTop: 21 }}
           refreshControl={(
             <RefreshControl
-              refreshing={this.state.isRefreshing}
+              refreshing={false}
               onRefresh={() => this.getDatas()}
               tintColor="#ff0000"
               title="Loading..."
@@ -223,54 +211,36 @@ export default class TimerHomePage extends Component {
               colors={['#ff0000', '#00ff00', '#0000ff']}
               progressBackgroundColor="#ffff00"
             />
-)}
+          )}
           renderQuickActions={({ item }) => this.getQuickActions(item)} // 创建侧滑菜单
           maxSwipeDistance={80} // 可展开（滑动）的距离
           bounceFirstRowOnMount // 进去的时候不展示侧滑效果
         />
 
         <ButtonX image={Res.addSchedule} style={styles.addSchedule} onPress={() => this.toAddSchedules({}, true, '')} />
-        <Toast
-          ref="toast"
-          style={{ backgroundColor: 'black' }}
-          position="bottom"
-          positionValue={200}
-          fadeInDuration={750}
-          fadeOutDuration={1000}
-          opacity={0.8}
-          textStyle={{ color: 'white' }}
-        />
       </View>
     );
   }
 
   // 侧滑菜单渲染
   getQuickActions = (item) => {
-    const s = this.props.navigation.state.params;
     return (
       <View style={styles.quickAContent}>
         <TouchableOpacity
           onPress={() => {
+            console.log(item)
             TuyaTimerApi.removeTimerWithTask({
-              taskName: 'timers',
+              taskName,
               devId: this.state.devId,
               timeId: item.timerId,
             })
-              .then((data) => {
-                this.refs.toast.show('delete success');
-                const timeList = this.state.timerList;
-                const id = item.timerId;
-                const newArr = new Array();
-                for (let i = 0, j = timeList.length; i < j; i++) {
-                  if (timeList[i].timerId != id) {
-                    newArr.push(timeList[i]);
-                  }
-                }
-                this.setState({
-                  timerList: newArr,
-                });
+              .then(() => {
+                this.showToast('delete success');
+                this.getDatas()
               })
-              .catch((err) => {});
+              .catch((err) => { 
+                this.showToast(err.toString());
+              });
           }}
         >
           <View style={styles.quick}>
