@@ -50,6 +50,7 @@
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		BEC658C456AE230FDC4243F3 /* libPods-TuyaRnDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E05DD7DB362067EAB844B2D7 /* libPods-TuyaRnDemo.a */; };
 		DB4C2DDA2230E51000689A50 /* TuyaRNGroupListener.m in Sources */ = {isa = PBXBuildFile; fileRef = DB4C2DD92230E51000689A50 /* TuyaRNGroupListener.m */; };
+		DBBF26B522E9A0C100E709CF /* t_s.bmp in Resources */ = {isa = PBXBuildFile; fileRef = DBBF268D22E9A0C100E709CF /* t_s.bmp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -404,6 +405,7 @@
 		B0144F5A83B2BC67D1A2F201 /* Pods-TuyaRnDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TuyaRnDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TuyaRnDemo/Pods-TuyaRnDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		DB4C2DD82230E51000689A50 /* TuyaRNGroupListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TuyaRNGroupListener.h; sourceTree = "<group>"; };
 		DB4C2DD92230E51000689A50 /* TuyaRNGroupListener.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TuyaRNGroupListener.m; sourceTree = "<group>"; };
+		DBBF268D22E9A0C100E709CF /* t_s.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = t_s.bmp; sourceTree = SOURCE_ROOT; };
 		DFD8A9EDC06F4293B0D1C64C /* libRNSVG.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSVG.a; sourceTree = "<group>"; };
 		E05DD7DB362067EAB844B2D7 /* libPods-TuyaRnDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TuyaRnDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F29F095F97E64C7A852CC641 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
@@ -516,6 +518,7 @@
 		13B07FAE1A68108700A75B9A /* TuyaRnDemo */ = {
 			isa = PBXGroup;
 			children = (
+				DBBF268D22E9A0C100E709CF /* t_s.bmp */,
 				7596FFD6222787190047DA87 /* TuyaRNSDK */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -1235,6 +1238,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DBBF26B522E9A0C100E709CF /* t_s.bmp in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
