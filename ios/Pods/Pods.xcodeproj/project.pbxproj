@@ -1302,7 +1302,6 @@
 		5F621C4AFF7B964C17844B8E654D93FB /* RCTResizeMode.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RCTResizeMode.m; path = Libraries/Image/RCTResizeMode.m; sourceTree = "<group>"; };
 		5F9E107A317A31B6872320468FBEA1A9 /* RCTDefines.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTDefines.h; sourceTree = "<group>"; };
 		601ED4BBAEFB7F470ADFF432529E65AA /* ScopeGuard.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = ScopeGuard.cpp; path = folly/ScopeGuard.cpp; sourceTree = "<group>"; };
-		604D48B21E0F5D16E0E00BAD1BE6F5E5 /* TuyaSmartKit.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = TuyaSmartKit.h; path = Headers/TuyaSmartKit.h; sourceTree = "<group>"; };
 		60860A3351635E7BFBE1AECD7F5E7D4D /* RNSVGTextManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RNSVGTextManager.h; sourceTree = "<group>"; };
 		6091F4662731B7C11DB5B06DF0772C20 /* MQTTSSLSecurityPolicyTransport.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQTTSSLSecurityPolicyTransport.h; path = MQTTClient/MQTTClient/MQTTSSLSecurityPolicyTransport.h; sourceTree = "<group>"; };
 		60926A49EFAAC96D0C46F21FE8990931 /* RCTLocationObserver.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RCTLocationObserver.h; path = Libraries/Geolocation/RCTLocationObserver.h; sourceTree = "<group>"; };
@@ -1327,6 +1326,7 @@
 		6A26E820E6FE7CC359ADAE0FA741AE84 /* json.cpp */ = {isa = PBXFileReference; includeInIndex = 1; name = json.cpp; path = folly/json.cpp; sourceTree = "<group>"; };
 		6ABA2E8CF8D8328F4F47749A179815C9 /* RCTJavaScriptLoader.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTJavaScriptLoader.mm; sourceTree = "<group>"; };
 		6BB299C2C7EADE440DF71E6D357DB6FB /* RCTConvert+Transform.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "RCTConvert+Transform.h"; sourceTree = "<group>"; };
+		6C1553C1A418727A6A2F89BC385C44A5 /* TuyaSmartKit.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = TuyaSmartKit.h; sourceTree = "<group>"; };
 		6CEF0841B24A83F7FF9FC69E3AB00FAD /* MQTTCFSocketDecoder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQTTCFSocketDecoder.h; path = MQTTClient/MQTTClient/MQTTCFSocketDecoder.h; sourceTree = "<group>"; };
 		6DFDCD918BCA2A96740A18D6061CF2BA /* RNGestureHandlerModule.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNGestureHandlerModule.h; path = ios/RNGestureHandlerModule.h; sourceTree = "<group>"; };
 		6E29EE8E621A4D8D6E019C327574F98A /* MQTTCFSocketTransport.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MQTTCFSocketTransport.m; path = MQTTClient/MQTTClient/MQTTCFSocketTransport.m; sourceTree = "<group>"; };
@@ -2503,6 +2503,15 @@
 			name = cxxreact;
 			sourceTree = "<group>";
 		};
+		2E1B1C32A93CF88B2B8E3974D11B7C5F /* TuyaSmartHomeKit */ = {
+			isa = PBXGroup;
+			children = (
+				6C1553C1A418727A6A2F89BC385C44A5 /* TuyaSmartKit.h */,
+			);
+			name = TuyaSmartHomeKit;
+			path = TuyaSmartHomeKit;
+			sourceTree = "<group>";
+		};
 		320D69100C9D82A361BC110DAB104887 /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -2709,15 +2718,6 @@
 				0FD6454EF5B3304D8C157198DF2A1933 /* RNSVG.podspec */,
 			);
 			name = Pod;
-			sourceTree = "<group>";
-		};
-		541513EA97862767CEA44EC93DDBC594 /* TuyaSmartHomeKit */ = {
-			isa = PBXGroup;
-			children = (
-				604D48B21E0F5D16E0E00BAD1BE6F5E5 /* TuyaSmartKit.h */,
-			);
-			name = TuyaSmartHomeKit;
-			path = TuyaSmartHomeKit;
 			sourceTree = "<group>";
 		};
 		565B9D7A495AACB5BA4E4BA0F45D3B06 /* Support Files */ = {
@@ -3669,7 +3669,7 @@
 				138C3137B295FBF6CFB684B6D0BDE924 /* TuyaSmartBLEMeshKit */,
 				29AAA35E1B8F01E816B023EB58F70830 /* TuyaSmartDeviceKit */,
 				714D1784B0024ECCD0BCE71B250DCAC0 /* TuyaSmartFeedbackKit */,
-				541513EA97862767CEA44EC93DDBC594 /* TuyaSmartHomeKit */,
+				2E1B1C32A93CF88B2B8E3974D11B7C5F /* TuyaSmartHomeKit */,
 				94F9046E44A190A5A47267BB31A18741 /* TuyaSmartMessageKit */,
 				6116E3C750C49F77486CDD18493AC755 /* TuyaSmartMQTTChannelKit */,
 				9ABBED6545C41893FECCEE9D584B66D2 /* TuyaSmartSceneKit */,

@@ -74,7 +74,7 @@ RCT_REMAP_METHOD(apiRequest,
   [request requestWithApiName:apiName postData:postData version:version success:^(id result) {
     if ([result isKindOfClass:[NSDictionary class]] || [result isKindOfClass:[NSArray class]]) {
       if (resolver) {
-        resolver([result ty_JSONString]);
+        resolver([result tysdk_JSONString]);
       }
     } else {
       if (resolver) {
