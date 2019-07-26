@@ -41,7 +41,7 @@ RCT_EXPORT_METHOD(initWithOptions:(NSDictionary *)params) {
 
   
   dispatch_async(dispatch_get_main_queue(), ^{
-    [[TuyaSmartSDK sharedInstance] startWithAppKey:appKey secretKey:appSecret];
+//    [[TuyaSmartSDK sharedInstance] startWithAppKey:appKey secretKey:appSecret];
 
     
     if (!self.locationManager) {
