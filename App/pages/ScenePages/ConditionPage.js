@@ -4,10 +4,12 @@ import {
   DeviceEventEmitter,
   Platform
 } from 'react-native';
+import { TuyaSceneApi } from '../../../sdk';
+
 import Item from '../../common/Item'
 import HeadView from '../../common/HeadView'
 import BaseComponent from '../../common/BaseComponent'
-import {messageCondition,cityId} from '../../constant'
+import { messageCondition, cityId } from '../../constant'
 
 export default class ConditionPage extends BaseComponent {
   constructor(props) {
@@ -18,7 +20,6 @@ export default class ConditionPage extends BaseComponent {
       localCity: '',
       item: params.item
     };
-    console.log(this.state.item)
   }
 
   renderHeaderView() {
@@ -28,47 +29,47 @@ export default class ConditionPage extends BaseComponent {
 
   _save() {
     if (this.state.localCity.length !== 0) {
-      const data = {
+      TuyaSceneApi.createWeatherCondition({
+        place: this.state.placeBean,
+        ruleType: typeof (this.getValue()) == Number ? 'value' : 'enum',
         type: this.getType(),
-        cityId,
-        value:this.getValue(),
-        localCity: this.state.localCity,
-        range:this.getRange(),
-        placeBean: this.state.placeBean,
-        entityType: 3,
-      }
-      DeviceEventEmitter.emit(messageCondition,data)
-      this.props.navigation.pop(2)
+        range: this.getRange(),
+        value: this.getValue(),
+      }).then(data => {
+        DeviceEventEmitter.emit(messageCondition, data)
+        this.props.navigation.pop(2)
+      })
+
+
     } else {
       this.showToast('The city has not yet been chosen');
     }
   }
 
-  getValue(){
-    
-    if(this.state.item.operators.length>1){
+  getValue() {
+    if (this.state.item.operators.length > 1) {
       return "20"
-    }else{
-      for(key in this.state.item.property.enums){
+    } else {
+      for (key in this.state.item.property.enums) {
         return key
       }
     }
   }
-  getName(){
-    if(Platform.OS=='ios'){
+  getName() {
+    if (Platform.OS == 'ios') {
       return this.state.item.property.name
     }
-   return this.state.item.name
+    return this.state.item.name
   }
-  getType(){
-    if(Platform.OS=='ios'){
+  getType() {
+    if (Platform.OS == 'ios') {
       return this.state.item.property.code
     }
     return this.state.item.type
   }
-  getRange(){
-    if(Platform.OS=='ios'){
-      return (this.state.item.property&& this.state.item.property.property.range)?"==":"<"
+  getRange() {
+    if (Platform.OS == 'ios') {
+      return (this.state.item.property && this.state.item.property.property.range) ? "==" : "<"
     }
     return this.state.item.operators[0]
   }

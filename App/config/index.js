@@ -1,28 +1,27 @@
-import Strings from '../i18n';
 
 export const ConditionConfig = [
   {
-    label: Strings.Weather,
+    label: 'Weather',
     key: 'weather',
     type: 'condition',
   },
   {
-    label: Strings.Temperature,
+    label: 'Temperature',
     key: 'temperature',
     type: 'temp',
   },
   {
-    label: Strings.Humidity,
+    label: 'Humidity',
     key: 'humidity',
     type: 'humidity',
   },
   {
-    label: Strings.Sunrises,
+    label: 'Sunrises',
     key: 'sunrise',
     type: 'sunsetrise',
   },
   {
-    label: Strings.AirQuality,
+    label: 'AirQuality',
     key: 'airquality',
     type: 'aqi',
   },

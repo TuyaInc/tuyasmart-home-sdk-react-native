@@ -1,5 +1,5 @@
 const GatewayNativeApi = require('react-native').NativeModules.TuyaGatewayModule
-import TYNativeBridge, { SUBDEVLISTENER } from './bridgeUtils'
+import {TYNativeBridge,  GATWAYLISTENER } from './bridgeUtils'
 
 const TuyaGatewayApi = {
   publishDps (params) {
@@ -11,10 +11,13 @@ const TuyaGatewayApi = {
   multicastDps (params) {
     return GatewayNativeApi.multicastDps(params)
   },
+  getSubDevList (params) {
+    return GatewayNativeApi.getSubDevList(params)
+  },
   registerSubDevListener (params,onSubDevDpUpdate,onSubDevRemoved,onSubDevAdded,onSubDevInfoUpdate,onSubDevStatusChanged) {
     GatewayNativeApi.registerSubDevListener(params)
     return TYNativeBridge.on(
-      TYNativeBridge.bridge(SUBDEVLISTENER, params.devId),
+      TYNativeBridge.bridge(GATWAYLISTENER, params.devId),
       data => {
         if (data.type == 'onSubDevDpUpdate') {
           onSubDevDpUpdate(data)
@@ -32,7 +35,10 @@ const TuyaGatewayApi = {
   },
   unRegisterSubDevListener (params,sub) {
     GatewayNativeApi.unRegisterSubDevListener(params)
-    TYNativeBridge.off(TYNativeBridge.bridge(SUBDEVLISTENER, params.devId), sub)
+    TYNativeBridge.off(TYNativeBridge.bridge(GATWAYLISTENER, params.devId), sub)
+  },
+  onDestroy (params) {
+    GatewayNativeApi.onDestroy(params)
   }
 }
 

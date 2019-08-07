@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 
 import { TuyaTimerApi } from '../../../sdk'
-import Strings from '../../i18n';
 import HeadView from '../../common/HeadView';
 import BaseComponet from '../../common/BaseComponent';
 import ButtonX from '../../common/ButtonX';
@@ -228,7 +227,6 @@ export default class TimerHomePage extends BaseComponet {
       <View style={styles.quickAContent}>
         <TouchableOpacity
           onPress={() => {
-            console.log(item)
             TuyaTimerApi.removeTimerWithTask({
               taskName,
               devId: this.state.devId,
@@ -244,7 +242,7 @@ export default class TimerHomePage extends BaseComponet {
           }}
         >
           <View style={styles.quick}>
-            <Text style={styles.delete}>{Strings.delete}</Text>
+            <Text style={styles.delete}>{'delete'}}</Text>
           </View>
         </TouchableOpacity>
       </View>

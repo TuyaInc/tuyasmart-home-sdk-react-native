@@ -19,8 +19,9 @@ export default class Item extends Component {
     style: PropTypes.object,
     textStyle: PropTypes.object,
     start: PropTypes.bool,
-    rightHintText:PropTypes.string,
-    rightImage:PropTypes.obj,
+    rightHintText: PropTypes.string,
+    rightImage: PropTypes.obj,
+    renderRightView: PropTypes.object
   }
 
   static defaultProps = {
@@ -31,8 +32,9 @@ export default class Item extends Component {
     style: {},
     textStyle: {},
     start: false,
-    rightHintText:'',
-    rightImage:null
+    rightHintText: '',
+    rightImage: null,
+    renderRightView: null
   }
 
 
@@ -49,13 +51,17 @@ export default class Item extends Component {
             {this.props.start && <Text style={styles.start}>*</Text>}
             <Text style={[styles.text, this.props.textStyle]}>{this.props.leftText}</Text>
           </View>
-          <View style={styles.rightGroup}>
-            <Text style={styles.rightText} numberOfLines={1}>
-              {this.props.rightText||this.props.rightHintText}
-            </Text>
-            {this.props.showRightImage &&
-              <Image source={this.props.rightImage||require('../res/images/Arrow_right.png')} />}
-          </View>
+          {
+            this.props.renderRightView ?
+              <View style={styles.rightGroup}>{this.props.renderRightView()}</View> :
+              <View style={styles.rightGroup}>
+                <Text style={styles.rightText} numberOfLines={1}>
+                  {this.props.rightText || this.props.rightHintText}
+                </Text>
+                {this.props.showRightImage &&
+                  <Image source={this.props.rightImage || require('../res/images/Arrow_right.png')} />}
+              </View>
+          }
         </View>
       </TouchableOpacity>
     )
@@ -65,7 +71,7 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor:'white',
+    backgroundColor: 'white',
     width,
     height: 50,
     alignItems: 'center',

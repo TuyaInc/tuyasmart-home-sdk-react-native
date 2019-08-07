@@ -30,7 +30,6 @@ export default class DevicesFunctionPage extends BaseComponent {
       devId: this.state.devId,
     })
       .then((data) => {
-        console.log(data)
         this.setState({
           FunctionList: data,
         });

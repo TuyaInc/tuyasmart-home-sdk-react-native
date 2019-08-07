@@ -8,8 +8,9 @@ import { TuyaShareApi } from '../../../sdk'
 import BaseComponent from '../../common/BaseComponent'
 import HeadView from '../../common/HeadView'
 import Item from '../../common/Item'
+import EditItem from '../../common/EditItem'
 
-import { shareCountryCode, shareUserAccount } from '../../constant'
+import { countryCode, userName } from '../../constant'
 
 const { width } = Dimensions.get('window');
 
@@ -23,9 +24,9 @@ export default class AddSharePage extends BaseComponent {
     const params = this.props.navigation.state.params;
     this.state = {
       homeId: params.homeId,
-      shareList: [],
-      userName: '',
       devIds: [params.devId],
+      countryCode,
+      userName
     };
   }
 
@@ -38,8 +39,8 @@ export default class AddSharePage extends BaseComponent {
       rightOnPress={() => {
         TuyaShareApi.addShareWithHomeId({
           homeId: this.state.homeId,
-          countryCode: shareCountryCode,
-          userAccount: shareUserAccount,
+          countryCode: this.state.countryCode,
+          userAccount: this.state.userName,
           devIds: this.state.devIds,
         })
           .then(() => {
@@ -56,14 +57,16 @@ export default class AddSharePage extends BaseComponent {
   renderContent() {
     return (
       <View style={styles.container}>
-        <Item
-          leftText={'Country/region'}
-          rightText={shareCountryCode}
-        />
-         <Item
-          leftText={'Country/region'}
-          rightText={shareUserAccount}
-        />
+        <EditItem leftText={'Country/region'} value={this.state.countryCode} onChangeText={(countryCode) => {
+          this.setState({
+            countryCode
+          })
+        }} />
+        <EditItem leftText={'userName'} value={this.state.userName} onChangeText={(userName) => {
+          this.setState({
+            userName
+          })
+        }} />
       </View>
     );
   }

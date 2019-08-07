@@ -6,9 +6,12 @@ const androidAppSecret=""
 
 //login Account
 const countryCode="86"
+
 const userName=""
 const password=""
 
+const region='AY'
+const uid=""
 //connect Wifi 
 const ssid=""
 const wifiPassWord=""
@@ -35,7 +38,8 @@ const rooms=['A living room', 'Master BedRoom']
 //create Scene
 const sceneName="My Scene"
 const sceneBackground="https://images.tuyacn.com/smart/rule/cover/bedroom.png"
-const matchType="MATCH_TYPE_OR"
+//MATCH_TYPE_OR=1,MATCH_TYPE_AND=2,MATCH_TYPE_BY_EXPR=3
+const matchType=1
 const stickyOnTop=false
 const cityId=793409505965772800
 
@@ -74,5 +78,7 @@ export {
     shareUserAccount,
     groupName,
     taskName,
-    dps
+    dps,
+    uid,
+    region
 }

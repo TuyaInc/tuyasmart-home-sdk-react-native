@@ -4,14 +4,11 @@ const TuyaTimerApi = {
   addTimerWithTask (params) {
     return TimerNativeApi.addTimerWithTask(params)
   },
-  addTimerWithTaskDps (params) {
-    return TimerNativeApi.addTimerWithTaskDps(params)
-  },
   getTimerTaskStatusWithDeviceId (params) {
     return TimerNativeApi.getTimerTaskStatusWithDeviceId(params)
   },
-  updateTimerTaskStatusWithTask (params) {
-    return TimerNativeApi.updateTimerTaskStatusWithTask(params)
+  updateTimerStatusWithTask (params) {
+    return TimerNativeApi.updateTimerStatusWithTask(params)
   },
   removeTimerWithTask (params) {
     return TimerNativeApi.removeTimerWithTask(params)
@@ -19,11 +16,8 @@ const TuyaTimerApi = {
   updateTimerWithTask (params) {
     return TimerNativeApi.updateTimerWithTask(params)
   },
-  updateTimerStatusWithTask (params) {
-    return TimerNativeApi.updateTimerStatusWithTask(params)
-  },
-  updateTimerWithTaskInstruct (params) {
-    return TimerNativeApi.updateTimerWithTaskInstruct(params)
+  updateTimerWithTaskAndInstruct (params) {
+    return TimerNativeApi.updateTimerWithTaskAndInstruct(params)
   },
   getTimerWithTask (params) {
     return TimerNativeApi.getTimerWithTask(params)

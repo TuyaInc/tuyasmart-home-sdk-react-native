@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   View, StyleSheet, Text, Image,Dimensions, FlatList, TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
 import {TuyaShareApi} from '../../../sdk'
 
-import NavigationBar from '../../common/NavigationBar';
-import ViewUtils from '../../utils/ViewUtils';
+import BaseComponent from '../../common/BaseComponent';
+import HeadView from '../../common/HeadView';
 
 const { width } = Dimensions.get('window');
 
-class SharePage extends Component {
+class SharePage extends BaseComponent {
   constructor(props) {
     super(props);
     const params = this.props.navigation.state.params;
@@ -30,16 +30,15 @@ class SharePage extends Component {
       })
   }
 
-  render() {
+  renderHeaderView(){
+    return <HeadView
+    centerText={'共享设备'}
+    leftOnPress={()=>this.props.navigation.pop()}
+    />
+  }
+  renderContent() {
     return (
       <View style={styles.container}>
-        <NavigationBar
-          style={{ backgroundColor: '#FFFFFF', width }}
-          leftButton={ViewUtils.getLeftButton(() => {
-            this.props.navigation.pop();
-          })}
-          title="共享设备"
-        />
         <Text
           style={{
             color: '#22232C',

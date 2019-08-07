@@ -1,23 +1,14 @@
 package com.tuyarndemo;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
-import android.support.multidex.MultiDex;
 
-import com.facebook.react.BuildConfig;
 import com.facebook.react.ReactApplication;
-import com.tuya.smart.rnsdk.TuyaReactPackage;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import com.horcrux.svg.SvgPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.tuya.smart.rnsdk.TuyaReactPackage;
-import com.tuya.smart.rnsdk.core.TuyaCoreModule;
 import com.zyu.ReactNativeWheelPickerPackage;
-
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,8 +25,6 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNGestureHandlerPackage(),
-            new SvgPackage(),
               new TuyaReactPackage(),
               new ReactNativeWheelPickerPackage()
       );

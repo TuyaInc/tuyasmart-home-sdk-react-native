@@ -5,19 +5,25 @@ import {
   NativeModules
 } from 'react-native'
 
-export const GROUPLISTENER = 'groupListener'
-const HARDWAREUPGRADELISTENER = 'hardwareUpgradeListener'
+const GROUPLISTENER = 'groupListener'
+const NEEDLOGIN = 'needLogin'
+
+const OTALISTENER = 'otaListener'
 const DEVLISTENER = 'devListener'
-const SUBDEVLISTENER = 'subDevListener'
+const GATWAYLISTENER = 'gatwayListener'
+const HOMEDEVICESTATUS = 'homeDeviceStatus'
 const HOMESTATUS = 'homeStatus'
 const HOMECHANGE = 'homeChange'
-const SINGLETRANSFER = 'SingleTransfer'
+const TRANSFERDATA = 'transferData'
+const TRANSFER = 'transfer'
+const WARNMESSAGEARRIVED = "WarnMessageArrived";
+const SMARTUPDATE = "SmartUpdate";
+const SEARCHDEVICE = "searchDevice";
 
 const TYNativeBridge = {}
 
 TYNativeBridge.on = (eventname, callback) => {
   if (Platform.OS == 'android') {
-    console.log('----->rn event',eventname)
     DeviceEventEmitter.addListener(eventname, callback)
   } else {
     if (NativeModules['TuyaRNEventEmitter'] != undefined) {
@@ -41,4 +47,19 @@ TYNativeBridge.bridge = (key, id) => {
   return key + '//' + id
 }
 
-module.exports = TYNativeBridge
+module.exports = {
+  TYNativeBridge,
+  GROUPLISTENER,
+  OTALISTENER,
+  DEVLISTENER,
+  GATWAYLISTENER,
+  HOMEDEVICESTATUS,
+  HOMESTATUS,
+  HOMECHANGE,
+  TRANSFERDATA,
+  TRANSFER,
+  WARNMESSAGEARRIVED,
+  SMARTUPDATE,
+  SEARCHDEVICE,
+  NEEDLOGIN
+}

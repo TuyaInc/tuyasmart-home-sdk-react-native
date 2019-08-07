@@ -13,7 +13,6 @@ import {
 import { TuyaSceneApi } from '../../../sdk';
 import Item from '../../common/Item'
 
-import DeviceStorage from '../../utils/DeviceStorage';
 import HeadView from '../../common/HeadView'
 import BaseComponent from '../../common/BaseComponent'
 import { messageCondition, messageTask, sceneName, sceneBackground, matchType, stickyOnTop } from '../../constant'
@@ -61,44 +60,28 @@ class AddAutoPage extends BaseComponent {
   }
 
   _save() {
-    if(Platform.OS=='ios')return
+    if (Platform.OS == 'ios') return
     if (this.state.ActionList.length > 0) {
-      const ActionLists = this.state.ActionList;
-      const conditionPromise = new Array();
-      const devLists = new Array();
-      for (let i = 0, j = ActionLists.length; i < j; i++) {
-        devLists.push(ActionLists[i].devId);
-      }
-      for (let i = 0, j = this.state.ConditionList.length; i < j; i++) {
-        conditionPromise.push(TuyaSceneApi.createWeatherCondition(this.state.ConditionList[i]));
-      }
-      Promise.all(conditionPromise).then((data) => {
-        TuyaSceneApi.createAutoScene({
+      TuyaSceneApi.createScene({
           homeId: this.state.homeId,
           name: sceneName,
           stickyOnTop,
-          devIds: devLists,
           background: sceneBackground,
-          matchType,
-          tasks: ActionLists,
-          conditionList: data,
+          matchType: matchType,
+          tasks: this.state.ActionList,
+          conditionList:this.state.ConditionList
         })
-          .then(() => {
-            DeviceStorage.delete('Action');
-            DeviceStorage.delete('Condition');
-            this.setState({
-              ActionList: [],
-              ConditionList: [],
-            });
-            this.props.navigation.navigate('HomePage');
-          })
-          .catch((err) => {
-            console.log('-->err', err);
+        .then(() => {
+          this.setState({
+            ActionList: [],
+            ConditionList: [],
           });
-      })
-
+          this.props.navigation.navigate('HomePage');
+        })
+        .catch((err) => {
+          console.log('-->err', err);
+        });
     } else {
-      // 未添加动作
     }
   }
 
@@ -143,7 +126,7 @@ class AddAutoPage extends BaseComponent {
             marginLeft: 50,
           }}
         >
-          {data.item.dpName}
+          {data.item.executorProperty.dpName}
         </Text>
         <Text
           style={{
@@ -153,7 +136,7 @@ class AddAutoPage extends BaseComponent {
             marginRight: 15,
           }}
         >
-          {`${data.item.value}`}
+          {`${data.item.executorProperty.value}`}
         </Text>
       </TouchableOpacity>
     );
@@ -162,80 +145,18 @@ class AddAutoPage extends BaseComponent {
   _renderConditionItem(data) {
     let text = '';
     if (data.item.type == 'temp') {
-      text = `${data.item.range} ` + ':' + ` ${data.item.value}`;
+      text = data.item.expr.toString();
     } else {
-      text = data.item.value;
+      text = data.item.entitySubIds;
     }
     return (
-      <TouchableOpacity
-        activeOpacity={1}
-        style={styles.itemConditionStyle}
-      >
-        <Image style={{ height: 20, width: 20, resizeMode: 'stretch' }} source={Res.cloud} />
-        <View
-          style={{
-            flex: 1,
-            width: 60,
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 16,
-              color: 'black',
-              flex: 1,
-            }}
-          >
-            {data.item.localCity}
-          </Text>
-          <Text
-            style={{
-              fontSize: 16,
-              color: 'black',
-              flex: 1,
-            }}
-          >
-            {text}
-          </Text>
-        </View>
-      </TouchableOpacity>
+      <Item
+        leftText={data.item.entityName}
+        rightText={text}
+      />
     );
   }
 
-  // 侧滑菜单渲染
-  getQuickActions = (item, isCondition) => (
-    <View style={styles.quickAContent}>
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={() => {
-          if (!isCondition) {
-            const newArr = new Array();
-            const data = this.state.ActionList;
-            for (let i = 0, j = data.length; i < j; i++) {
-              if (data[i].dpId !== item.dpId) {
-                newArr.push(data[i]);
-              }
-            }
-            this.setState({
-              ActionList: newArr,
-            });
-          } else {
-            const data = this.state.ConditionList;
-            data.splice(data.indexOf(item), 1)
-            this.setState({
-              ConditionList: data
-            })
-          }
-        }}
-      >
-        <View style={styles.quick}>
-          <Text style={styles.delete}>{'delete'}</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
-  )
 
   renderHeaderView() {
     return <HeadView
@@ -290,9 +211,6 @@ class AddAutoPage extends BaseComponent {
             }}
             renderItem={this._renderConditionItem}
             style={{ width }}
-            renderQuickActions={({ item }) => this.getQuickActions(item, true)} // 创建侧滑菜单
-            maxSwipeDistance={80} // 可展开（滑动）的距离
-            bounceFirstRowOnMount // 进去的时候不展示侧滑效果
             ListEmptyComponent={this._renderConditionFooter(this.props)}
           />
         </View>
@@ -334,9 +252,6 @@ class AddAutoPage extends BaseComponent {
             }}
             renderItem={this._renderItem}
             style={{ width }}
-            renderQuickActions={({ item }) => this.getQuickActions(item)} // 创建侧滑菜单
-            maxSwipeDistance={80} // 可展开（滑动）的距离
-            bounceFirstRowOnMount // 进去的时候不展示侧滑效果
             ListEmptyComponent={() => <Item
               onPress={() => {
                 this.props.navigation.navigate('AddActionPage', {

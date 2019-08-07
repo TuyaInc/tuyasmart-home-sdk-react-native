@@ -1,136 +1,113 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  View, StyleSheet, Text, Image,  Dimensions,
+  View, StyleSheet, Dimensions,
 } from 'react-native';
-import {TuyaUserApi} from '../../../sdk'
+import { TuyaUserApi } from '../../../sdk'
 import { resetAction } from '../../navigations/AppNavigator';
-import DeviceStorage from '../../utils/DeviceStorage';
-import TextButton from '../../component/TextButton';
+import ButtonX from '../../common/ButtonX';
+import BaseComponent from '../../common/BaseComponent';
+import InputDialog from '../../common/InputDialog';
+import PickeWheelX from '../../common/PickeWheelX'
 
+import EmptyView from '../../common/EmptyView'
+import Item from '../../common/Item'
 const { width } = Dimensions.get('window');
 
-export default class MyPage extends Component {
+export default class MyPage extends BaseComponent {
   constructor(props) {
     super(props);
-
     this.state = {
-      user: {
-        headPic: '',
-      },
+      user: '',
     };
-    TuyaUserApi.getCurrentUser()
+    this.getUser()
+  }
+
+  getUser() {
+    TuyaUserApi.getUser()
       .then((data) => {
-        console.log('----get cr', data);
-        if (data == null || data == undefined) {
-          // this.logout()
-        } else if (data.username) {
+        if (data) {
           this.setState({
             user: data,
           });
-        } else {
-          // this.logout()
         }
       })
-      .catch((error) => {
-        // this.logout()
+  }
+  logout() {
+    TuyaUserApi.logout()
+      .then(() => {
+        this.props.navigation.dispatch(resetAction('LoginHomePage'));
+      })
+      .catch(() => {
+        this.props.navigation.dispatch(resetAction('LoginHomePage'));
       });
   }
 
-  logout() {
-    DeviceStorage.delete('userInfo').then((data) => {
-      TuyaUserApi.logout()
-        .then((data) => {
-          console.log('logout', data);
-          this.props.navigation.dispatch(resetAction('LoginHomePage'));
-        })
-        .catch((e) => {
-          console.log('logout', e);
-          this.props.navigation.dispatch(resetAction('LoginHomePage'));
-        });
-    });
-  }
 
-  render() {
-    const headImage = this.state.user.headPic.length > 0 ? (
-      <Image source={{ uri: `${this.state.user.headPic}` }} />
-    ) : (
-      <Image source={require('../../res/images/headPic.png')} />
-    );
+  getList() {
+    return [
+      {
+        key: 'Account',
+        leftText: 'Account',
+        rightText: this.state.user.username,
+      },
+      {
+        key: 'nickName',
+        leftText: 'nickName',
+        rightText: this.state.user.nickName,
+        onPress: () => {
+          this.inputDialog &&
+            this.inputDialog.show({
+              title: 'rename',
+              value: this.state.user.nickName || '',
+              confim: (name) => {
+                TuyaUserApi.reRickName({ name }).then(() => this.getUser())
+              },
+            })
+        }
+      },
+      {
+        key: 'TempUnit',
+        leftText: ' TempUnit',
+        rightText: this.state.user.tempUnit == 1 ? 'Celsius' : 'Fahrenheit',
+        onPress: () => {
+          const list = ['Celsius', 'Fahrenheit']
+          this.pickeWheelX &&
+            this.pickeWheelX.show(this.state.user.tempUnit - 1, list, (index) => {
+              TuyaUserApi.setTempUnit({ tempUnitEnum: list[index]}).then(() => this.getUser())
+            })
+        }
+      },
+      {
+        key: 'timezoneId',
+        leftText: 'timezoneId',
+        rightText: this.state.user.timezoneId,
+      },
+      {
+        key: 'TestApi',
+        leftText: 'TestApi',
+        rightText: '',
+        onPress: () => {
+          this.props.navigation.navigate('TestApiPage')
+        }
+      },
+    ]
+  }
+  renderContent() {
+    if (!this.state.user) return <EmptyView text={'user is null'} />
     return (
       <View style={styles.container}>
-        <View
-          style={{
-            width,
-            height: 50,
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: 'white',
-            paddingLeft: 15,
-            paddingRight: 15,
-            marginTop: 15,
-          }}
-        >
-          <Text>Account</Text>
-          <Text>{this.state.user.username}</Text>
-        </View>
-        <View
-          style={{
-            width,
-            height: 50,
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: 'white',
-            paddingLeft: 15,
-            paddingRight: 15,
-            marginTop: 15,
-          }}
-        >
-          <Text>nickName</Text>
-          <Text>{this.state.user.nickName}</Text>
-        </View>
-        <View
-          style={{
-            width,
-            height: 50,
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: 'white',
-            paddingLeft: 15,
-            paddingRight: 15,
-            marginTop: 15,
-          }}
-        >
-          <Text>timezoneId</Text>
-          <Text>{this.state.user.timezoneId}</Text>
-        </View>
-        <View
-          style={{
-            width,
-            height: 50,
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            alignItems: 'center',
-            backgroundColor: 'white',
-            paddingLeft: 15,
-            paddingRight: 15,
-            marginTop: 15,
-          }}
-        >
-          <Text>headPic</Text>
-          {headImage}
-        </View>
-
-        <TextButton
+        {
+          this.getList().map(d => <Item {...d} />)
+        }
+        <ButtonX
           style={{
             backgroundColor: '#FFFFFF',
             width,
             height: 50,
+            justifyContent:'center',
             marginTop: 50,
           }}
-          title="退出登陆"
+          text="退出登陆"
           onPress={() => {
             this.logout();
           }}
@@ -138,6 +115,16 @@ export default class MyPage extends Component {
         />
       </View>
     );
+  }
+  renderExpendView() {
+    return <View>
+      <InputDialog ref={ref => (this.inputDialog = ref)} />
+      <PickeWheelX
+        ref={(ref) => {
+          this.pickeWheelX = ref
+        }}
+      />
+    </View>
   }
 }
 
@@ -149,8 +136,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#F8F8F8',
-  },
-  tips: {
-    fontSize: 29,
+    marginTop: 50
   },
 });

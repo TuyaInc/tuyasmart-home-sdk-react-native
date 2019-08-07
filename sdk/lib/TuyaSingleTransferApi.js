@@ -1,6 +1,6 @@
 const SinglerTransferNativeApi = require('react-native').NativeModules
   .TuyaSingleTransferModule
-import TYNativeBridge, { SINGLETRANSFER } from './bridgeUtils'
+import  {TYNativeBridge, TRANSFERDATA,TRANSFER } from './bridgeUtils'
 
 const TuyaSingleTransferApi = {
   startConnect () {
@@ -9,16 +9,16 @@ const TuyaSingleTransferApi = {
   isOnline () {
     return SinglerTransferNativeApi.isOnline()
   },
-  subscribeDevice (params, onSuccess, onError) {
+  subscribeDevice (params) {
     SinglerTransferNativeApi.subscribeDevice(params)
   },
   unSubscribeDevice (params) {
     SinglerTransferNativeApi.unSubscribeDevice(params)
   },
-  registerTransferDataListener (params) {
-    SinglerTransferNativeApi.registerTransferDataListener(params)
+  registerTransferDataListener (onSuccess,onError) {
+    SinglerTransferNativeApi.registerTransferDataListener()
     return TYNativeBridge.on(
-      TYNativeBridge.bridge(SINGLETRANSFER, params.devId),
+      TYNativeBridge.bridge(TRANSFERDATA, ''),
       data => {
         if (data.type == 'onSuccess') {
           onSuccess(data)
@@ -28,9 +28,29 @@ const TuyaSingleTransferApi = {
       }
     )
   },
-  unRegisterTransferDataListener(params){
-    TYNativeBridge.off(TYNativeBridge.bridge(SINGLETRANSFER, params.devId), sub)
+  unRegisterTransferDataListener(){
+    SinglerTransferNativeApi.unRegisterTransferDataListener()
+    TYNativeBridge.off(TYNativeBridge.bridge(TRANSFERDATA, ''))
   },
+
+  registerTransferCallback (onConnectSuccess,onConnectError) {
+    SinglerTransferNativeApi.registerTransferCallback()
+    return TYNativeBridge.on(
+      TYNativeBridge.bridge(TRANSFER, ''),
+      data => {
+        if (data.type == 'onSuccess') {
+          onConnectSuccess(data)
+        } else if (data.type == 'onError') {
+          onConnectError(data)
+        }
+      }
+    )
+  },
+  unRegisterTransferCallback(){
+    SinglerTransferNativeApi.unRegisterTransferCallback()
+    TYNativeBridge.off(TYNativeBridge.bridge(TRANSFER, ''))
+  },
+
   stopConnect () {
     SinglerTransferNativeApi.stopConnect()
   }

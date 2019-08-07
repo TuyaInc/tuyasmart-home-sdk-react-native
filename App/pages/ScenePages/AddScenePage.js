@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux'
 import { TuyaSceneApi } from '../../../sdk';
-import Strings from '../../i18n';
 import HeadView from '../../common/HeadView'
 import Item from '../../common/Item'
 import { messageTask, sceneName, sceneBackground, matchType, stickyOnTop } from '../../constant'
@@ -62,6 +61,7 @@ class AddScenePage extends BaseComponent {
 
   _save() {
     if (this.state.ActionList.length > 0) {
+      //createSceneWithStickyOnTop
       TuyaSceneApi.createScene({
         homeId: this.state.homeId,
         name: sceneName,
@@ -92,7 +92,7 @@ class AddScenePage extends BaseComponent {
             marginLeft: 50,
           }}
         >
-          {data.item.dpName}
+          {data.item.executorProperty.dpName}
         </Text>
         <Text
           style={{
@@ -102,36 +102,12 @@ class AddScenePage extends BaseComponent {
             marginRight: 15,
           }}
         >
-          {`${data.item.value}`}
+          {`${data.item.executorProperty.value}`}
         </Text>
       </TouchableOpacity>
     );
   }
 
-  // 侧滑菜单渲染
-  getQuickActions = item => (
-    <View style={styles.quickAContent}>
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={() => {
-          const newArr = new Array();
-          const data = this.state.ActionList;
-          for (let i = 0, j = data.length; i < j; i++) {
-            if (data[i].dpId !== item.dpId) {
-              newArr.push(data[i]);
-            }
-          }
-          this.setState({
-            ActionList: newArr,
-          });
-        }}
-      >
-        <View style={styles.quick}>
-          <Text style={styles.delete}>{Strings.delete}</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
-  )
 
   renderContent() {
     return (
@@ -150,6 +126,8 @@ class AddScenePage extends BaseComponent {
             backgroundColor: '#FFFFFF',
             marginTop: 30,
             flexDirection: 'column',
+            justifyContent:'center',
+            alignItems:'center'
           }}
         >
           <Image source={Res.scenebg} />
@@ -158,6 +136,7 @@ class AddScenePage extends BaseComponent {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
+              width: 0.95 * width,
               marginTop: 5,
             }}
           >
@@ -188,9 +167,6 @@ class AddScenePage extends BaseComponent {
             }}
             renderItem={this._renderItem}
             style={{ width }}
-            renderQuickActions={({ item }) => this.getQuickActions(item)} // 创建侧滑菜单
-            maxSwipeDistance={80} // 可展开（滑动）的距离
-            bounceFirstRowOnMount // 进去的时候不展示侧滑效果
             ListEmptyComponent={() => <Item
               onPress={() => {
                 this.props.navigation.navigate('AddActionPage', {

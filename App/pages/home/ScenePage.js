@@ -8,7 +8,8 @@ import {
   FlatList,
   ScrollView,
   DeviceEventEmitter,
-  RefreshControl
+  RefreshControl,
+  TouchableOpacity
 } from 'react-native';
 import { connect } from 'react-redux'
 import Item from '../../common/Item'
@@ -16,7 +17,7 @@ import { TuyaSceneApi } from '../../../sdk'
 import HeadView from '../../common/HeadView'
 import BaseComponent from '../../common/BaseComponent'
 
-const {  width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 class ScenePage extends BaseComponent {
   constructor(props) {
@@ -25,16 +26,14 @@ class ScenePage extends BaseComponent {
       sceneList: [],
       conditionList: [],
       homeId: this.props.homeId,
-      refreshing: false
     };
   }
 
   getData() {
-    this.setState({ refreshing: true })
     TuyaSceneApi.getSceneList({ homeId: this.state.homeId })
       .then((data) => {
-        const SceneList = new Array();
-        const conditionList = new Array();
+        const SceneList = [];
+        const conditionList = [];
         for (let i = 0, j = data.length; i < j; i++) {
           if (data[i].conditions != undefined) {
             conditionList.push(data[i]);
@@ -45,12 +44,8 @@ class ScenePage extends BaseComponent {
         this.setState({
           sceneList: SceneList,
           conditionList,
-          refreshing: false
         });
       })
-      .catch(() => {
-        this.setState({ refreshing: false })
-      });
   }
   componentDidMount() {
     this.setHomeIdListener = DeviceEventEmitter.addListener('setHomeId', (value) => {
@@ -65,20 +60,25 @@ class ScenePage extends BaseComponent {
 
   _renderItem(item) {
     return (
-      <View>
-        <Image
-          style={{
-            height: 120,
-            width: 163,
-            marginLeft: 10,
-            marginTop: 5,
-            borderRadius: 8,
-          }}
-          resizeMode="stretch"
-          source={{ uri: item.background }}
-        />
-        <Text style={{position:'absolute',left:10,top:10,color:'black'}}>{item.name}</Text>
-      </View>
+      <TouchableOpacity onPress={() => {
+        TuyaSceneApi.executeScene({ sceneId: item.id })
+      }}>
+        <View>
+          <Image
+            style={{
+              height: 120,
+              width: 163,
+              marginLeft: 10,
+              marginTop: 5,
+              borderRadius: 8,
+            }}
+            resizeMode="stretch"
+            source={{ uri: item.background }}
+          />
+          <Text style={{ position: 'absolute', left: 10, top: 10, color: 'black' }}>{item.name}</Text>
+        </View>
+      </TouchableOpacity>
+
     )
   }
 
@@ -101,7 +101,7 @@ class ScenePage extends BaseComponent {
           refreshControl={(
             <RefreshControl
               onRefresh={() => { this.getData() }}
-              refreshing={this.state.refreshing}
+              refreshing={false}
               tintColor="#ff0000"
               title="Loading..."
               titleColor="#00ff00"

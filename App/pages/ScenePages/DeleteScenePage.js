@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
@@ -10,11 +10,9 @@ import {
 } from 'react-native';
 import {TuyaSceneApi} from '../../../sdk';
 
-import Toast from 'react-native-easy-toast';
-import NavigationBar from '../../common/NavigationBar';
+import BaseComponent from '../../common/BaseComponent';
+import HeadView from '../../common/HeadView';
 
-import ViewUtils from '../../utils/ViewUtils';
-import Strings from '../../i18n';
 import { connect } from 'react-redux'
 
 const {  width } = Dimensions.get('window');
@@ -22,7 +20,7 @@ const Res = {
   setting: require('../../res/images/scene_settings.png'),
 };
 
-class DeleteScenePage extends Component {
+class DeleteScenePage extends BaseComponent {
   constructor(props) {
     super(props);
 
@@ -33,21 +31,15 @@ class DeleteScenePage extends Component {
   }
 
   componentDidMount() {
-    console.log("---->this.state.homeId",this.state.homeId)
     TuyaSceneApi.getSceneList({ homeId: this.state.homeId })
       .then((data) => {
-        console.log('-getSceneList--->', data);
         this.setState({
           sceneList: data,
         });
       })
-      .catch((err) => {
-        console.log('---getSceneList->', err);
-      });
   }
 
   _renderItem(data) {
-    console.log('--->data', data);
     return (
       <View style={styles.itemStyle}>
         <Text
@@ -79,7 +71,7 @@ class DeleteScenePage extends Component {
         activeOpacity={1}
         onPress={() => {
           TuyaSceneApi.deleteScene({ sceneId: item.id })
-            .then((data) => {
+            .then(() => {
               const newArr = new Array();
               for (let i = 0, j = this.state.sceneList.length; i < j; i++) {
                 if (this.state.sceneList[i].id != item.id) {
@@ -89,16 +81,11 @@ class DeleteScenePage extends Component {
               this.setState({
                 sceneList: newArr,
               });
-              this.toast.show('删除成功', DURATION.LENGTH_SHORT);
             })
-            .catch((err) => {
-              console.warn('--err', err);
-              this.toast.show('删除失败', DURATION.LENGTH_SHORT);
-            });
         }}
       >
         <View style={styles.quick}>
-          <Text style={styles.delete}>{Strings.delete}</Text>
+          <Text style={styles.delete}>{'delete'}</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -119,7 +106,12 @@ class DeleteScenePage extends Component {
     );
   }
 
-  render() {
+  renderHeaderView(){
+    return <HeadView
+    centerText={'delete'}
+    leftOnPress={()=>this.props.navigation.pop()}/>
+  }
+  renderContent() {
     return (
       <View
         style={{
@@ -130,13 +122,6 @@ class DeleteScenePage extends Component {
           flex: 1,
         }}
       >
-        <NavigationBar
-          style={{ backgroundColor: '#F4F4F5', width }}
-          leftButton={ViewUtils.getLeftButton(() => {
-            this.props.navigation.pop();
-          })}
-          title="delete "
-        />
         <SwipeableFlatList
           data={this.state.sceneList}
           ref={(ref) => {
@@ -149,7 +134,6 @@ class DeleteScenePage extends Component {
           bounceFirstRowOnMount // 进去的时候不展示侧滑效果
           ListEmptyComponent={this._renderFooter(this.props)}
         />
-        <Toast ref={toast => (this.toast = toast)} />
       </View>
     );
   }

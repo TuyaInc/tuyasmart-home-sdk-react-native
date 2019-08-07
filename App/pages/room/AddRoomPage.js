@@ -2,7 +2,7 @@ import React from 'react';
 import { TuyaHomeApi } from '../../../sdk'
 import BaseComponet from '../../common/BaseComponent';
 import HeadView from '../../common/HeadView';
-import Item from '../../common/Item'
+import EditItem from '../../common/EditItem'
 import { homeName } from '../../constant'
 
 export default class AddRoomPage extends BaseComponet {
@@ -12,6 +12,7 @@ export default class AddRoomPage extends BaseComponet {
     const params = this.props.navigation.state.params;
     this.state = {
       homeId: params.homeId,
+      roomName:homeName,
     };
   }
 
@@ -24,23 +25,25 @@ export default class AddRoomPage extends BaseComponet {
       rightOnPress={() => {
         TuyaHomeApi.addRoom({
           homeId: this.state.homeId,
-          name: homeName,
+          name: this.state.roomName,
         })
           .then(() => {
             this.props.navigation.pop();
           })
-          .catch((err) => {
-          });
       }}
     />
   }
 
   renderContent() {
     return (
-      <Item 
-      style={{marginTop:20}}
-      leftText={homeName}
-     />
+      <EditItem
+        leftText={'room name'}
+        value={this.state.roomName} onChangeText={(data) => {
+          this.setState({
+            roomName: data
+          })
+        }}
+      />
     );
   }
 }

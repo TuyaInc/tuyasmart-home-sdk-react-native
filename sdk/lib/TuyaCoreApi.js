@@ -1,43 +1,35 @@
-import {NativeModules}from 'react-native'
-// const CoreNativeApi = require('react-native').NativeModules.TuyaCoreModule
-const  CoreNativeApi = NativeModules.TuyaCoreModule
+import { NativeModules } from 'react-native'
+const CoreNativeApi = NativeModules.TuyaCoreModule
+import { TYNativeBridge, NEEDLOGIN, } from './bridgeUtils'
 
 const TuyaCoreApi = {
-  // sync
-  initApp (data) {
-    if(data){
-      CoreNativeApi.initWithOptions(data)
-    }else{
-      CoreNativeApi.initWithoutOptions()
-    }
+  onDestroy() {
+    CoreNativeApi.onDestroy()
   },
- 
-  // sync
-  exitApp () {
-    CoreNativeApi.exitApp()
-  },
-  setDebugMode(){
-    CoreNativeApi.setDebugMode()
+  setDebugMode(params) {
+    return CoreNativeApi.setDebugMode(params)
   },
 
-  // async, return a promise
-  apiRequest (params: Object): Promise<any> {
+  apiRequest(params) {
     return CoreNativeApi.apiRequest(params)
+  },
+  initWithOptions(params) {
+    CoreNativeApi.initWithOptions(params)
+  },
+  initWithoutOptions() {
+    CoreNativeApi.initWithOptions()
+  },
+  setOnNeedLoginListener(needLoginListener) {
+    CoreNativeApi.setOnNeedLoginListener()
+    TYNativeBridge.on(
+      NEEDLOGIN,
+      () => {
+        needLoginListener()
+      }
+    )
   }
 }
-TuyaCoreApi.initWithOptions = function (data) {
-  CoreNativeApi.initWithOptions(data)
-}
 
-// TuyaCoreApi.initApp(data) =function(data){
-//   // sync
-//   initApp (data) {
-//     if(data){
-//       CoreNativeApi.initWithOptions(data)
-//     }else{
-//       CoreNativeApi.initWithoutOptions()
-//     }
-//   },
-// }
+
 
 module.exports = TuyaCoreApi

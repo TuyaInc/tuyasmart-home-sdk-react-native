@@ -2,17 +2,16 @@ import React from 'react';
 import {
   Text, View, StyleSheet, Dimensions,
 } from 'react-native';
-import {TuyaTimerApi} from '../../../sdk'
+import { TuyaTimerApi } from '../../../sdk'
 
 import Picker from 'react-native-wheel-picker';
-import Strings from '../../i18n';
 import ButtonX from '../../common/ButtonX';
 
 import HeadView from '../../common/HeadView'
 import BaseComponent from '../../common/BaseComponent'
 
-import {taskName,dps} from '../../constant'
-const {  width } = Dimensions.get('window');
+import { taskName, dps } from '../../constant'
+const { width } = Dimensions.get('window');
 const PickerItem = Picker.Item;
 
 const WEEKS = ['S', 'M', 'T', 'W', 'Th', 'F', 'S'];
@@ -54,20 +53,10 @@ export default class SchedulePage extends BaseComponent {
   constructor(props) {
     super(props);
 
-    // this.getHours();
-    // this.getMins();
     const s = this.props.navigation.state.params;
     d = s.data;
     const mIndex = this.renderIndex(undefined != d ? d.m : '00', mins);
     const hIndex = this.renderIndex(undefined != d ? d.h : '00', hours);
-    // console.log({
-    //   mIndex,
-    //   hIndex,
-    //   m: d.m,
-    //   h: d.h,
-    //   mins,
-    //   hours
-    // })
     this.state = {
       repeat: ['0', '0', '0', '0', '0', '0', '0'],
       Power: 'open',
@@ -110,18 +99,18 @@ export default class SchedulePage extends BaseComponent {
     return 0;
   }
 
-  renderHeaderView(){
+  renderHeaderView() {
     return <HeadView
-    centerText={'Create Timer'}
-    leftOnPress={()=>this.props.navigation.pop()}
+      centerText={'Create Timer'}
+      leftOnPress={() => this.props.navigation.pop()}
     />
   }
   renderContent() {
     return (
       <View style={styles.container}>
         <View style={styles.item}>
-          <ButtonX text={Strings.CANCEL} textStyle={styles.text} onPress={() => this.props.navigation.pop()} />
-          <ButtonX text={Strings.SAVE} textStyle={styles.text} onPress={() => this.save()} />
+          <ButtonX text={'cancel'} textStyle={styles.text} onPress={() => this.props.navigation.pop()} />
+          <ButtonX text={'save'} textStyle={styles.text} onPress={() => this.save()} />
         </View>
         <View
           style={{
@@ -192,7 +181,7 @@ export default class SchedulePage extends BaseComponent {
             }}
           />
         </View>
-        <Text style={styles.Repeat}>{Strings.Repeat}</Text>
+        <Text style={styles.Repeat}>{'Repeat'}</Text>
         <View style={styles.repeats}>
           {this.state.repeat.map((d, index) => (
             <ButtonX
@@ -231,12 +220,12 @@ export default class SchedulePage extends BaseComponent {
     instruct.push({ dps, time: d });
     const jsonstr = `${JSON.stringify(instruct)}`;
     if (this.state.isFirst) {
-      TuyaTimerApi.addTimerWithTaskDps({
+      TuyaTimerApi.addTimerWithTask({
         taskName,
         loops: this.state.repeat.join(''),
         devId: this.state.devInfo.devId,
-        //example
         dps,
+        time: d
       })
         .then(() => {
           this.showToast('创建成功了');
@@ -246,14 +235,28 @@ export default class SchedulePage extends BaseComponent {
           this.showToast(err.toString())
         });
     } else {
-      TuyaTimerApi.updateTimerWithTaskInstruct({
+      // TuyaTimerApi.updateTimerWithTask({
+      //   taskName,
+      //   loops: this.state.repeat.join(''),
+      //   devId: this.state.devId,
+      //   dpId:'',
+      //   isOpen: true,
+      //   timeId: this.state.timerId,
+      //   time:d,
+      // })
+      //   .then(() => {
+      //     this.props.navigation.pop();
+      //   })
+      //   .catch((err) => {
+      //     this.showToast(err.toString())
+      //   });
+      TuyaTimerApi.updateTimerWithTaskAndInstruct({
         taskName,
         loops: this.state.repeat.join(''),
         devId: this.state.devId,
         timeId: this.state.timerId,
         instruct: jsonstr,
-        time:d,
-        dps,
+        time: d,
       })
         .then(() => {
           this.props.navigation.pop();

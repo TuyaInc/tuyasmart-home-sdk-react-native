@@ -1,6 +1,6 @@
 const HomeManagerNativeApi = require('react-native').NativeModules
   .TuyaHomeManagerModule
-import TYNativeBridge, { HOMECHANGE } from './bridgeUtils'
+import {TYNativeBridge,HOMECHANGE} from './bridgeUtils'
 
 const TuyaHomeManagerApi = {
   queryHomeList () {
@@ -34,8 +34,12 @@ const TuyaHomeManagerApi = {
       }
     })
   },
-  unregisterTuyaHomeChangeListener(sub){
-    TYNativeBridge.off(TYNativeBridge.bridge(HOMECHANGE,""), sub)
+  unregisterTuyaHomeChangeListener(){
+    HomeManagerNativeApi.unregisterTuyaHomeChangeListener()
+    TYNativeBridge.off(TYNativeBridge.bridge(HOMECHANGE,""))
+  },
+  onDestroy(){
+    HomeManagerNativeApi.onDestroy()
   }
 }
 

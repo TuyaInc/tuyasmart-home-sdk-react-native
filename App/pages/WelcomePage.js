@@ -2,12 +2,9 @@ import React, { Component } from 'react';
 import {
   View, StyleSheet, Text,Platform,
 } from 'react-native';
-import { TuyaCoreApi } from '../../sdk'
+import { TuyaCoreApi,TuyaUserApi } from '../../sdk'
 import { StackActions, NavigationActions } from 'react-navigation';
 import { iosAppKey, iosAppSecret,androidAppKey,androidAppSecret } from '../constant'
-import DeviceStorage from '../utils/DeviceStorage';
-
-const TIME = 2000;
 const resetAction = StackActions.reset({
   index: 0,
   actions: [
@@ -21,7 +18,6 @@ const resetActionLogin = StackActions.reset({
   ],
 });
 
-// import HomePage from './HomePage'
 
 export default class WelcomePage extends Component {
   constructor(props) {
@@ -30,32 +26,20 @@ export default class WelcomePage extends Component {
       appKey:Platform.OS=='ios'?iosAppKey:androidAppKey,
       appSecret:Platform.OS=='ios'?iosAppSecret:androidAppSecret,
     });
-    TuyaCoreApi.setDebugMode()
+    TuyaCoreApi.setDebugMode({
+      debug:true
+    })
   }
 
   componentDidMount() {
-    DeviceStorage.getUserInfo()
-      .then((data) => {
-        if (data != null) {
-          this.props.navigation.dispatch(resetAction);
-        } else {
-          this.timer = setTimeout(() => {
-            this.props.navigation.dispatch(resetActionLogin);
-          }, TIME);
-        }
-      })
-      .catch(() => {
-        this.timer = setTimeout(() => {
-          this.props.navigation.dispatch(resetActionLogin);
-        }, TIME);
-      });
-
+    TuyaUserApi.isLogin().then(d=>{
+      if(d){
+        this.props.navigation.dispatch(resetAction);
+      }else{
+        this.props.navigation.dispatch(resetActionLogin);
+      }
+    })
   }
-
-  componentWillUnmount() {
-    this.timer && clearTimeout(this.timer);
-  }
-
   render() {
     return (
       <View style={styles.container}>

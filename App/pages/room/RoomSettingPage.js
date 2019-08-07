@@ -1,33 +1,30 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   View,
   StyleSheet,
   Text,
-  SwipeableFlatList,
   TouchableOpacity,
   Dimensions,
   RefreshControl
 } from 'react-native';
 import { TuyaHomeApi } from '../../../sdk'
-
-import NavigationBar from '../../common/NavigationBar';
-import ViewUtils from '../../utils/ViewUtils';
+import SwipeableFlatList from '../../common/SwiperFlatList'
+import BaseComponet from '../../common/BaseComponent';
+import HeadView from '../../common/HeadView';
 const { width } = Dimensions.get('window');
 
-export default class RoomSettingPage extends Component {
+export default class RoomSettingPage extends BaseComponet {
   constructor(props) {
     super(props);
     const params = this.props.navigation.state.params;
     this.state = {
-      ...params
+      homeId:params.homeId,
+      roomList:[]
     };
   }
 
   componentDidMount(){
     this.getRoomList()
-  }
-  componentWillUnmount(){
-    this.state.refreshHome()
   }
   getRoomList() {
     TuyaHomeApi.queryRoomList({
@@ -50,16 +47,8 @@ export default class RoomSettingPage extends Component {
             roomId: item.roomId,
           })
             .then(() => {
-              const list = this.state.roomList;
-              const newArr = new Array();
-              for (let i = 0, j = list.length; i < j; i++) {
-                if (list[i].roomId !== item.roomId) {
-                  newArr.push(list[i]);
-                }
-              }
-              this.setState({
-                roomList: newArr,
-              });
+                this.getRoomList()
+                this.swipeableFlatList && this.swipeableFlatList._onClose()
             })
         }}
       >
@@ -70,8 +59,14 @@ export default class RoomSettingPage extends Component {
     </View>
   )
 
-  _renderFooter() {
-    return <Text style={{ fontSize: 18, color: 'black' }}>No room is currently set up</Text>;
+
+  renderHeaderView(){
+      return <HeadView centerText={'Room management'} leftOnPress={()=>this.props.navigation.pop()}
+      rightOnPress={()=>{
+        this.props.navigation.navigate('AddRoomPage', {
+          homeId: this.state.homeId,
+        });
+      }} rightText={'Add Room'} rightVisable={true}/>
   }
 
   _renderItem(data) {
@@ -82,27 +77,19 @@ export default class RoomSettingPage extends Component {
     );
   }
 
-  render() {
+  renderContent() {
     return (
       <View style={styles.container}>
-        <NavigationBar
-          title="Room management"
-          style={{ backgroundColor: '#FFFFFF', width }}
-          leftButton={ViewUtils.getLeftButton(() => {
-            this.props.navigation.pop();
-          })}
-        />
         <SwipeableFlatList
           data={this.state.roomList}
           ref={(ref) => {
-            this._flatListRef = ref;
+            this.swipeableFlatList = ref;
           }}
           renderItem={this._renderItem}
           style={{ width, marginTop: 20, flex: 1 }}
           renderQuickActions={({ item }) => this.getQuickActions(item)} // 创建侧滑菜单
           maxSwipeDistance={80} // 可展开（滑动）的距离
           bounceFirstRowOnMount // 进去的时候不展示侧滑效果
-          ListEmptyComponent={this._renderFooter(this.props)}
           refreshControl={(
             <RefreshControl
               onRefresh={() => { this.getRoomList()}}
@@ -115,23 +102,6 @@ export default class RoomSettingPage extends Component {
             />
           )}
         />
-        <TouchableOpacity
-          style={{
-            width,
-            height: 60,
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            backgroundColor: 'white',
-          }}
-          onPress={() => {
-            this.props.navigation.navigate('AddRoomPage', {
-              homeId: this.state.homeId,
-            });
-          }}
-        >
-          <Text style={{ fontSize: 18, color: '#FF4800', marginLeft: 15 }}>Adding rooms</Text>
-        </TouchableOpacity>
       </View>
     );
   }

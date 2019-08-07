@@ -53,11 +53,11 @@ class GroupPage extends BaseComponet {
       rightOnPress={() => {
         const list=[]
         this.state.devLists.forEach(e=>list.push(e.devId))
-        TuyaGroupApi.createGroup({
+        TuyaHomeApi.createGroup({
           homeId: this.state.homeId,
           productId: this.state.productId,
           name: groupName,
-          devIds:list,
+          devIdList:list,
         })
           .then(() => {
             this.showToast('success')

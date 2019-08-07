@@ -2,7 +2,10 @@ const PushNativeApi = require('react-native').NativeModules.TuyaPushModule
 
 const TuyaPushApi = {
   registerDevice (data) {
-    PushNativeApi.registerDevice(data)
+   return PushNativeApi.registerDevice(data)
+  },
+  registerMQPushListener () {
+    return PushNativeApi.registerMQPushListener()
   },
 
   // sync

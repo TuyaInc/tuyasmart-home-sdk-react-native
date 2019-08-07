@@ -2,266 +2,149 @@ import React from 'react';
 import {
   View,
   StyleSheet,
-  Text,
-  Image,
-  TouchableOpacity,
   Dimensions,
-  FlatList,
-  Modal,
-  DeviceEventEmitter,
-  Alert
+  RefreshControl,
+  Image,
+  Text,
+  TouchableOpacity
 } from 'react-native';
-import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import { connect } from 'react-redux';
-import { TuyaHomeManagerApi, TuyaHomeApi, } from '../../../sdk'
+import { TuyaHomeManagerApi, TuyaHomeApi } from '../../../sdk'
 import HeadView from '../../common/HeadView';
 import BaseComponet from '../../common/BaseComponent';
+import SwipeableFlatList from '../../common/SwiperFlatList'
 
 import { storeHomeId } from '../../redux/action';
-import { resetAction } from '../../navigations/AppNavigator';
-import DevicesTab from './DevicesTab';
-import Item from '../../common/Item'
-const { height, width } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 class DevicesListPage extends BaseComponet {
   constructor(props) {
     super(props);
     this.state = {
-      deviceList: [],
-      homeName: '',
-      HomeList: [],
-      roomList: [],
-      homeId: '',
-      showHomeSetting: false,
+      home: null,
+      devList: []
     };
   }
   componentDidMount() {
     this.getData()
-    this.refreshListener = DeviceEventEmitter.addListener('refresh', () => {
-      TuyaHomeManagerApi.queryHomeList()
-        .then((data) => {
-          console.log('--->queryHomeList', data);
-          this.setState({
-            roomList: data[0].rooms,
-          });
-        })
-        .catch((err) => {
-          console.warn('--->err', err);
-        });
-    });
+    TuyaHomeManagerApi.registerTuyaHomeChangeListener(() => {
+      this.getData()
+    }, () => {
+      this.getData()
+    }, () => { }, () => { }, () => { }, () => { })
   }
 
-  getRoomList(homeId) {
-    TuyaHomeApi.queryRoomList({
-      homeId,
-    })
-      .then((data) => {
-        for (let i = 1, j = data.length; i < j; i++) {
-          data[i].key = i + 1;
+
+  componentWillUnmount() {
+    TuyaHomeApi.unRegisterHomeStatusListener({homeId: this.state.home.homeId})
+    TuyaHomeManagerApi.onDestroy()
+    TuyaHomeManagerApi.unregisterTuyaHomeChangeListener()
+  }
+  getHomeDetail() {
+    TuyaHomeApi.getHomeDetail({ homeId: this.state.home.homeId }).then(data => {
+      this.setState(
+        {
+          devList: data.deviceList
         }
-        this.setState({
-          roomList: data,
-        });
-      })
-      .catch((err) => {
-        console.warn('-room', err);
-      });
+      )
+    })
+    TuyaHomeApi.unRegisterHomeStatusListener({homeId: this.state.home.homeId})
+    TuyaHomeApi.registerHomeStatusListener({homeId: this.state.home.homeId},()=>{
+      this.getHomeDetail()
+    },()=>{
+      this.getHomeDetail()
+    },()=>{},()=>{},()=>{})
   }
   getData() {
     TuyaHomeManagerApi.queryHomeList()
       .then((data) => {
         if (data.length !== 0) {
           this.setState({
-            homeName: data[0].name,
-            HomeList: data,
-            homeId: data[0].homeId,
+            home: data[0],
+            devList: []
+          }, () => {
+            this.getHomeDetail()
           });
-          DeviceEventEmitter.emit('setHomeId', data[0].homeId);
           this.props.dispatch(storeHomeId(data[0].homeId));
-          this.getRoomList(data[0].homeId)
         } else {
-          this.props.navigation.dispatch(resetAction('CreateHomePage'));
+          this.setState({
+            home: null,
+          })
         }
       })
-      .catch((err) => {
-        console.warn('--->err', err);
-      });
   }
 
 
-  renderLeftButton(name) {
-    return (
-      <Text style={{
-        fontSize: 14, fontWeight: 'bold', color: 'black', paddingLeft: 20,
-      }}
-        onPress={() => {
-          this.setState({ showHomeSetting: true })
-        }}
-      >
-        {name}
-      </Text>
-    );
+  componentWillUnmount(){
+    TuyaHomeApi.onDestroy({homeId:this.state.home.homeId})
   }
-
-
   renderHeaderView() {
     return <HeadView
-      leftText={this.state.homeName}
+      leftText={this.state.home ? this.state.home.name : 'create Home'}
       style={{ backgroundColor: 'white', marginBottom: 10 }}
-      leftOnPress={() => this.setState({ showHomeSetting: true })}
-      rightOnPress={() => this.props.navigation.navigate('ConfigPage', {
-        homeId: this.state.homeId,
-      })}
+      leftOnPress={() => this.props.navigation.navigate('HomeListPage')}
+      rightOnPress={() => {
+        if (this.state.home != null) {
+          this.props.navigation.navigate('AddDevicePage', {
+            homeId: this.state.home.homeId,
+          })
+        } else {
+          this.showToast('you need create home')
+        }
+      }}
       rightVisable={true}
       rightText={'Add Device'}
     />
   }
 
-  _renderHomeItem(data) {
-    return (
-        <Item
-          onPress={() => {
-            Alert.alert(
-              'delete',
-              'delete home',
-              [
-                {
-                  text: 'OK', onPress: () => {
-                    TuyaHomeApi.dismissHome({ homeId: data.homeId }).then(() => this.getData())
-                  }
-                },
-                { text: 'Cancel', onPress: () => { } },
-              ],
-              { cancelable: false }
-            )
-          }}
-          leftText={data.name}
-        />
-    );
-  }
-
-  _renderFooter() {
-    return (
-      <Item
-        leftText={'Creating Home'}
-        onPress={() => {
-          this.setState({
-            showHomeSetting: false,
-          });
-          this.props.navigation.navigate('CreateHomeListPage');
-        }}
-      />
-    );
-  }
-
-  showHome() {
-    return (
-      <Modal
-        animationType="slide"
-        transparent
-        visible
-        onRequestClose={() => {
-          this.setState({ showHomeSetting: false });
-        }}
-      >
-        <View style={styles.marks}>
-          <View>
-            <FlatList
-              data={this.state.HomeList}
-              renderItem={({ item }) => this._renderHomeItem(item)}
-              style={{ width }}
-              ListFooterComponent={this._renderFooter()}
-            />
-          </View>
-        </View>
-      </Modal>
-    );
-  }
-
   renderContent() {
-    const content = this.state.roomList.length > 0 ? (
-      <View style={{ flex: 1 }}>
-        <ScrollableTabView
-          tabBarUnderlineStyle={{ backgroundColor: '#FFFFFF' }}
-          tabBarInactiveTextColor="#81828B"
-          tabBarActiveTextColor="#22242C"
-          ref="scrollableTabView"
-          tabBarBackgroundColor="#FFFFFF"
-          initialPage={0}
-          onChangeTab={(obj) => {
-          }}
-          renderTabBar={() => <ScrollableTabBar style={{ height: 40, borderWidth: 0 }} tabStyle={{ height: 39 }} />}
-        >
-          <DevicesTab
-            key={0}
-            tabLabel="All device"
-            id={this.state.HomeList[0].homeId}
-            isRoom={false}
-            {...this.props}
-          />
-          {this.state.roomList.map((result, i, arr) => {
-            const room = arr[i];
-            return <DevicesTab key={i + 1} tabLabel={room.name} id={room.roomId} isRoom {...this.props} />;
-          })}
-        </ScrollableTabView>
-        <View
-          style={{
-            width: 40,
-            height: 40,
-            backgroundColor: '#FFFFFF',
-            position: 'absolute',
-            right: 0,
-            top: 0,
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onPress={() => {
-              this.props.navigation.navigate('RoomSettingPage', {
-                roomList: this.state.roomList,
-                homeId: this.state.homeId,
-                refreshHome: () => this.getRoomList(this.state.homeId)
-              });
-            }}
-          >
-            <Image source={require('../../res/images/setting.png')} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    ) : null;
     return (
-      <View style={styles.container}>
-        {content}
-        {this.state.showHomeSetting && this.showHome()}
-      </View>
+      <SwipeableFlatList
+        data={this.state.devList}
+        ref={(ref) => {
+          this.swipeableFlatList = ref
+        }}
+        bounceFirstRowOnMount={false}
+        onEndReachedThreshold={0.1}
+        maxSwipeDistance={73 * 1}
+        refreshControl={
+          <RefreshControl
+            onRefresh={() => this.getHomeDetail()}
+            refreshing={false}
+            tintColor="#ff0000"
+            titleColor="#FF2C00"
+            colors={['#ff0000', '#00ff00', '#0000ff']}
+            progressBackgroundColor="#FFFFFF"
+          />
+        }
+        renderItem={({ item, index }) => <TouchableOpacity onPress={()=>{
+          this.props.navigation.navigate('DeviceDetailPage', {
+            devId: item.devId,
+            devInfo: item,
+          });
+        }}>
+          <View style={styles.item}>
+          <Image source={{ uri: item.iconUrl }} style={{width:30,height:30,marginLeft:15}}/>
+          <Text style={{ color: '#444444', fontSize: 15, marginLeft: 10 }}>{item.name}</Text>
+        </View>
+        </TouchableOpacity>}
+      />
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'transparent',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+  item: {
+    width: width - 30,
+    marginLeft: 15,
+    marginRight: 15,
+    height: 92,
+    borderRadius: 6,
     backgroundColor: '#FFFFFF',
-  },
-  tips: {
-    fontSize: 29,
-  },
-  marks: {
-    paddingTop: 20,
-    width,
-    height,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    alignItems: 'center',
+    flexDirection: 'row',
+    marginTop: 10,
     justifyContent: 'flex-start',
-    flexDirection: 'column',
+    alignItems: 'center',
   },
 });
 export default connect(() => ({}))(DevicesListPage);

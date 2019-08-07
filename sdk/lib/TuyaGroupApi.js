@@ -1,16 +1,6 @@
 const GroupNativeApi = require('react-native').NativeModules.TuyaGroupModule
-import TYNativeBridge, { GROUPLISTENER } from './bridgeUtils'
+import {TYNativeBridge,  GROUPLISTENER } from './bridgeUtils'
 const TuyaGroupApi = {
-  createGroup (params) {
-    return GroupNativeApi.createGroup(params)
-  },
-
-  queryDeviceListToAddGroup (params) {
-    return GroupNativeApi.queryDeviceListToAddGroup(params)
-  },
-  dismissGroup (params) {
-    return GroupNativeApi.dismissGroup(params)
-  },
   registerGroupListener (params, onDpUpdate, onGroupInfoUpdate, onGroupRemoved) {
     GroupNativeApi.registerGroupListener(params)
     return TYNativeBridge.on(
@@ -30,11 +20,26 @@ const TuyaGroupApi = {
     GroupNativeApi.unregisterGroupListener(params)
     TYNativeBridge.off(TYNativeBridge.bridge(GROUPLISTENER, params.groupId), sub)
   },
-  publishDps (params) {
-    return GroupNativeApi.publishDps(params)
+  renameGroup (params) {
+    return GroupNativeApi.renameGroup(params)
   },
-  onDestroy (params) {
-    GroupNativeApi.onDestroy(params)
+  dismissGroup (params) {
+    return  GroupNativeApi.dismissGroup(params)
+  },
+  publishDps (params) {
+    return  GroupNativeApi.publishDps(params)
+  },
+  publishDpsWithEnum (params) {
+    return  GroupNativeApi.publishDpsWithEnum(params)
+  },
+  updateDeviceList (params) {
+    return  GroupNativeApi.updateDeviceList(params)
+  },
+  addDevice (params) {
+    return  GroupNativeApi.addDevice(params)
+  },
+  removeDevice (params) {
+    return  GroupNativeApi.removeDevice(params)
   }
 }
 

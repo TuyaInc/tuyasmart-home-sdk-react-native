@@ -1,13 +1,16 @@
 const OTANativeApi = require('react-native').NativeModules.TuyaOTAModule
-import TYNativeBridge, { HARDWAREUPGRADELISTENER } from './bridgeUtils'
+import  {TYNativeBridge, OTALISTENER } from './bridgeUtils'
 const TuyaOTAApi = {
-  getOtaInfo (params) {
-    return OTANativeApi.getOtaInfo(params)
+  startOta (params) {
+     OTANativeApi.startOta(params)
   },
-  startOta (params,onSuccess,onFailure,onProgress) {
+  getOtaInfo (params) {
+   return OTANativeApi.getOtaInfo(params)
+ },
+ setOtaListener (params,onSuccess,onFailure,onProgress) {
     OTANativeApi.startOta(params)
     return TYNativeBridge.on(
-      TYNativeBridge.bridge(HARDWAREUPGRADELISTENER, params.devId),
+      TYNativeBridge.bridge(OTALISTENER, params.devId),
       data => {
         if (data.type == 'onSuccess') {
           onSuccess(data)
@@ -19,8 +22,8 @@ const TuyaOTAApi = {
       }
     )
   },
-  onDestory () {
-   OTANativeApi.onDestory()
+  onDestroy (params) {
+   OTANativeApi.onDestroy(params)
   },
 }
 

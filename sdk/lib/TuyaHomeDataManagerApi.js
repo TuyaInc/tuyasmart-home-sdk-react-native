@@ -1,9 +1,12 @@
+import  {TYNativeBridge, SEARCHDEVICE } from './bridgeUtils'
+
 const HomeDataManagerNativeApi = require('react-native').NativeModules
   .TuyaHomeDataManagerModule
 
+
 const TuyaHomeDataManagerApi = {
-  getHomeRoomList () {
-    return HomeDataManagerNativeApi.getHomeRoomList()
+  getHomeRoomList (params) {
+    return HomeDataManagerNativeApi.getHomeRoomList(params)
   },
   getHomeDeviceList (params) {
     return HomeDataManagerNativeApi.getHomeDeviceList(params)
@@ -43,6 +46,60 @@ const TuyaHomeDataManagerApi = {
   },
   getHomeBean (params) {
     return HomeDataManagerNativeApi.getHomeBean(params)
+  },
+  getSubDeviceBean (params) {
+    return HomeDataManagerNativeApi.getSubDeviceBean(params)
+  },
+  getSubDeviceBeanByNodeId (params) {
+    return HomeDataManagerNativeApi.getSubDeviceBeanByNodeId(params)
+  },
+  getProductBean (params) {
+    return HomeDataManagerNativeApi.getProductBean(params)
+  },
+  getDp (params) {
+    return HomeDataManagerNativeApi.getDp(params)
+  },
+  getDps (params) {
+    return HomeDataManagerNativeApi.getDps(params)
+  },
+  getSchema (params) {
+    return HomeDataManagerNativeApi.getSchema(params)
+  },
+  queryDev (params) {
+    return HomeDataManagerNativeApi.queryDev(params)
+  },
+  discoveredLanDevice (
+    onDeviceFind,
+  ) {
+    HomeDataManagerNativeApi.discoveredLanDevice()
+    return TYNativeBridge.on(TYNativeBridge.bridge(SEARCHDEVICE, ''), data => {
+      onDeviceFind(data)
+    })
+  },
+  unRegisterDiscoveredLanDeviceListener(sub){
+    HomeDataManagerNativeApi.unRegisterDiscoveredLanDeviceListener()
+    TYNativeBridge.off(TYNativeBridge.bridge(SEARCHDEVICE,""), sub)
+  },
+  querySubDev (params) {
+    return HomeDataManagerNativeApi.querySubDev(params)
+  },
+  getDevRespBean (params) {
+    return HomeDataManagerNativeApi.getDevRespBean(params)
+  },
+  getSubDevRespBean (params) {
+    return HomeDataManagerNativeApi.getSubDevRespBean(params)
+  },
+  getDevRespBeanList () {
+    return HomeDataManagerNativeApi.getDevRespBeanList()
+  },
+  addDevRespList (params) {
+     HomeDataManagerNativeApi.addDevRespList(params)
+  },
+  addProductList (params) {
+     HomeDataManagerNativeApi.addProductList(params)
+  },
+  getSubDevList (params) {
+    return HomeDataManagerNativeApi.getSubDevList(params)
   }
 }
 

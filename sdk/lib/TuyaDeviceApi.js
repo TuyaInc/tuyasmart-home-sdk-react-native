@@ -1,12 +1,21 @@
 const DeviceNativeApi = require('react-native').NativeModules.TuyaDeviceModule
-import TYNativeBridge from './bridgeUtils'
-const DEVLISTENER = 'devListener'
+
+import { TYNativeBridge, DEVLISTENER, WARNMESSAGEARRIVED } from './bridgeUtils'
 
 const TuyaDeviceApi = {
-  getDevice (params) {
-    return DeviceNativeApi.getDevice(params)
+  removeDevice(params) {
+    return DeviceNativeApi.removeDevice(params)
   },
-  registerDevListener (params,onDpUpdate,onRemoved,onStatusChanged,onNetworkStatusChanged,onDevInfoUpdate) {
+  renameDevice(params) {
+    return DeviceNativeApi.renameDevice(params)
+  },
+  publishDps(params) {
+    return DeviceNativeApi.publishDps(params)
+  },
+  publishDpsWithEnum(params) {
+    return DeviceNativeApi.publishDpsWithEnum(params)
+  },
+  registerDevListener(params, onDpUpdate, onRemoved, onStatusChanged, onNetworkStatusChanged, onDevInfoUpdate) {
     DeviceNativeApi.registerDevListener(params)
     return TYNativeBridge.on(
       TYNativeBridge.bridge(DEVLISTENER, params.devId),
@@ -18,36 +27,60 @@ const TuyaDeviceApi = {
           onRemoved(data)
         } else if (data.type == 'onStatusChanged') {
           onStatusChanged(data)
-        }else if (data.type == 'onNetworkStatusChanged') {
+        } else if (data.type == 'onNetworkStatusChanged') {
           onNetworkStatusChanged(data)
-        }else if (data.type == 'onDevInfoUpdate') {
+        } else if (data.type == 'onDevInfoUpdate') {
           onDevInfoUpdate(data)
         }
       }
     )
   },
-  unRegisterDevListener (params,sub) {
+  unRegisterDevListener(params, sub) {
     DeviceNativeApi.unRegisterDevListener(params)
     TYNativeBridge.off(TYNativeBridge.bridge(DEVLISTENER, params.devId), sub)
   },
-  onDestroy (params) {
-    DeviceNativeApi.onDestroy(params)
-  },
-  send (params) {
-    return DeviceNativeApi.send(params)
-  },
-  getDp (params) {
+  getDp(params) {
     return DeviceNativeApi.getDp(params)
   },
-  renameDevice (params) {
-    return DeviceNativeApi.renameDevice(params)
+  getDpList(params) {
+    return DeviceNativeApi.getDpList(params)
   },
-  getDataPointStat (params) {
+  resetFactory(params) {
+    return DeviceNativeApi.resetFactory(params)
+  },
+  getDeviceProperty(params) {
+    return DeviceNativeApi.getDeviceProperty(params)
+  },
+  saveDeviceProperty(params) {
+    return DeviceNativeApi.saveDeviceProperty(params)
+  },
+  getDataPointStat(params) {
     return DeviceNativeApi.getDataPointStat(params)
   },
-  removeDevice (params) {
-    return DeviceNativeApi.removeDevice(params)
+  queryData(params) {
+    return DeviceNativeApi.queryData(params)
   },
+
+  onDestroy(params) {
+    DeviceNativeApi.onDestroy(params)
+  },
+
+  requestWifiSignal(params) {
+    return DeviceNativeApi.requestWifiSignal(params)
+  },
+  getInitiativeQueryDpsInfoWithDpsArray(params) {
+    return DeviceNativeApi.getInitiativeQueryDpsInfoWithDpsArray(params)
+  },
+  registerWarnMessageListener(params, onWarnMessageArrived, ) {
+    DeviceNativeApi.registerWarnMessageListener(params)
+    return TYNativeBridge.on(
+      TYNativeBridge.bridge(WARNMESSAGEARRIVED, params.devId),
+      data => {
+        onWarnMessageArrived(data)
+      }
+    )
+  },
+
 }
 
 module.exports = TuyaDeviceApi

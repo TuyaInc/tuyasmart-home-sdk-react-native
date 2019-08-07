@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   View, StyleSheet, Image, ImageBackground,
+  ScrollView
 } from 'react-native';
 import ButtonX from '../../common/ButtonX';
 
@@ -8,23 +9,32 @@ export default class LoginHomePage extends Component {
   constructor(props) {
     super(props);
   }
-
+ 
   getButton() {
     return [
       {
         navigate: 'LoginPage',
-        text: 'login'
+        text: 'Password login'
+      },
+      {
+        navigate: 'LoginWithCodePage',
+        text: 'code login'
       },
       {
         navigate: 'RegisterPage',
         text: 'Creating Account'
+      },
+      {
+        navigate: 'ResetPassWordPage',
+        text: 'Reset PassWord'
       },
     ]
   }
   render() {
     return (
       <ImageBackground source={require('../../res/images/login_bg.png')} style={{ flex: 1 }}>
-        <View style={styles.container}>
+       <ScrollView>
+       <View style={styles.container}>
           <Image
             style={{
               height: 150,
@@ -46,6 +56,7 @@ export default class LoginHomePage extends Component {
             />)
           }
         </View>
+       </ScrollView>
       </ImageBackground>
     );
   }

@@ -1,105 +1,85 @@
 import React from 'react';
 import {
-  View, StyleSheet, Text, Image, TouchableOpacity, Dimensions,
+  View, StyleSheet,
 } from 'react-native';
 import { TuyaUserApi } from '../../../sdk'
 
-import NavigationBar from '../../common/NavigationBar';
+import HeadView from '../../common/HeadView'
+import EditItem from '../../common/EditItem'
+import ButtonX from '../../common/ButtonX'
+
 import CheckUtils from '../../utils/CheckUtils';
-import TextButton from '../../component/TextButton';
-import DeviceStorage from '../../utils/DeviceStorage';
 import { resetAction } from '../../navigations/AppNavigator';
 import BaseComponent from '../../common/BaseComponent'
 import { userName, password, countryCode } from '../../constant'
 
-const { width } = Dimensions.get('window');
 
 export default class LoginPage extends BaseComponent {
   constructor(props) {
     super(props);
+    this.state = {
+      userName,
+      password,
+      countryCode
+    }
   }
 
-  renderLeftButton() {
-    return (
-      <View>
-        <TouchableOpacity
-          onPress={() => {
-            this.props.navigation.pop();
-          }}
-          style={{ padding: 5, marginLeft: 8 }}
-        >
-          <Image source={require('../../res/images/arrow_left.png')} style={{ width: 15, height: 20 }} />
-        </TouchableOpacity>
-      </View>
-    );
+  componentWillUnmount() {
+    TuyaUserApi.onDestroy()
   }
 
-  _loginConfirm() {
+  login() {
+    const { userName, password, countryCode } = this.state
+    if (!countryCode || !userName || !password) return
+    let promise = ''
     if (userName.indexOf('@') >= 0) {
-      TuyaUserApi.loginWithEmail({
+      promise = TuyaUserApi.loginWithEmail({
         email: userName,
         password,
         countryCode,
       })
-        .then(() => {
-          DeviceStorage.saveUserInfo(userName, password, countryCode).then(
-            () => {
-              this.props.navigation.dispatch(resetAction('HomePage'));
-            },
-          );
-        })
-        .catch((error) => {
-          this.showToast(error.toString())
-        });
     } else {
-      const LoginEnable = CheckUtils.isPoneAvailable(userName) && CheckUtils.isPassWord(password);
-      if (LoginEnable) {
-        TuyaUserApi.loginWithPhonePassword({
-          phoneNumber: userName,
-          password,
-          countryCode,
-        })
-          .then(() => {
-            DeviceStorage.saveUserInfo(userName, password, countryCode).then(
-              () => {
-                this.props.navigation.dispatch(resetAction('HomePage'));
-              },
-            );
-          })
-          .catch((error) => {
-            this.showToast(error.toString())
-          });
-      } else {
-        this.showToast("Format error")
-      }
+      promise = TuyaUserApi.loginWithPhonePassword({
+        phoneNumber: userName,
+        password: password,
+        countryCode: countryCode,
+      })
     }
+    promise.then(() => this.props.navigation.dispatch(resetAction('HomePage'))).catch((error) => {
+      this.showToast(error.toString())
+    })
   }
-
+  renderHeaderView() {
+    return <HeadView leftOnPress={() => this.props.navigation.pop()} centerText={'login'} />
+  }
   renderContent() {
-    const disabled = !(userName.length > 5 && password.length > 5);
     return (
       <View style={styles.container}>
-        <NavigationBar style={{ backgroundColor: '#FFFFFF' }} leftButton={this.renderLeftButton()} />
-        <Text
-          style={{
-            fontSize: 34,
-            color: '#22242C',
-            fontWeight: 'bold',
-            marginTop: 30,
-            marginLeft: 30,
-          }}
-        >
-          login
-        </Text>
-        <Text style={styles.textStyle}>{'Account: '}{userName}</Text>
-        <Text style={styles.textStyle}>{'Passwrod: '}{password}</Text>
-        <TextButton
-          style={{ marginTop: 50 }}
-          onPress={() => {
-            this._loginConfirm();
-          }}
-          disabled={disabled}
-          title="login"
+        {
+          [
+            {
+              leftText: 'Account',
+              value: 'userName'
+            },
+            {
+              leftText: 'Passwrod',
+              value: 'password'
+            },
+            {
+              leftText: 'CountryCode',
+              value: 'countryCode'
+            }
+          ].map(d => <EditItem key={d.value} leftText={d.leftText} value={this.state[d.value]} onChangeText={(data) => {
+            this.setState({
+              [d.value]: data
+            })
+          }} />)
+        }
+        <ButtonX
+          style={styles.button}
+          onPress={() => this.login()}
+          text="login"
+          textStyle={{ color: 'white' }}
         />
       </View>
     );
@@ -113,14 +93,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     justifyContent: 'flex-start',
   },
-  textStyle: {
-    height: 40,
-    marginTop: 20,
-    borderColor: '#EAEAEA',
-    borderBottomWidth: 1,
-    width: width * 0.85,
+  button: {
+    width: 300,
+    height: 48,
+    backgroundColor: '#FF4800',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
     marginLeft: 30,
     marginRight: 30,
-    color: 'black'
-  },
+    borderRadius: 4,
+    marginTop: 50
+  }
 });

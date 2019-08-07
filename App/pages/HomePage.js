@@ -1,15 +1,10 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
-  StyleSheet, Image, View, DeviceEventEmitter,
+  StyleSheet, Image, View
 } from 'react-native';
+import{TuyaCoreApi,TuyaPushApi} from '../../sdk/index'
+import { resetAction } from '../navigations/AppNavigator';
 import TabNavigator from 'react-native-tab-navigator';
-import Toast from 'react-native-easy-toast';
 import DevicesListPage from './home/DevicesListPage';
 import MyPage from './home/MyPage';
 import ScenePage from './home/ScenePage';
@@ -22,14 +17,20 @@ export default class HomePage extends Component {
     };
   }
 
-  componentDidMount() {
-    this.listener = DeviceEventEmitter.addListener('showToast', (text) => {
-      this.toast.show(text, DURATION.LENGTH_SHORT);
-    });
-  }
 
-  componentWillUnmount() {
-    this.listener && this.listener.remove();
+  componentDidMount() {
+    TuyaCoreApi.setOnNeedLoginListener(()=>{
+      this.props.navigation.dispatch(resetAction('LoginHomePage'));
+    })
+    TuyaPushApi.registerMQPushListener().then(data=>console.log(data))
+    // TuyaPushApi.registerDevice({
+    //   aliasId:'',
+    //   pushProvider:''
+    // })
+  }
+  componentWillUnmount(){
+    TuyaCoreApi.onDestroy()
+    TuyaPushApi.onDestroy()
   }
 
   _rendetTab(Component, selectTab, title, renderIcon) {
@@ -55,7 +56,6 @@ export default class HomePage extends Component {
           {this._rendetTab(ScenePage, 'tb_trending', '智能', require('../res/images/scene.png'))}
           {this._rendetTab(MyPage, 'tb_favorite', '我', require('../res/images/personal.png'))}
         </TabNavigator>
-        <Toast ref={toast => (this.toast = toast)} />
       </View>
     );
   }

@@ -7,6 +7,7 @@ import HeadView from '../../common/HeadView'
 import BaseComponent from '../../common/BaseComponent'
 import Item from '../../common/Item'
 import { messageTask } from '../../constant'
+import { TuyaSceneApi } from '../../../sdk';
 
 export default class ActionBoolPage extends BaseComponent {
   constructor(props) {
@@ -44,16 +45,26 @@ export default class ActionBoolPage extends BaseComponent {
             key: 'open',
             label: '开',
             onPress: () => {
-              DeviceEventEmitter.emit(messageTask, this.getCondition(true))
-              this.props.navigation.pop(3)
+              TuyaSceneApi.createDpTask({
+                devId: this.state.devId,
+                tasks: this.getCondition(true)
+              }).then(d => {
+                DeviceEventEmitter.emit(messageTask, d)
+                this.props.navigation.pop(3)
+              })
             }
           },
           {
             key: 'close',
             label: '关',
             onPress: () => {
-              DeviceEventEmitter.emit(messageTask, this.getCondition(false))
-              this.props.navigation.pop(3)
+              TuyaSceneApi.createDpTask({
+                devId: this.state.devId,
+                tasks: this.getCondition(false)
+              }).then(d => {
+                DeviceEventEmitter.emit(messageTask, d)
+                this.props.navigation.pop(3)
+              })
             }
           }
         ].map(d => <Item

@@ -2773,7 +2773,6 @@
 				4DA52D4118252231B74B7A3DD6E3ADE7 /* Support Files */,
 			);
 			name = RNGestureHandler;
-			path = "../../node_modules/react-native-gesture-handler";
 			sourceTree = "<group>";
 		};
 		57E9B49F399F5A792B8E021DD40E6419 /* DevSupport */ = {
