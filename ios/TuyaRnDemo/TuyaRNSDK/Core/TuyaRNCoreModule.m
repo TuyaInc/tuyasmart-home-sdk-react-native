@@ -41,7 +41,7 @@ RCT_EXPORT_METHOD(initWithOptions:(NSDictionary *)params) {
 
   
   dispatch_async(dispatch_get_main_queue(), ^{
-    [[TuyaSmartSDK sharedInstance] startWithAppKey:appKey secretKey:appSecret];
+//    [[TuyaSmartSDK sharedInstance] startWithAppKey:appKey secretKey:appSecret];
 
     
     if (!self.locationManager) {
@@ -74,7 +74,7 @@ RCT_REMAP_METHOD(apiRequest,
   [request requestWithApiName:apiName postData:postData version:version success:^(id result) {
     if ([result isKindOfClass:[NSDictionary class]] || [result isKindOfClass:[NSArray class]]) {
       if (resolver) {
-        resolver([result ty_JSONString]);
+        resolver([result tysdk_JSONString]);
       }
     } else {
       if (resolver) {

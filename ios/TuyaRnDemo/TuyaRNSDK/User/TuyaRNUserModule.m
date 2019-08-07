@@ -445,7 +445,7 @@ RCT_EXPORT_METHOD(uploadUserAvatar:(NSDictionary *)params resolver:(RCTPromiseRe
   UIImage *image = params[kTuyaRNUserModuleImageFile];
   
   if (image == nil || [image isKindOfClass:[UIImage class]]) {
-    [TuyaRNUtils rejecterWithError:[NSError ty_errorWithCodeString:@"999" errorMsg:@"error image info"] handler:rejecter];
+    [TuyaRNUtils rejecterWithError:[NSError tysdk_errorWithErrorCode:TUYA_COMMON_ERROR errorMsg:@"error image info"] handler:rejecter];
     return;
   }
   
@@ -465,7 +465,7 @@ RCT_EXPORT_METHOD(setTempUnit:(NSDictionary *)params resolver:(RCTPromiseResolve
       resolver(@"success");
     }
   } else {
-    [TuyaRNUtils rejecterWithError:[NSError ty_errorWithCodeString:@"999" errorMsg:@"error params"] handler:rejecter];
+    [TuyaRNUtils rejecterWithError:[NSError tysdk_errorWithErrorCode:TUYA_COMMON_ERROR errorMsg:@"error params"] handler:rejecter];
   }
 }
 

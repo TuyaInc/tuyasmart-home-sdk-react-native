@@ -170,10 +170,10 @@ RCT_EXPORT_METHOD(queryRoomList:(NSDictionary *)params resolver:(RCTPromiseResol
   self.currentHome = [self smartHomeWithParams:params];
   
   //获取详情获取：
-  WEAKSELF_AT
+  __weak typeof(self) weakSelf = self;
   [self.currentHome getHomeDetailWithSuccess:^(TuyaSmartHomeModel *homeModel) {
     
-    TuyaSmartHome *detailHome =  [TuyaSmartHome homeWithHomeId:weakSelf_AT.currentHome.homeModel.homeId];
+    TuyaSmartHome *detailHome =  [TuyaSmartHome homeWithHomeId:weakSelf.currentHome.homeModel.homeId];
     if (detailHome.roomList.count == 0) {
       if (resolver) {
         resolver(@[]);

@@ -1,1 +1,1 @@
-../../../TuyaSmartHomeKit/Headers/TuyaSmartKit.h
+../../../TuyaSmartHomeKit/TuyaSmartKit.h
