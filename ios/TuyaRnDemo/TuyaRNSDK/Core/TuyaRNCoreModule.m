@@ -90,10 +90,8 @@ RCT_REMAP_METHOD(apiRequest,
 
 
 //判断网络
-RCT_EXPORT_METHOD(setDebugMode) {
-  
-  [[TuyaSmartSDK sharedInstance] setDebugMode:YES];
-  
+RCT_EXPORT_METHOD(setDebugMode:(NSDictionary *)params) {
+  [[TuyaSmartSDK sharedInstance] setDebugMode:params[@"debug"]];
 }
 
 RCT_EXPORT_METHOD(exitApp:(NSDictionary *)params) {
