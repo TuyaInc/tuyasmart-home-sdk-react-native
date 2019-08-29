@@ -1,3 +1,8 @@
+
+import {
+  Platform
+} from 'react-native';
+
 const GroupNativeApi = require('react-native').NativeModules.TuyaGroupModule
 import {TYNativeBridge,  GROUPLISTENER } from './bridgeUtils'
 const TuyaGroupApi = {
@@ -30,6 +35,11 @@ const TuyaGroupApi = {
     return  GroupNativeApi.publishDps(params)
   },
   publishDpsWithEnum (params) {
+
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
+
     return  GroupNativeApi.publishDpsWithEnum(params)
   },
   updateDeviceList (params) {

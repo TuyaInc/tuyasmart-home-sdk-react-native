@@ -8,7 +8,7 @@ const TuyaOTAApi = {
    return OTANativeApi.getOtaInfo(params)
  },
  setOtaListener (params,onSuccess,onFailure,onProgress) {
-    OTANativeApi.startOta(params)
+    OTANativeApi.setOtaListener(params)
     return TYNativeBridge.on(
       TYNativeBridge.bridge(OTALISTENER, params.devId),
       data => {

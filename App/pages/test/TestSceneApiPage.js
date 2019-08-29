@@ -385,6 +385,7 @@ export default class TestSceneApiPage extends BaseComponent {
                 leftText: 'enableScene',
                 rightText: 'click',
                 onPress: () => {
+                    if(this.state.sceneList.length==0)return
                     TuyaSceneApi.enableScene({
                         sceneId: this.state.sceneList[0].id
                     })
@@ -456,7 +457,7 @@ export default class TestSceneApiPage extends BaseComponent {
                 rightText: 'click',
                 onPress: () => {
                     const sceneBean=this.state.sceneList[0]
-                    sceneBean.name='xxx'
+                    // sceneBean.name='xxx'
                     TuyaSceneApi.modifyScene({
                         sceneBean,
                         sceneId:sceneBean.id

@@ -8,6 +8,7 @@
 
 #import "TuyaRNUserModule.h"
 #import <TuyaSmartBaseKit/TuyaSmartBaseKit.h>
+#import <TuyaSmartBaseKit/TuyaSmartUser+Region.h>
 #import <React/RCTBridgeModule.h>
 #import "TuyaRNUtils.h"
 #import "YYModel.h"
@@ -39,8 +40,32 @@
 
 RCT_EXPORT_MODULE(TuyaUserModule)
 
+
+RCT_EXPORT_METHOD(isLogin:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  bool isLogin = [[TuyaSmartUser sharedInstance] isLogin];
+  if(resolver) {
+    resolver(@(isLogin));
+  }
+}
+
+RCT_EXPORT_METHOD(getUser:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  TuyaSmartUser *user = [TuyaSmartUser sharedInstance];
+  if (resolver) {
+    NSDictionary *dic = [user yy_modelToJSONObject];
+    NSMutableDictionary *userDic = [NSMutableDictionary dictionaryWithDictionary:dic];
+    [userDic setObject:[self getValidStr:user.userName] forKey:@"username"];
+    [userDic setObject:[self getValidStr:user.headIconUrl] forKey:@"headPic"];
+    [userDic setObject:[self getValidStr:user.countryCode] forKey:@"phoneCode"];
+    [userDic setObject:[self getValidStr:user.phoneNumber] forKey:@"mobile"];
+    [userDic setObject:[self getValidStr:user.email] forKey:@"email"];
+    [userDic setObject:[self getValidStr:user.nickname] forKey:@"nickname"];
+    [userDic setObject:[self getValidStr:user.timezoneId] forKey:@"timezoneId"];
+    resolver(userDic);
+  }
+}
+
 //版本检测
-RCT_EXPORT_METHOD(checkVersionUpgrade:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+RCT_EXPORT_METHOD(checkVersionUpgrade:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
 
   if(resolver) {
     resolver([NSNumber numberWithBool:[[TuyaSmartSDK sharedInstance] checkVersionUpgrade]]);
@@ -48,7 +73,7 @@ RCT_EXPORT_METHOD(checkVersionUpgrade:(NSDictionary *)params resolver:(RCTPromis
 }
 
 //版本升级
-RCT_EXPORT_METHOD(upgradeVersion:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+RCT_EXPORT_METHOD(upgradeVersion:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
   [[TuyaSmartSDK sharedInstance] upgradeVersion:^{
     [TuyaRNUtils resolverWithHandler:resolver];
@@ -81,6 +106,86 @@ RCT_EXPORT_METHOD(getValidateCode:(NSDictionary *)params resolver:(RCTPromiseRes
     [TuyaRNUtils rejecterWithError:error handler:rejecter];
   }];
 }
+
+
+RCT_EXPORT_METHOD(checkPhoneCode:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  NSString *countryCode = params[@"countryCode"];
+  NSString *phoneNumber = params[@"phoneNumber"];
+  NSString *code = params[@"code"];
+//  NSString *type = params[@"type"];
+  
+  [[TuyaSmartUser sharedInstance] checkCodeWithUserName:phoneNumber region:nil countryCode:countryCode code:code type:[params[@"type"] integerValue] success:^(BOOL result) {
+    [TuyaRNUtils resolverWithHandler:resolver];
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+  
+}
+
+// 没有在SDK中找到相关方法:
+RCT_EXPORT_METHOD(checkEmailPassword:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+
+  NSString *password = params[@"password"];
+
+//  [[TuyaSmartUser sharedInstance] email];
+  
+}
+
+
+RCT_EXPORT_METHOD(loginOrRegisterWithUidAndCreateHome:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  NSString *countryCode = params[kTuyaRNUserModuleCountryCode];
+  NSString *uid = params[@"uid"];
+  BOOL create = [params[@"isCreateHome"] boolValue];
+  NSString *password = params[@"password"];
+  
+  [[TuyaSmartUser sharedInstance] loginOrRegisterWithCountryCode:countryCode uid:uid password:password createHome:create success:^(id result) {
+    resolver([result yy_modelToJSONObject]);
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+  
+}
+
+RCT_EXPORT_METHOD(bindMobile:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  NSString *countryCode = params[kTuyaRNUserModuleCountryCode];
+  NSString *phoneNumber = params[@"phoneNumber"];
+  NSString *code = params[@"code"];
+  
+  [[TuyaSmartUser sharedInstance] mobileBinding:countryCode phoneNumber:phoneNumber code:code success:^{
+    [TuyaRNUtils resolverWithHandler:resolver];
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+  
+}
+
+RCT_EXPORT_METHOD(sendBindVerifyCode:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  NSString *countryCode = params[kTuyaRNUserModuleCountryCode];
+  NSString *phoneNumber = params[@"phoneNumber"];
+  
+  [[TuyaSmartUser sharedInstance] sendBindVerifyCode:countryCode phoneNumber:phoneNumber success:^{
+    [TuyaRNUtils resolverWithHandler:resolver];
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
+
+RCT_EXPORT_METHOD(updateTimeZone:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  NSString *timeZoneId = params[@"timezoneId"];
+  
+  [[TuyaSmartUser sharedInstance] updateTimeZoneWithTimeZoneId:timeZoneId success:^{
+    [TuyaRNUtils resolverWithHandler:resolver];
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
 
 /* 手机验证码登陆
 * @param countryCode 国家区号
@@ -238,6 +343,69 @@ RCT_EXPORT_METHOD(loginWithEmail:(NSDictionary *)params resolver:(RCTPromiseReso
   
 }
 
+
+RCT_EXPORT_METHOD(switchUserRegion:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  NSString *region = params[@"region"];
+  
+  [[TuyaSmartUser sharedInstance] switchUserRegion:region success:^{
+    [TuyaRNUtils resolverWithHandler:resolver];
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
+
+RCT_EXPORT_METHOD(sendVerifyCodeWithUserName:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  NSString *region = params[@"region"];
+  NSString *userName = params[@"userName"];
+  NSString *countryCode = params[@"countryCode"];
+  NSInteger type = [params[@"type"] integerValue];
+  
+  [[TuyaSmartUser sharedInstance] sendVerifyCodeWithUserName:userName region:region countryCode:countryCode type:type success:^{
+    [TuyaRNUtils resolverWithHandler:resolver];
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
+
+RCT_EXPORT_METHOD(checkCodeWithUserName:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  NSString *region = params[@"region"];
+  NSString *userName = params[@"userName"];
+  NSString *countryCode = params[@"countryCode"];
+  NSString *code = params[@"code"];
+  NSInteger type = [params[@"type"] integerValue];
+  
+  [[TuyaSmartUser sharedInstance] checkCodeWithUserName:userName region:region countryCode:countryCode code:code type:type success:^(BOOL result) {
+    resolver(@(result));
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
+
+
+RCT_EXPORT_METHOD(registerWithUserName:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  NSString *region = params[@"region"];
+  NSString *userName = params[@"userName"];
+  NSString *countryCode = params[@"countryCode"];
+  NSString *code = params[@"code"];
+  NSInteger type = [params[@"type"] integerValue];
+  NSString *password = params[@"password"];
+  
+  [[TuyaSmartUser sharedInstance] registerWithUserName:userName region:region countryCode:countryCode code:code password:password success:^{
+    [TuyaRNUtils resolverWithHandler:resolver];
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
+
+
 /*
 * 邮箱找回密码，获取验证码
 * @param countryCode 国家区号
@@ -284,7 +452,7 @@ RCT_EXPORT_METHOD(logout:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRe
   }];
 }
 
-RCT_EXPORT_METHOD(cancelAccount:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+RCT_EXPORT_METHOD(cancelAccount:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
   [[TuyaSmartUser sharedInstance] cancelAccount:^{
     [TuyaRNUtils resolverWithHandler:resolver];
@@ -469,9 +637,22 @@ RCT_EXPORT_METHOD(setTempUnit:(NSDictionary *)params resolver:(RCTPromiseResolve
   }
 }
 
-RCT_EXPORT_METHOD(onDestory:(NSDictionary *)params) {
+RCT_EXPORT_METHOD(onDestroy:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
 }
+
+
+RCT_EXPORT_METHOD(getRegionListWithCountryCode:(NSDictionary *)params resolver: (RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  [[TuyaSmartUser sharedInstance] regionListWithCountryCode:params[@"countryCode"] success:^(NSArray<TYRegionModel *> * _Nonnull regionList) {
+    if (resolver) {
+      resolver([regionList yy_modelToJSONObject]);
+    }
+  } failure:^(NSError *error) {
+    
+  }];
+
+}
+
 
 
 #pragma mark -

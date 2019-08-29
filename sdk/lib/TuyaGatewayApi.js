@@ -1,3 +1,7 @@
+
+import {
+  Platform
+} from 'react-native';
 const GatewayNativeApi = require('react-native').NativeModules.TuyaGatewayModule
 import {TYNativeBridge,  GATWAYLISTENER } from './bridgeUtils'
 
@@ -6,15 +10,26 @@ const TuyaGatewayApi = {
     return GatewayNativeApi.publishDps(params)
   },
   broadcastDps (params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
+
     return GatewayNativeApi.broadcastDps(params)
   },
   multicastDps (params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return GatewayNativeApi.multicastDps(params)
   },
   getSubDevList (params) {
     return GatewayNativeApi.getSubDevList(params)
   },
   registerSubDevListener (params,onSubDevDpUpdate,onSubDevRemoved,onSubDevAdded,onSubDevInfoUpdate,onSubDevStatusChanged) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
+    
     GatewayNativeApi.registerSubDevListener(params)
     return TYNativeBridge.on(
       TYNativeBridge.bridge(GATWAYLISTENER, params.devId),

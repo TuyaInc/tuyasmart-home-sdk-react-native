@@ -41,8 +41,29 @@ RCT_EXPORT_METHOD(initWithOptions:(NSDictionary *)params) {
 
   
   dispatch_async(dispatch_get_main_queue(), ^{
-//    [[TuyaSmartSDK sharedInstance] startWithAppKey:appKey secretKey:appSecret];
+    [[TuyaSmartSDK sharedInstance] startWithAppKey:appKey secretKey:appSecret];
 
+    if (!self.locationManager) {
+      self.locationManager = [CLLocationManager new];
+      self.locationManager.delegate = self;
+    }
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedWhenInUse || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
+      [self.locationManager startUpdatingLocation];
+    } else {
+      if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [self.locationManager requestWhenInUseAuthorization];
+      }
+    }
+  });
+}
+
+RCT_EXPORT_METHOD(initWithoutOptions) {
+  
+  NSString *appKey = @"";
+  NSString *appSecret = @"";
+  
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [[TuyaSmartSDK sharedInstance] startWithAppKey:appKey secretKey:appSecret];
     
     if (!self.locationManager) {
       self.locationManager = [CLLocationManager new];
@@ -57,6 +78,8 @@ RCT_EXPORT_METHOD(initWithOptions:(NSDictionary *)params) {
     }
   });
 }
+
+
 
 //通用api
 RCT_REMAP_METHOD(apiRequest,
@@ -90,10 +113,8 @@ RCT_REMAP_METHOD(apiRequest,
 
 
 //判断网络
-RCT_EXPORT_METHOD(setDebugMode) {
-  
-  [[TuyaSmartSDK sharedInstance] setDebugMode:YES];
-  
+RCT_EXPORT_METHOD(setDebugMode:(NSDictionary *)params) {
+  [[TuyaSmartSDK sharedInstance] setDebugMode:params[@"debug"]];
 }
 
 RCT_EXPORT_METHOD(exitApp:(NSDictionary *)params) {
@@ -101,6 +122,10 @@ RCT_EXPORT_METHOD(exitApp:(NSDictionary *)params) {
 }
 
 RCT_EXPORT_METHOD(onDestory:(NSDictionary *)params) {
+  
+}
+
+RCT_EXPORT_METHOD(setOnNeedLoginListener:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter)  {
   
 }
 

@@ -5,7 +5,7 @@ source 'https://github.com/CocoaPods/Specs.git'  # 官方库
 
 target 'TuyaRnDemo' do
 
-  pod 'TuyaSmartHomeKit'
+  pod 'TuyaSmartHomeKit', '2.12.46'
 
   pod 'React', :path => '../node_modules/react-native/', :subspecs => [
     'Core',
@@ -33,6 +33,5 @@ target 'TuyaRnDemo' do
     pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
 
-  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
 end

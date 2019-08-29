@@ -66,7 +66,7 @@ RCT_EXPORT_METHOD(addTimerWithTaskDps:(NSDictionary *)params resolver:(RCTPromis
 RCT_EXPORT_METHOD(getTimerTaskStatusWithDeviceId:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
     TuyaSmartTimer *timer = [[TuyaSmartTimer alloc] init];
     self.timer = timer;
-    [timer getTimerTaskStatusWithDeviceId:params[@"devid"] success:^(NSArray<TYTimerTaskModel *> *list) {
+    [timer getTimerTaskStatusWithDeviceId:params[@"devId"] success:^(NSArray<TYTimerTaskModel *> *list) {
       
       NSMutableArray *res = [NSMutableArray array];
       for (TYTimerTaskModel *item in list) {
@@ -141,10 +141,8 @@ RCT_EXPORT_METHOD(removeTimerWithTask:(NSDictionary *)params resolver:(RCTPromis
 // 更新定时器的状态：
 RCT_EXPORT_METHOD(updateTimerWithTask:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
     TuyaSmartTimer *timer = [[TuyaSmartTimer alloc] init];
-  self.timer = timer;
-    NSDictionary *dps = @{@"1": @(YES)};
-  
-    [timer updateTimerWithTask:params[@"taskName"] loops:params[@"loops"] devId:params[@"devId"] timerId:params[@"timerId"] time:params[@"time"] dps:dps timeZone:@"+08:00" success:^{
+    self.timer = timer;
+    [timer updateTimerWithTask:params[@"taskName"] loops:params[@"loops"] devId:params[@"devId"] timerId:params[@"timerId"] time:params[@"time"] dps:params[@"dps"] timeZone:params[@"timeZone"] success:^{
         if (resolver) {
           resolver(@"success");
         }
@@ -201,5 +199,12 @@ RCT_EXPORT_METHOD(getAllTimerWithDeviceId:(NSDictionary *)params resolver:(RCTPr
       [TuyaRNUtils rejecterWithError:error handler:rejecter];
     }];
 }
+
+
+
+
+
+
+
 
 @end

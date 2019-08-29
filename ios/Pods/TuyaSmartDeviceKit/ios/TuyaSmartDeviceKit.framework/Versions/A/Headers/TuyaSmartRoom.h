@@ -35,7 +35,7 @@
 
 /**
  *  Get room instance
- *  获取 room 对象
+*  获取 room 对象
  *
  *  @param roomId Room ID
  *  @param homeId Home ID

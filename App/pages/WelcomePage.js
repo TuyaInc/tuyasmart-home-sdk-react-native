@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import {
-  View, StyleSheet, Text,Platform,
+  View, StyleSheet, Text,Platform,NativeModules
 } from 'react-native';
 import { TuyaCoreApi,TuyaUserApi } from '../../sdk'
 import { StackActions, NavigationActions } from 'react-navigation';
 import { iosAppKey, iosAppSecret,androidAppKey,androidAppSecret } from '../constant'
+const d=NativeModules.TuyaUserModule
 const resetAction = StackActions.reset({
   index: 0,
   actions: [

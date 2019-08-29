@@ -118,7 +118,8 @@ export default class TestUserApiPage extends BaseComponent {
                 onPress: () => {
                     if(this.state.roomList.length>0){
                         TuyaHomeDataManagerApi.getRoomBean({
-                            roomId:this.state.roomList[0].roomId
+                            roomId:this.state.roomList[0].roomId,
+                            homeId
                         }).then(data => {
                             this.setState({ content: JSON.stringify(data) })
                         })

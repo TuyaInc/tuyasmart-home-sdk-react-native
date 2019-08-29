@@ -49,7 +49,7 @@
  * @param showFirstPage      show the scene in index page or not
  * @param conditionList      condition list
  * @param actionList         action list
- * @param matchType          Match all conditons/any conditon will execute the automation.
+* @param matchType          Match all conditons/any conditon will execute the automation.
  * @param success            success block
  * @param failure            failure block
  */

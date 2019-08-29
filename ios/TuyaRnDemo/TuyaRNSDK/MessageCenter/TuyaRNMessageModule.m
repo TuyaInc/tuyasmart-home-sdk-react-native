@@ -49,6 +49,67 @@ RCT_EXPORT_METHOD(getMessageList:(RCTPromiseResolveBlock)resolver rejecter:(RCTP
 }
 
 
+RCT_EXPORT_METHOD(getMessageListParams:(NSDictionary *)params
+                  resolver: (RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  TuyaSmartMessage *smartMessage = [[TuyaSmartMessage alloc] init];
+  self.smartMessage = smartMessage;
+  [smartMessage getMessageListWithType:0 limit:[params[@"limit"] integerValue] offset:[params[@"offset"] integerValue] success:^(NSArray<TuyaSmartMessageListModel *> *list) {
+    resolver([list yy_modelToJSONObject]);
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
+
+RCT_EXPORT_METHOD(getMessageListByMsgType:(NSDictionary *)params
+                  resolver: (RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  TuyaSmartMessage *smartMessage = [[TuyaSmartMessage alloc] init];
+  self.smartMessage = smartMessage;
+  [smartMessage getMessageListWithType:[params[@"type"] integerValue] limit:[params[@"limit"] integerValue] offset:[params[@"offset"] integerValue] success:^(NSArray<TuyaSmartMessageListModel *> *list) {
+    resolver([list yy_modelToJSONObject]);
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
+RCT_EXPORT_METHOD(getMessageListParamsWithTime:(NSDictionary *)params
+                  resolver: (RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  TuyaSmartMessage *smartMessage = [[TuyaSmartMessage alloc] init];
+  self.smartMessage = smartMessage;
+  [smartMessage getMessageListWithType:0 limit:[params[@"limit"] integerValue] offset:[params[@"offset"] integerValue] success:^(NSArray<TuyaSmartMessageListModel *> *list) {
+    
+    NSMutableArray *res = [NSMutableArray array];
+    for(TuyaSmartMessageListModel *msg in list) {
+      if(msg.time == [params[@"time"] integerValue]) {
+        [res addObject:msg];
+      }
+    }
+    resolver([res yy_modelToJSONObject]);
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
+RCT_EXPORT_METHOD(getMessageListByMsgSrcId:(NSDictionary *)params
+                  resolver: (RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  TuyaSmartMessage *smartMessage = [[TuyaSmartMessage alloc] init];
+  self.smartMessage = smartMessage;
+  [smartMessage getMessageListWithType:0 limit:[params[@"limit"] integerValue] offset:[params[@"offset"] integerValue] success:^(NSArray<TuyaSmartMessageListModel *> *list) {
+    
+    NSMutableArray *res = [NSMutableArray array];
+    for(TuyaSmartMessageListModel *msg in list) {
+      if(msg.msgSrcId == params[@"srcId"]) {
+        [res addObject:msg];
+      }
+    }
+    resolver([res yy_modelToJSONObject]);
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+  
+}
+
+
 // 删除消息：
 RCT_EXPORT_METHOD(deleteMessage:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   TuyaSmartMessage *smartMessage = [[TuyaSmartMessage alloc] init];

@@ -41,6 +41,7 @@ class AddScenePage extends BaseComponent {
     this.listener = DeviceEventEmitter.addListener(messageTask, (data) => {
       const list = this.state.ActionList
       list.push(data)
+      console.log(data)
       this.setState({
         ActionList: list.concat()
       })
@@ -62,7 +63,7 @@ class AddScenePage extends BaseComponent {
   _save() {
     if (this.state.ActionList.length > 0) {
       //createSceneWithStickyOnTop
-      TuyaSceneApi.createScene({
+      TuyaSceneApi.createSceneWithStickyOnTop({
         homeId: this.state.homeId,
         name: sceneName,
         stickyOnTop,
