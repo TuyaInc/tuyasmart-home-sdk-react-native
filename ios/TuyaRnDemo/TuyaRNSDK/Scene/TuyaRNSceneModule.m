@@ -9,7 +9,6 @@
 #import "TuyaRNSceneModule.h"
 #import <TuyaSmartSceneKit/TuyaSmartSceneKit.h>
 #import <TuyaSmartSceneKit/TuyaSmartSceneManager.h>
-
 #import "TuyaRNUtils.h"
 #import "YYModel.h"
 
@@ -62,6 +61,17 @@ RCT_EXPORT_METHOD(getSceneList:(NSDictionary *)params resolver:(RCTPromiseResolv
     } failure:^(NSError *error) {
         [TuyaRNUtils rejecterWithError:error handler:rejecter];
     }];
+}
+
+
+// 获取场景列表,调试完毕：
+RCT_EXPORT_METHOD(getSceneDetail:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  TuyaSmartSceneModel *model = [TuyaSmartSceneModel new];
+  model.sceneId = params[@"sceneId"];
+  self.smartScene = [TuyaSmartScene sceneWithSceneModel:model];
+  resolver([self.smartScene yy_modelToJSONObject]);
+  
 }
 
 
@@ -129,9 +139,15 @@ RCT_EXPORT_METHOD(getDeviceConditionOperationList:(NSDictionary *)params resolve
     }];
 }
 
+// iOS不支持：
+RCT_EXPORT_METHOD(createSceneTask:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+
+}
+
 
 // 创建自动化：
-RCT_EXPORT_METHOD(createDevCondition:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+RCT_EXPORT_METHOD(xxx:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
   NSMutableArray *conditionList = [NSMutableArray array];
   for(NSDictionary *item in params[@"conditionList"]) {
@@ -247,49 +263,168 @@ RCT_EXPORT_METHOD(disableScene:(NSDictionary *)params resolver:(RCTPromiseResolv
   }];
 }
 
+
+// createTimerCondition：
+RCT_EXPORT_METHOD(createTimerCondition:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  TuyaSmartSceneConditionModel *actionModel = [[TuyaSmartSceneConditionModel alloc] init];
+  
+  //定时条件
+  actionModel.expr = @[params];
+  actionModel.extraInfo = @{@"delayTime" : params[@"delayTime"]};
+  
+  resolver([actionModel yy_modelToJSONObject]);
+}
+
+// createTimerCondition：
+RCT_EXPORT_METHOD(onDestroyScene:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  
+}
+
+
+
+
+
+// createDevCondition：
+RCT_EXPORT_METHOD(createDevCondition:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  TuyaSmartSceneConditionModel *actionModel = [[TuyaSmartSceneConditionModel alloc] init];
+
+  //设备条件
+  actionModel.entityId = params[@"deviceBean"][@"devId"];
+  TuyaSmartDevice *device = [TuyaSmartDevice deviceWithDeviceId:params[@"deviceBean"][@"devId"]];
+  actionModel.entityName = device.deviceModel.name;;
+  actionModel.entitySubIds = [NSString stringWithFormat:@"%@", params[@"dpId"]];
+  
+  actionModel.expr = @[@[[NSString stringWithFormat:@"dp%@", params[@"dpId"]],params[@"range"],params[@"ruleType"]]];
+  
+  resolver([actionModel yy_modelToJSONObject]);
+}
+
+
 // createWeatherCondition：
 RCT_EXPORT_METHOD(createWeatherCondition:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-  NSString *cityId = params[@"cityId"];
-  if (!([cityId isKindOfClass:[NSString class]] && cityId.length > 0)) {
-    if (rejecter) {
-      rejecter(nil, NSLocalizedString(@"cityId is null", nil), nil);
-    }
-    return;
+
+    TuyaSmartSceneConditionModel *actionModel = [[TuyaSmartSceneConditionModel alloc] init];
+  
+    //气象条件
+    actionModel.entityId = params[@"place"][@"cityId"];
+    actionModel.entityName = params[@"place"][@"city"];
+//    actionModel.entitySubIds = params[@"entitySubId"];
+    actionModel.cityName = params[@"place"][@"city"];
+    actionModel.cityLatitude = [params[@"place"][@"tempLatitude"] doubleValue];
+    actionModel.cityLongitude = [params[@"place"][@"tempLatitude"] doubleValue];
+    actionModel.expr = @[[NSString stringWithFormat:@"$%@", params[@"type"]],params[@"range"], params[@"ruleType"]];
+
+    resolver([actionModel yy_modelToJSONObject]);
+}
+
+// 创建动作对象：
+RCT_EXPORT_METHOD(createDpTask:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+//  TuyaSmartSceneActionModel *actionModel = [[TuyaSmartSceneActionModel alloc] init];
+//  actionModel.entityId = params[@"devId"];
+//
+//  actionModel.executorProperty = @[NSDictionary dictionaryWithObjectsAndKeys:
+//                                  params[@"devId"], @"devId",
+//                                  params[@"dpId"], @"dpId",
+//                                  params[@"dpName"], @"dpName",
+//                                  params[@"value"], @"value",
+//                                  params[@"devName"], @"devName",
+//                                  nil];
+//
+//  actionModel.actionExecutor = @"dpIssue";
+  NSDictionary *executorProperty = @{
+                                            @"devId": params[@"tasks"][@"devId"],
+                                            @"dpId": params[@"tasks"][@"dpId"],
+                                            @"dpName": params[@"tasks"][@"dpName"],
+                                            @"value": params[@"tasks"][@"value"],
+                                            @"devName": params[@"tasks"][@"devName"],
+                                            };
+  
+  resolver(@{
+              @"entityId": params[@"devId"],
+              @"executorProperty": executorProperty,
+              @"actionExecutor": @"dpIssue",
+             });
+  
+}
+
+
+RCT_EXPORT_METHOD(createSceneWithStickyOnTop:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  NSMutableArray *tasks = [NSMutableArray array];
+  for(NSDictionary *item in params[@"tasks"]) {
+    TuyaSmartSceneActionModel *actionModel = [[TuyaSmartSceneActionModel alloc] init];
+    actionModel.entityId = item[@"entityId"];
+    
+    actionModel.executorProperty = item;
+    
+    actionModel.actionExecutor = @"dpIssue";
+    [tasks addObject:actionModel];
   }
   
-  [[TuyaSmartSceneManager sharedInstance] getCityListWithCountryCode:cityId success:^(NSArray<TuyaSmartCityModel *> *list) {
-    for (TuyaSmartCityModel *item in list) {
-      TuyaSmartSceneDPModel *dpModel=[[TuyaSmartSceneDPModel alloc] init];
-      dpModel.entityType=3;
+  
+  [TuyaSmartScene addNewSceneWithName:params[@"name"] homeId:[params[@"homeId"] longLongValue] background:params[@"background"] showFirstPage:params[@"stickyOnTop"] conditionList:nil actionList:tasks matchType:[params[@"matchType"] integerValue] success:^(TuyaSmartSceneModel *sceneModel) {
+    if (resolver) {
+      resolver([sceneModel yy_modelToJSONObject]);
     }
   } failure:^(NSError *error) {
-     [TuyaRNUtils rejecterWithError:error handler:rejecter];
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
   }];
+}
+
+
+RCT_EXPORT_METHOD(createSceneWithStickyOnTopAndPreCondition:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  NSMutableArray *tasks = [NSMutableArray array];
+  for(NSDictionary *item in params[@"tasks"]) {
+    TuyaSmartSceneActionModel *actionModel = [[TuyaSmartSceneActionModel alloc] init];
+    actionModel.entityId = item[@"entityId"];
+    
+    actionModel.executorProperty = item;
+    
+    actionModel.actionExecutor = @"dpIssue";
+    [tasks addObject:actionModel];
+  }
+  
+  
+  [TuyaSmartScene addNewSceneWithName:params[@"name"] homeId:[params[@"homeId"] longLongValue] background:params[@"background"] showFirstPage:params[@"stickyOnTop"] conditionList:nil actionList:tasks matchType:[params[@"matchType"] integerValue] success:^(TuyaSmartSceneModel *sceneModel) {
+    if (resolver) {
+      resolver([sceneModel yy_modelToJSONObject]);
+    }
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
+// 创建场景：
+RCT_EXPORT_METHOD(getSceneBgs:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  [[TuyaSmartSceneManager sharedInstance] getSmartSceneBackgroundCoverWithsuccess:^(NSArray *list) {
+    resolver([list yy_modelToJSONObject]);
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+  
 }
 
 // 创建场景：
 RCT_EXPORT_METHOD(createScene:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-  NSMutableArray *actionList = [NSMutableArray array];
+  NSMutableArray *tasks = [NSMutableArray array];
   for(NSDictionary *item in params[@"tasks"]) {
-    TuyaSmartSceneActionModel *actionModel = [[TuyaSmartSceneActionModel alloc] init];
-    actionModel.entityId = item[@"devId"];
-
-    actionModel.executorProperty = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    item[@"devId"], @"devId",
-                                    item[@"dpId"], @"dpId",
-                                    item[@"dpName"], @"dpName",
-                                    item[@"value"], @"value",
-                                    item[@"devName"], @"devName",
-                                    nil];
+      TuyaSmartSceneActionModel *actionModel = [[TuyaSmartSceneActionModel alloc] init];
+      actionModel.entityId = item[@"entityId"];
     
-    actionModel.actionExecutor = @"dpIssue";
+      actionModel.executorProperty = item;
     
-    
-    [actionList addObject:actionModel];
+      actionModel.actionExecutor = @"dpIssue";
+    [tasks addObject:actionModel];
   }
+
   
-  [TuyaSmartScene addNewSceneWithName:params[@"name"] homeId:[params[@"homeId"] longLongValue] background:params[@"background"] showFirstPage:params[@"stickyOnTop"] conditionList:nil actionList:actionList matchType:[params[@"matchType"] integerValue] success:^(TuyaSmartSceneModel *sceneModel) {
+  [TuyaSmartScene addNewSceneWithName:params[@"name"] homeId:[params[@"homeId"] longLongValue] background:params[@"background"] showFirstPage:NO conditionList:nil actionList:tasks matchType:[params[@"matchType"] integerValue] success:^(TuyaSmartSceneModel *sceneModel) {
     if (resolver) {
       resolver([sceneModel yy_modelToJSONObject]);
     }
@@ -301,23 +436,12 @@ RCT_EXPORT_METHOD(createScene:(NSDictionary *)params resolver:(RCTPromiseResolve
 // 修改场景：
 RCT_EXPORT_METHOD(modifyScene:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-  NSMutableArray *actionList = [NSMutableArray array];
-  for(NSDictionary *item in params[@"tasks"]) {
-    TuyaSmartSceneActionModel *actionModel = [[TuyaSmartSceneActionModel alloc] init];
-    actionModel.entityId = item[@"devId"];
-    actionModel.executorProperty = @{[NSString stringWithFormat:@"%@", item[@"dpId"]]: item[@"value"], };
-    actionModel.actionExecutor = @"dpIssue";
-    [actionList addObject:actionModel];
-  }
-  
-  TuyaSmartSceneModel *model = [TuyaSmartSceneModel new];
+  TuyaSmartSceneModel *model = [TuyaSmartSceneModel yy_modelWithDictionary:params[@"sceneBean"]];
   model.sceneId = params[@"sceneId"];
-  model.actions = actionList;
-  model.name = params[@"name"];
   
   TuyaSmartScene *smartScene = [TuyaSmartScene sceneWithSceneModel:model];
   self.smartScene = smartScene;
-  [smartScene modifySceneWithName:params[@"name"] background:params[@"background"] showFirstPage:params[@"stickyOnTop"] preConditionList:@[] conditionList:@[] actionList:actionList matchType:[params[@"matchType"] integerValue] success:^{
+  [smartScene modifySceneWithName:model.name background:model.background showFirstPage:model.stickyOnTop preConditionList:model.preConditions conditionList:model.conditions actionList:model.actions matchType:model.matchType success:^{
     if (resolver) {
       resolver(@"success");
     }
@@ -412,6 +536,17 @@ RCT_EXPORT_METHOD(getCityListByCountryCode:(NSDictionary *)params resolver:(RCTP
   }];
 }
 
+
+// 获取城市列表, 调试通过：
+RCT_EXPORT_METHOD(getCityByLatLng:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  [[TuyaSmartSceneManager sharedInstance] getCityInfoWithLatitude:params[@"lat"] longitude:params[@"lon"] success:^(TuyaSmartCityModel *model) {
+    resolver([model yy_modelToJSONObject]);
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
+
 // 根据城市id获取城市信息：
 RCT_EXPORT_METHOD(getCityByCityIndex:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
@@ -456,6 +591,7 @@ RCT_EXPORT_METHOD(sortSceneList:(NSDictionary *)params resolver:(RCTPromiseResol
     [TuyaRNUtils rejecterWithError:error handler:rejecter];
   }];
 }
+
 
 
 @end

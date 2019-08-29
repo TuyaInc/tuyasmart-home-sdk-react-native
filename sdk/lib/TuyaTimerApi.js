@@ -16,6 +16,9 @@ const TuyaTimerApi = {
   updateTimerWithTask (params) {
     return TimerNativeApi.updateTimerWithTask(params)
   },
+  updateTimerTaskStatusWithTask (params) {
+    return TimerNativeApi.updateTimerTaskStatusWithTask(params)
+  },
   updateTimerWithTaskAndInstruct (params) {
     return TimerNativeApi.updateTimerWithTaskAndInstruct(params)
   },

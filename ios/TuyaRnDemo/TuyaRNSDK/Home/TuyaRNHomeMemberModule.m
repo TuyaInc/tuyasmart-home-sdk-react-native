@@ -67,7 +67,7 @@ RCT_EXPORT_METHOD(addMember:(NSDictionary *)params resolver:(RCTPromiseResolveBl
  */
 RCT_EXPORT_METHOD(removeMember:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-  NSNumber *memberId = params[kTuyaRNHomeMemberModuleMemberId];
+  NSNumber *memberId = params[@"memberId"];
   [self.homeMember removeHomeMemberWithMemberId:memberId.longLongValue success:^{
     [TuyaRNUtils resolverWithHandler:resolver];
   } failure:^(NSError *error) {
@@ -83,7 +83,7 @@ RCT_EXPORT_METHOD(removeMember:(NSDictionary *)params resolver:(RCTPromiseResolv
  */
 RCT_EXPORT_METHOD(updateMember:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-  NSNumber *memberId = params[kTuyaRNHomeMemberModuleMemberId];
+  NSNumber *memberId = params[@"memberId"];
   NSString *name = params[kTuyaRNHomeMemberModuleName];
   NSNumber *admin = params[kTuyaRNHomeMemberModuleAdmin];
   
@@ -92,6 +92,38 @@ RCT_EXPORT_METHOD(updateMember:(NSDictionary *)params resolver:(RCTPromiseResolv
   } failure:^(NSError *error) {
     [TuyaRNUtils rejecterWithError:error handler:rejecter];
   }];
+}
+
+
+// iOS不支持
+RCT_EXPORT_METHOD(updateMemberWithBean:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+
+}
+
+// iOS不支持
+RCT_EXPORT_METHOD(updateMemberRole:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+}
+
+
+// iOS不支持
+RCT_EXPORT_METHOD(getMemberDeviceList:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+
+}
+
+// iOS不支持
+RCT_EXPORT_METHOD(uploadMemberAvatar:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+}
+
+// iOS不支持
+RCT_EXPORT_METHOD(addMemberAccount:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+}
+
+// iOS不支持
+RCT_EXPORT_METHOD(addMemberWithBean:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
 }
 
 /**

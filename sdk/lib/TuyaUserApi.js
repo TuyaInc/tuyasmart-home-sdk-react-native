@@ -1,3 +1,8 @@
+
+import {
+  Platform
+} from 'react-native';
+
 const UserNativeApi = require('react-native').NativeModules.TuyaUserModule
 
 const TuyaUserApi = {
@@ -20,6 +25,9 @@ const TuyaUserApi = {
     return UserNativeApi.getEmailValidateCode(params)
   },
   registerAccountWithPhone (params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return UserNativeApi.registerAccountWithPhone(params)
   },
   resetEmailPassword (params) {
@@ -44,6 +52,9 @@ const TuyaUserApi = {
     return UserNativeApi.registerAccountWithEmail(params)
   },
   reRickName (params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return UserNativeApi.reRickName(params)
   },
   loginByTwitter (params) {
@@ -62,6 +73,9 @@ const TuyaUserApi = {
     return UserNativeApi.checkPhoneCode(params)
   },
   checkEmailPassword (params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return UserNativeApi.checkEmailPassword(params)
   },
   loginWithUid (params) {
@@ -77,6 +91,9 @@ const TuyaUserApi = {
     return UserNativeApi.registerAccountWithUid(params)
   },
   saveUser (params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return UserNativeApi.saveUser(params)
   },
   sendBindVerifyCode (params) {
@@ -101,6 +118,9 @@ const TuyaUserApi = {
     return UserNativeApi.upgradeVersion()
   },
   removeUser () {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return UserNativeApi.removeUser()
   },
   cancelAccount () {

@@ -1,51 +1,71 @@
+import {
+  Platform
+} from 'react-native';
 const HomeNativeApi = require('react-native').NativeModules.TuyaHomeModule
-import { TYNativeBridge, HOMEDEVICESTATUS,HOMESTATUS,WARNMESSAGEARRIVED } from './bridgeUtils'
+import { TYNativeBridge, HOMEDEVICESTATUS, HOMESTATUS, WARNMESSAGEARRIVED } from './bridgeUtils'
 
 const TuyaHomeApi = {
-  getHomeDetail (params) {
-    return HomeNativeApi.getHomeDetail(params)
+  getHomeDetail(params) {
+    return HomeNativeApi.getHomeDetail(params).then(data => {
+      if (Platform.OS == "ios") {
+        const List = []
+        data.deviceList.forEach(item => {
+          List.push({
+            ...item,
+            productBean:{
+              schemaInfo:item.originJson.schemaInfo
+            },
+          })
+        })
+        data.deviceList = List
+      }
+      return data
+    })
   },
 
-  getHomeLocalCache (params) {
+  getHomeLocalCache(params) {
     return HomeNativeApi.getHomeLocalCache(params)
   },
 
-  updateHome (params) {
+  updateHome(params) {
     return HomeNativeApi.updateHome(params)
   },
 
-  dismissHome (params) {
+  dismissHome(params) {
     return HomeNativeApi.dismissHome(params)
   },
-  sortHome (params) {
+  sortHome(params) {
     return HomeNativeApi.sortHome(params)
   },
 
-  addRoom (params) {
+  addRoom(params) {
     return HomeNativeApi.addRoom(params)
   },
 
-  removeRoom (params) {
+  removeRoom(params) {
     return HomeNativeApi.removeRoom(params)
   },
 
-  sortRoom (params) {
+  sortRoom(params) {
     return HomeNativeApi.sortRoom(params)
   },
 
-  queryRoomList (params) {
+  queryRoomList(params) {
     return HomeNativeApi.queryRoomList(params)
   },
-  getHomeBean (params) {
+  getHomeBean(params) {
     return HomeNativeApi.getHomeBean(params)
   },
-  createGroup (params) {
+  createGroup(params) {
     return HomeNativeApi.createGroup(params)
   },
-  queryRoomInfoByDevice (params) {
+  queryRoomInfoByDevice(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return HomeNativeApi.queryRoomInfoByDevice(params)
   },
-  registerHomeDeviceStatusListener (
+  registerHomeDeviceStatusListener(
     params,
     onDeviceDpUpdate,
     onDeviceStatusChanged,
@@ -61,16 +81,16 @@ const TuyaHomeApi = {
           onDeviceStatusChanged(data)
         } else if (data.type == 'onDeviceInfoUpdate') {
           onDeviceInfoUpdate(data)
-        } 
+        }
       }
     )
   },
-  unRegisterHomeDeviceStatusListener (params) {
-     HomeNativeApi.unRegisterHomeDeviceStatusListener(params)
-     TYNativeBridge.off(TYNativeBridge.bridge(HOMEDEVICESTATUS, params.homeId))
+  unRegisterHomeDeviceStatusListener(params) {
+    HomeNativeApi.unRegisterHomeDeviceStatusListener(params)
+    TYNativeBridge.off(TYNativeBridge.bridge(HOMEDEVICESTATUS, params.homeId))
   },
 
-  registerHomeStatusListener (
+  registerHomeStatusListener(
     params,
     onDeviceAdded,
     onDeviceRemoved,
@@ -92,40 +112,64 @@ const TuyaHomeApi = {
           onGroupRemoved(data)
         } else if (data.type == 'onMeshAdded') {
           onMeshAdded(data)
-        } 
+        }
       }
     )
   },
-  unRegisterHomeStatusListener (params) {
-     HomeNativeApi.unRegisterHomeStatusListener(params)
-     TYNativeBridge.off(TYNativeBridge.bridge(HOMESTATUS, params.homeId))
+  unRegisterHomeStatusListener(params) {
+    HomeNativeApi.unRegisterHomeStatusListener(params)
+    TYNativeBridge.off(TYNativeBridge.bridge(HOMESTATUS, params.homeId))
   },
-  createBlueMesh (params) {
+  createBlueMesh(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return HomeNativeApi.createBlueMesh(params)
   },
-  createSigMesh (params) {
+  createSigMesh(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return HomeNativeApi.createSigMesh(params)
   },
-  queryDeviceListToAddGroup (params) {
+  queryDeviceListToAddGroup(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return HomeNativeApi.queryDeviceListToAddGroup(params)
   },
-  queryZigbeeDeviceListToAddGroup (params) {
+  queryZigbeeDeviceListToAddGroup(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return HomeNativeApi.queryZigbeeDeviceListToAddGroup(params)
   },
-  onDestroy (params) {
+  onDestroy(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     HomeNativeApi.onDestroy(params)
   },
-  createZigbeeGroup (params) {
+  createZigbeeGroup(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return HomeNativeApi.createZigbeeGroup(params)
   },
-  queryRoomInfoByGroup (params) {
+  queryRoomInfoByGroup(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return HomeNativeApi.queryRoomInfoByGroup(params)
   },
-  bindNewConfigDevs (params) {
+  bindNewConfigDevs(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return HomeNativeApi.bindNewConfigDevs(params)
   },
 
-  registerProductWarnListener (
+  registerProductWarnListener(
     params,
     onWarnMessageArrived,
   ) {
@@ -137,11 +181,14 @@ const TuyaHomeApi = {
       }
     )
   },
-  unRegisterProductWarnListener (params) {
-     HomeNativeApi.unRegisterProductWarnListener(params)
-     TYNativeBridge.off(TYNativeBridge.bridge(WARNMESSAGEARRIVED, params.homeId))
+  unRegisterProductWarnListener(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
+    HomeNativeApi.unRegisterProductWarnListener(params)
+    TYNativeBridge.off(TYNativeBridge.bridge(WARNMESSAGEARRIVED, params.homeId))
   },
-  sortDevInHome (params) {
+  sortDevInHome(params) {
     return HomeNativeApi.sortDevInHome(params)
   },
 }

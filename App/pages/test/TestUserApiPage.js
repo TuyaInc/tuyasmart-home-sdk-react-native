@@ -123,15 +123,21 @@ export default class TestUserApiPage extends BaseComponent {
                     })
                 }
             },
+            // type
+            // 1: mobile phone verification code register,
+            // 2: mobile phone verification code login,
+            // 3: mobile phone password reset.
             {
                 key: 'checkPhoneCode',
                 leftText: 'checkPhoneCode',
                 rightText: 'click',
                 onPress: () => {
+                    let type=1;
                     TuyaUserApi.checkPhoneCode({
                         countryCode,
                         phoneNumber: userName,
-                        code: '86'
+                        code: '86',
+                        type
                     }).then(data => {
                         this.setState({ content: JSON.stringify(data) })
                     }).catch((error) => {

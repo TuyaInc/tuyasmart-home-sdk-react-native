@@ -57,18 +57,7 @@ RCT_EXPORT_METHOD(addShareWithMemberId:(NSDictionary *)params resolver:(RCTPromi
     }];
 }
 
-//// 单个设备取消共享：
-//RCT_EXPORT_METHOD(disableDevShare:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-//
-//    TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
-//    [deviceShare removeShareMemberWithMemberId:[params[@"memberId"] integerValue] success:^{
-//        if (resolver) {
-//          resolver(@"removeShareMember success");
-//        }
-//    } failure:^(NSError *error) {
-//        [TuyaRNUtils rejecterWithError:error handler:rejecter];
-//    }];
-//}
+
 
 // 查询分享:
 // 查询主动分享的关系列表:
@@ -196,7 +185,7 @@ RCT_EXPORT_METHOD(removeUserShare:(NSDictionary *)params resolver:(RCTPromiseRes
     } failure:^(NSError *error) {
         [TuyaRNUtils rejecterWithError:error handler:rejecter];
     }];
-
+  
 }
 
 

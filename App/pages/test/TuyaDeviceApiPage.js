@@ -68,8 +68,8 @@ export default class TuyaDeviceApiPage extends BaseComponent {
                         devId,
                         dpId
                     })
-                        .then(() => {
-                            this.showToast('success')
+                        .then((data) => {
+                            this.setState({content:JSON.stringify(data)})
                             this.stopLoading();
                         })
                         .catch((error) => {
@@ -89,8 +89,8 @@ export default class TuyaDeviceApiPage extends BaseComponent {
                         devId,
                         list
                     })
-                        .then(() => {
-                            this.showToast('success')
+                        .then((data) => {
+                          this.setState({content:JSON.stringify(data)})
                             this.stopLoading();
                         })
                         .catch((error) => {
@@ -250,6 +250,7 @@ export default class TuyaDeviceApiPage extends BaseComponent {
                 rightText: 'click',
                 onPress: () => {
                     let devId = dev.devId
+                    console.log(dev)
                     let list=[1,2]
                     TuyaDeviceApi.getInitiativeQueryDpsInfoWithDpsArray({
                         devId,

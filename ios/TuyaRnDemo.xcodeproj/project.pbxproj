@@ -48,6 +48,9 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		DB4C2DDA2230E51000689A50 /* TuyaRNGroupListener.m in Sources */ = {isa = PBXBuildFile; fileRef = DB4C2DD92230E51000689A50 /* TuyaRNGroupListener.m */; };
+		DB7E04F52304FBAB0069C730 /* t_s.bmp in Resources */ = {isa = PBXBuildFile; fileRef = DB7E04CF2304FBAA0069C730 /* t_s.bmp */; };
+		DB7E04FA23050BE00069C730 /* TuyaPushModule.m in Sources */ = {isa = PBXBuildFile; fileRef = DB7E04F923050BE00069C730 /* TuyaPushModule.m */; };
+		DB9BD01423164F3300A2B6E3 /* TuyaOTAModule.m in Sources */ = {isa = PBXBuildFile; fileRef = DB9BD01323164F3300A2B6E3 /* TuyaOTAModule.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -402,6 +405,11 @@
 		B0144F5A83B2BC67D1A2F201 /* Pods-TuyaRnDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TuyaRnDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TuyaRnDemo/Pods-TuyaRnDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		DB4C2DD82230E51000689A50 /* TuyaRNGroupListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TuyaRNGroupListener.h; sourceTree = "<group>"; };
 		DB4C2DD92230E51000689A50 /* TuyaRNGroupListener.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TuyaRNGroupListener.m; sourceTree = "<group>"; };
+		DB7E04CF2304FBAA0069C730 /* t_s.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = t_s.bmp; sourceTree = "<group>"; };
+		DB7E04F823050BE00069C730 /* TuyaPushModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TuyaPushModule.h; sourceTree = "<group>"; };
+		DB7E04F923050BE00069C730 /* TuyaPushModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TuyaPushModule.m; sourceTree = "<group>"; };
+		DB9BD01223164F3300A2B6E3 /* TuyaOTAModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TuyaOTAModule.h; sourceTree = "<group>"; };
+		DB9BD01323164F3300A2B6E3 /* TuyaOTAModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TuyaOTAModule.m; sourceTree = "<group>"; };
 		DFD8A9EDC06F4293B0D1C64C /* libRNSVG.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSVG.a; sourceTree = "<group>"; };
 		E05DD7DB362067EAB844B2D7 /* libPods-TuyaRnDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TuyaRnDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F29F095F97E64C7A852CC641 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
@@ -512,6 +520,7 @@
 		13B07FAE1A68108700A75B9A /* TuyaRnDemo */ = {
 			isa = PBXGroup;
 			children = (
+				DB7E04CF2304FBAA0069C730 /* t_s.bmp */,
 				7596FFD6222787190047DA87 /* TuyaRNSDK */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -602,6 +611,7 @@
 		7596FFD6222787190047DA87 /* TuyaRNSDK */ = {
 			isa = PBXGroup;
 			children = (
+				DB7E04F723050BC90069C730 /* PushModule */,
 				7596FFED2227C6AF0047DA87 /* GateWay */,
 				7596FFEC2227C69A0047DA87 /* MessageCenter */,
 				7596FFEB2227C68A0047DA87 /* Group */,
@@ -729,6 +739,8 @@
 			children = (
 				7596FFF72227C7710047DA87 /* TuyaRNDeviceModule.h */,
 				7596FFF82227C7710047DA87 /* TuyaRNDeviceModule.m */,
+				DB9BD01223164F3300A2B6E3 /* TuyaOTAModule.h */,
+				DB9BD01323164F3300A2B6E3 /* TuyaOTAModule.m */,
 			);
 			path = DeviceControl;
 			sourceTree = "<group>";
@@ -838,6 +850,15 @@
 				2D16E6721FA4F8DC00B85C8A /* libRCTBlob-tvOS.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		DB7E04F723050BC90069C730 /* PushModule */ = {
+			isa = PBXGroup;
+			children = (
+				DB7E04F823050BE00069C730 /* TuyaPushModule.h */,
+				DB7E04F923050BE00069C730 /* TuyaPushModule.m */,
+			);
+			path = PushModule;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1231,6 +1252,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB7E04F52304FBAB0069C730 /* t_s.bmp in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
@@ -1290,6 +1312,7 @@
 				7596000E2227C8420047DA87 /* TuyaRNGatewayModule.m in Sources */,
 				7596FFF02227C6EF0047DA87 /* TuyaRNHomeManagerModule.m in Sources */,
 				750BCF37222F718B00239E92 /* TuyaRNHomeManagerListener.m in Sources */,
+				DB7E04FA23050BE00069C730 /* TuyaPushModule.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				7596FFF62227C7340047DA87 /* TuyaRNActivatorModule.m in Sources */,
 				759600082227C8090047DA87 /* TuyaRNMessageModule.m in Sources */,
@@ -1308,6 +1331,7 @@
 				755A8F012229131A002F15C6 /* TuyaRNHomeMemberModule.m in Sources */,
 				7596000B2227C8240047DA87 /* TuyaRNFeedBackModule.m in Sources */,
 				755A8ED72228E1B6002F15C6 /* TuyaRNHomeModule.m in Sources */,
+				DB9BD01423164F3300A2B6E3 /* TuyaOTAModule.m in Sources */,
 				DB4C2DDA2230E51000689A50 /* TuyaRNGroupListener.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1348,7 +1372,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tuyarndemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.demo.fmtxxx;
 				PRODUCT_NAME = TuyaRnDemo;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1375,7 +1399,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tuyarndemo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.demo.fmtxxx;
 				PRODUCT_NAME = TuyaRnDemo;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";

@@ -1,10 +1,19 @@
+import {
+  Platform
+} from 'react-native';
 const ShareNativeApi = require('react-native').NativeModules.TuyaShareModule
 
 const TuyaShareApi = {
   enableDevShare (params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return ShareNativeApi.enableDevShare(params)
   },
   disableDevShare (params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return ShareNativeApi.disableDevShare(params)
   },
   removeReceivedDevShare (params) {
@@ -17,6 +26,9 @@ const TuyaShareApi = {
     return ShareNativeApi.queryDevShareUserList(params)
   },
   addShare (params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return ShareNativeApi.addShare(params)
   },
   addShareWithMemberId (params) {
@@ -29,7 +41,9 @@ const TuyaShareApi = {
     return ShareNativeApi.getReceivedShareInfo(params)
   },
   queryUserShareList (params) {
-    return ShareNativeApi.queryUserShareList(params)
+    return ShareNativeApi.queryUserShareList(params).then(data=>{
+      return data
+    })
   },
   queryShareReceivedUserList () {
     return ShareNativeApi.queryShareReceivedUserList()
@@ -50,6 +64,9 @@ const TuyaShareApi = {
     return ShareNativeApi.removeReceivedUserShare(params)
   },
   onDestroy () {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
    ShareNativeApi.onDestroy()
   },
   inviteShare (params) {

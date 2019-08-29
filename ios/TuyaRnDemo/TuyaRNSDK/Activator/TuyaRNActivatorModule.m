@@ -83,6 +83,14 @@ RCT_EXPORT_METHOD(stopConfig:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromi
   [[TuyaSmartActivator sharedInstance] stopConfigWiFi];
 }
 
+RCT_EXPORT_METHOD(getCurrentSSID:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  NSString *ssid = [TuyaSmartActivator currentWifiSSID];
+  if(resolver) {
+    resolver(ssid);
+  }
+}
+
 
 //ZigBee子设备配网需要ZigBee网关设备云在线的情况下才能发起,且子设备处于配网状态。
 
@@ -122,7 +130,9 @@ RCT_EXPORT_METHOD(getCurrentWifi:(NSDictionary *)params success:(RCTResponseSend
   }
 }
 
-
+RCT_EXPORT_METHOD(stop:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+}
 
 
 RCT_EXPORT_METHOD(onDestory:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {

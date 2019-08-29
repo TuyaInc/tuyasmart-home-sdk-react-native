@@ -10,12 +10,14 @@
 #import "TuyaRNDeviceListener.h"
 #import <TuyaSmartDeviceKit/TuyaSmartDevice.h>
 #import <TuyaSmartDeviceKit/TuyaSmartDeviceKit.h>
+#import "TuyaRNEventEmitter.h"
+
 #import "TuyaRNUtils.h"
 #import "YYModel.h"
 
 
 #define kTuyaDeviceModuleDevId @"devId"
-#define kTuyaDeviceModuleCommand @"command"
+#define kTuyaDeviceModuleCommand @"dps"
 #define kTuyaDeviceModuleDpId @"dpId"
 #define kTuyaDeviceModuleDeviceName @"name"
 
@@ -64,16 +66,33 @@ RCT_EXPORT_METHOD(unRegisterDevListener:(NSDictionary *)params resolver:(RCTProm
  * 通过局域网或者云端这两种方式发送控制指令给设备。send(通过局域网或者云端这两种方式发送控制指令给设备。)
  command的格式应符合{key:value} 例如 {"1":true}
  */
-RCT_EXPORT_METHOD(send:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+RCT_EXPORT_METHOD(publishDps:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   //设备发送消息
   self.smartDevice  = [self smartDeviceWithParams:params];
-  NSDictionary *command = params[kTuyaDeviceModuleCommand];
-  [self.smartDevice publishDps:command success:^{
+  NSString *json = params[@"dps"];
+  NSDictionary *dps = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
+  
+  [self.smartDevice publishDps:dps success:^{
     [TuyaRNUtils resolverWithHandler:resolver];
   } failure:^(NSError *error) {
     [TuyaRNUtils rejecterWithError:error handler:rejecter];
   }];
 }
+
+
+RCT_EXPORT_METHOD(publishDpsWithEnum:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  // 设备发送消息
+  self.smartDevice  = [self smartDeviceWithParams:params];
+  NSString *json = params[@"dps"];
+  NSDictionary *dps = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
+
+  [self.smartDevice publishDps:dps mode:[params[@"TYDevicePublishModeEnum"] integerValue] success:^{
+    [TuyaRNUtils resolverWithHandler:resolver];
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
 
 /**
  查询单个dp数据
@@ -91,6 +110,34 @@ RCT_EXPORT_METHOD(getDp:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)
 }
 
 
+RCT_EXPORT_METHOD(getDpList:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  //读取dp点
+  self.smartDevice  = [self smartDeviceWithParams:params];
+  
+  NSArray *list = params[@"list"];
+  
+  NSMutableArray *res = [NSMutableArray array];
+  for(NSString *obj in list) {
+    [res addObject:self.smartDevice.deviceModel.dps[obj]];
+  }
+  if (self.smartDevice) {
+    if (resolver) {
+      resolver(res);
+    }
+  }
+}
+
+
+RCT_EXPORT_METHOD(resetFactory:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  self.smartDevice  = [self smartDeviceWithParams:params];
+  [self.smartDevice resetFactory:^{
+    [TuyaRNUtils resolverWithHandler:resolver];
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
 /**
  设备重命名
  */
@@ -104,6 +151,19 @@ RCT_EXPORT_METHOD(renameDevice:(NSDictionary *)params resolver:(RCTPromiseResolv
     [TuyaRNUtils rejecterWithError:error handler:rejecter];
   }];
 }
+
+
+RCT_EXPORT_METHOD(getInitiativeQueryDpsInfoWithDpsArray:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  self.smartDevice  = [self smartDeviceWithParams:params];
+  [self.smartDevice getInitiativeQueryDpsInfoWithDpsArray:params[@"list"] success:^{
+    resolver(@"success");
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
+
 
 // 更新单个设备信息:
 //RCT_EXPORT_METHOD(getDp:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
@@ -119,7 +179,7 @@ RCT_EXPORT_METHOD(renameDevice:(NSDictionary *)params resolver:(RCTPromiseResolv
 
 
 RCT_EXPORT_METHOD(getDataPointStat:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-  self.smartDevice  = [self smartDeviceWithParams:params];
+ 
 }
   
 
@@ -151,13 +211,17 @@ RCT_EXPORT_METHOD(removeDevice:(NSDictionary *)params resolver:(RCTPromiseResolv
 
 
 RCT_EXPORT_METHOD(onDestroy:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-  
+    self.smartDevice = nil;
 }
 
 // 下发升级指令：
 RCT_EXPORT_METHOD(startOta:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    TuyaSmartDevice *device = [TuyaSmartDevice deviceWithDeviceId:params[@"devId"]];
-    [device upgradeFirmware:[params[@"type"] integerValue] success:^{
+    self.smartDevice = [TuyaSmartDevice deviceWithDeviceId:params[@"devId"]];
+  self.smartDevice.delegate = self;
+  
+  
+  
+    [self.smartDevice upgradeFirmware:[params[@"type"] integerValue] success:^{
         if (resolver) {
           resolver(@"success");
         }
@@ -197,6 +261,63 @@ RCT_EXPORT_METHOD(getOtaInfo:(NSDictionary *)params resolver:(RCTPromiseResolveB
   }
   return [TuyaSmartDevice deviceWithDeviceId:deviceId];
 }
+
+
+/**
+ *  Device firmware upgrade success
+ *  固件升级成功代理回调
+ *
+ *  @param device instance
+ *  @param type   device type
+ */
+- (void)deviceFirmwareUpgradeSuccess:(TuyaSmartDevice *)device type:(NSInteger)type {
+  NSDictionary *dic = @{
+                        @"otaType": @(type),
+                        @"type": @"onSuccess"
+                        };
+  [TuyaRNEventEmitter ty_sendEvent:[self getEventName:@"otaListener" ID:device.deviceModel.devId] withBody:dic];
+}
+
+- (NSString *)getEventName:(NSString *)event ID:(NSString *)ID {
+  return [NSString stringWithFormat:@"%@//%@", event, ID];
+}
+
+
+/**
+ *  Device firmware upgrade failure
+ *  固件升级失败代理回调
+ *
+ *  @param device instance
+ *  @param type   device type
+ */
+- (void)deviceFirmwareUpgradeFailure:(TuyaSmartDevice *)device type:(NSInteger)type {
+  NSDictionary *dic = @{
+                        @"otaType": @(type),
+                        @"type": @"onFailure"
+                        };
+  [TuyaRNEventEmitter ty_sendEvent:[self getEventName:@"otaListener" ID:device.deviceModel.devId] withBody:dic];
+}
+
+/**
+ *  Firmware upgrade progress.
+ *  固件升级进度
+ *
+ *  @param device   instance
+ *  @param type     device type
+ *  @param progress upgrade progress
+ */
+- (void)device:(TuyaSmartDevice *)device firmwareUpgradeProgress:(NSInteger)type progress:(double)progress {
+  NSDictionary *dic = @{
+                        @"otaType": @(type),
+                        @"type": @"onProgress"
+                        };
+  [TuyaRNEventEmitter ty_sendEvent:[self getEventName:@"otaListener" ID:device.deviceModel.devId] withBody:dic];
+}
+
+
+
+
+
 
 
 @end

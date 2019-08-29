@@ -152,8 +152,13 @@ RCT_EXPORT_METHOD(removeRoom:(NSDictionary *)params resolver:(RCTPromiseResolveB
 RCT_EXPORT_METHOD(sortRoom:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
   self.currentHome = [self smartHomeWithParams:params];
-  
-  NSArray<TuyaSmartRoomModel *> * list = nil;
+
+  NSMutableArray<TuyaSmartRoomModel *> * list = [NSMutableArray array];
+  for(NSNumber * homeId in params[@"idList"] ) {
+    TuyaSmartRoomModel *room = [[TuyaSmartRoomModel alloc] init];
+    room.roomId = [homeId longLongValue];
+    [list addObject:room];
+  }
   
   [self.currentHome sortRoomList:list success:^{
     [TuyaRNUtils resolverWithHandler:resolver];
@@ -161,6 +166,27 @@ RCT_EXPORT_METHOD(sortRoom:(NSDictionary *)params resolver:(RCTPromiseResolveBlo
     [TuyaRNUtils rejecterWithError:error handler:rejecter];
   }];
 }
+
+
+
+RCT_EXPORT_METHOD(sortHome:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  self.currentHome = [self smartHomeWithParams:params];
+  
+  NSMutableArray<TuyaSmartHomeModel *> * list = [NSMutableArray array];
+  for(NSNumber * homeId in params[@"idList"] ) {
+    TuyaSmartHomeModel *home = [[TuyaSmartHomeModel alloc] init];
+    home.homeId = [homeId longLongValue];
+    [list addObject:home];
+  }
+  [[TuyaSmartHomeManager new] sortHomeList:list success:^{
+    [TuyaRNUtils resolverWithHandler:resolver];
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
+
 
 /**
  查询房屋的列表
@@ -219,11 +245,63 @@ RCT_EXPORT_METHOD(unRegisterHomeStatusListener:(NSDictionary *)params resolver:(
 }
 
 
+RCT_EXPORT_METHOD(registerHomeDeviceStatusListener:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  
+  NSNumber *homeIdNum = params[kTuyaRNHomeModuleHomeId];
+  if (!homeIdNum || homeIdNum.longLongValue <= 0) {
+    return;
+  }
+  [[TuyaRNHomeListener shareInstance] registerHomeStatusWithSmartHome:[TuyaSmartHome homeWithHomeId:homeIdNum.longLongValue]];
+}
+
+/**
+ 取消Home注册监听
+ 
+ */
+RCT_EXPORT_METHOD(unRegisterHomeDeviceStatusListener:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  [[TuyaRNHomeListener shareInstance] removeHomeStatusSmartHome];
+}
+
+
+
+
 //
 RCT_EXPORT_METHOD(queryDeviceListToAddGroup:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
   
 }
+
+
+//
+RCT_EXPORT_METHOD(queryRoomInfoByDevice:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  self.currentHome = [self smartHomeWithParams:params];
+  [self.currentHome sortDeviceOrGroupWithOrderList:nil success:^{
+    [TuyaRNUtils resolverWithHandler:resolver];
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+  
+}
+
+//
+RCT_EXPORT_METHOD(sortDevInHome:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  self.currentHome = [self smartHomeWithParams:params];
+  [self.currentHome sortDeviceOrGroupWithOrderList:params[@"list"] success:^{
+    [TuyaRNUtils resolverWithHandler:resolver];
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+  
+}
+
+
+//
+RCT_EXPORT_METHOD(queryRoomInfoByGroup:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  self.currentHome = [self smartHomeWithParams:params];
+  
+  
+}
+
 
 RCT_EXPORT_METHOD(onDestroy:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
@@ -238,5 +316,7 @@ RCT_EXPORT_METHOD(onDestroy:(NSDictionary *)params resolver:(RCTPromiseResolveBl
   self.currentHome = [TuyaSmartHome homeWithHomeId:homeId];
   return self.currentHome;
 }
+
+
 
 @end

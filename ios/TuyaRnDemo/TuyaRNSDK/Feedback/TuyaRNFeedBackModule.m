@@ -66,7 +66,7 @@ RCT_EXPORT_METHOD(getFeedbackType:(RCTPromiseResolveBlock)resolver rejecter:(RCT
 
 
 // 新增反馈：
-RCT_EXPORT_METHOD(addMsg:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+RCT_EXPORT_METHOD(addFeedback:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   TuyaSmartFeedback *feedBack = [[TuyaSmartFeedback alloc] init];
   self.smartFeedback = feedBack;
   [feedBack addFeedback:params[@"message"] hdId:params[@"hdId"] hdType:[params[@"hdType"] integerValue] contact:params[@"contact"] success:^{
@@ -97,6 +97,18 @@ RCT_EXPORT_METHOD(getFeedbackList:(RCTPromiseResolveBlock)resolver rejecter:(RCT
     }];
 }
 
+
+RCT_EXPORT_METHOD(getMsgList:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  TuyaSmartFeedback *feedBack = [[TuyaSmartFeedback alloc] init];
+  self.smartFeedback = feedBack;
+  [feedBack getFeedbackTalkList:^(NSArray<TuyaSmartFeedbackTalkListModel *> *list) {
+    if (resolver) {
+      resolver(list);
+    }
+  } failure:^(NSError *error) {
+    [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
 
 
 @end

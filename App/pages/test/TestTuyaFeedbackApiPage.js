@@ -77,7 +77,7 @@ export default class TuyaDeviceApiPage extends BaseComponent {
             },
             {
                 key: 'addMsg',
-                leftText: 'getFeedbaaddMsgckMsg',
+                leftText: 'addMsg',
                 rightText: 'click',
                 onPress: () => {
                     TuyaFeedBackApi.addMsg({

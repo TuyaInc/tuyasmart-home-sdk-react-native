@@ -1,3 +1,6 @@
+import {
+  Platform
+} from 'react-native';
 const DeviceNativeApi = require('react-native').NativeModules.TuyaDeviceModule
 
 import { TYNativeBridge, DEVLISTENER, WARNMESSAGEARRIVED } from './bridgeUtils'
@@ -49,23 +52,41 @@ const TuyaDeviceApi = {
     return DeviceNativeApi.resetFactory(params)
   },
   getDeviceProperty(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return DeviceNativeApi.getDeviceProperty(params)
   },
   saveDeviceProperty(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return DeviceNativeApi.saveDeviceProperty(params)
   },
   getDataPointStat(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return DeviceNativeApi.getDataPointStat(params)
   },
   queryData(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return DeviceNativeApi.queryData(params)
   },
 
   onDestroy(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     DeviceNativeApi.onDestroy(params)
   },
 
   requestWifiSignal(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return DeviceNativeApi.requestWifiSignal(params)
   },
   getInitiativeQueryDpsInfoWithDpsArray(params) {

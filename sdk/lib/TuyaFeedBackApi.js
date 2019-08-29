@@ -1,20 +1,29 @@
 const FeedBackNativeApi = require('react-native').NativeModules
   .TuyaFeedBackModule
+import {
+  Platform
+} from 'react-native';
 
 const TuyaFeedBackApi = {
-  getFeedbackList () {
+  getFeedbackList() {
     return FeedBackNativeApi.getFeedbackList()
   },
-  getFeedbackType () {
+  getFeedbackType() {
     return FeedBackNativeApi.getFeedbackType()
   },
-  addFeedback (params) {
+  addFeedback(params) {
     return FeedBackNativeApi.addFeedback(params)
   },
-  getMsgList (params) {
+  getMsgList(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return FeedBackNativeApi.getMsgList(params)
   },
-  addMsg (params) {
+  addMsg(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return FeedBackNativeApi.addMsg(params)
   }
 }

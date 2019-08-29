@@ -1,3 +1,7 @@
+import {
+  Platform
+} from 'react-native';
+
 const RoomNativeApi = require('react-native').NativeModules.TuyaRoomModule
 
 const TuyaRoomApi = {
@@ -17,9 +21,15 @@ const TuyaRoomApi = {
     return RoomNativeApi.removeGroup(params)
   },
   moveDevGroupListFromRoom (params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return RoomNativeApi.moveDevGroupListFromRoom(params)
   },
   sortDevInRoom (params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return RoomNativeApi.sortDevInRoom(params)
   },
 }

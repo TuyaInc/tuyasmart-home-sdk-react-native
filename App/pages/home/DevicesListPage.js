@@ -28,8 +28,10 @@ class DevicesListPage extends BaseComponet {
   componentDidMount() {
     this.getData()
     TuyaHomeManagerApi.registerTuyaHomeChangeListener(() => {
+      console.warn("add")
       this.getData()
     }, () => {
+      console.warn("remove")
       this.getData()
     }, () => { }, () => { }, () => { }, () => { })
   }
@@ -48,7 +50,6 @@ class DevicesListPage extends BaseComponet {
         }
       )
     })
-    TuyaHomeApi.unRegisterHomeStatusListener({homeId: this.state.home.homeId})
     TuyaHomeApi.registerHomeStatusListener({homeId: this.state.home.homeId},()=>{
       this.getHomeDetail()
     },()=>{

@@ -72,7 +72,7 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) NSString     *productId;
 
 // whether to support group
-@property (nonatomic, assign) BOOL         supportGroup;
+@property (nonatomic, assign) BOOL           supportGroup;
 
 // type of gateway
 @property (nonatomic, strong) NSString     *gwType;

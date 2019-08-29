@@ -1,3 +1,7 @@
+import {
+  Platform
+} from 'react-native';
+
 const SceneNativeApi = require("react-native").NativeModules.TuyaSceneModule;
 import  {TYNativeBridge, SMARTUPDATE } from './bridgeUtils'
 
@@ -6,12 +10,21 @@ const TuyaSceneApi = {
     return SceneNativeApi.getDeviceTaskOperationList(params);
   },
   getDeviceTaskOperationListByGroup(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return SceneNativeApi.getDeviceTaskOperationListByGroup(params);
   },
   getDeviceTaskFunctionList(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return SceneNativeApi.getDeviceTaskFunctionList(params);
   },
   getDeviceTaskFunctionListByGoup(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return SceneNativeApi.getDeviceTaskFunctionListByGoup(params);
   },
   getSceneList(params) {
@@ -28,6 +41,9 @@ const TuyaSceneApi = {
     return SceneNativeApi.createSceneWithStickyOnTop(params)
   },
   createSceneWithStickyOnTopAndPreCondition(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return SceneNativeApi.createSceneWithStickyOnTopAndPreCondition(params);
   },
   getConditionDevList(params) {
@@ -37,9 +53,17 @@ const TuyaSceneApi = {
     return SceneNativeApi.getTaskDevList(params);
   },
   getTaskDevAndGoupList(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return SceneNativeApi.getTaskDevAndGoupList(params);
   },
   getSceneConditionDevList(params) {
+
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
+
     return SceneNativeApi.getSceneConditionDevList(params);
   },
   getDeviceConditionOperationList(params) {
@@ -49,6 +73,9 @@ const TuyaSceneApi = {
     return SceneNativeApi.getConditionList(params);
   },
   getConditionListAll(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return SceneNativeApi.getConditionListAll(params);
   },
   getCityByLatLng(params) {
@@ -58,21 +85,36 @@ const TuyaSceneApi = {
     return SceneNativeApi.getCityByCityIndex(params);
   },
   getCityListByCountryCode(params) {
-    return SceneNativeApi.getCityListByCountryCode(params);
+    return SceneNativeApi.getCityListByCountryCode(params).then(data=>{
+      console.log(data)
+      return data
+    });
   },
   sortSceneList(params) {
     return SceneNativeApi.sortSceneList(params);
   },
   getScenePanelBoundList(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return SceneNativeApi.getScenePanelBoundList(params);
   },
   getAvailableBindSceneList(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return SceneNativeApi.getAvailableBindSceneList(params);
   },
   bindLocalScene(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return SceneNativeApi.bindLocalScene(params);
   },
   unbindLocalScene(params) {
+    if (Platform.OS == "ios") {
+      return Promise.reject("ios not support")
+    }
     return SceneNativeApi.unbindLocalScene(params);
   },
   getSceneBgs() {
