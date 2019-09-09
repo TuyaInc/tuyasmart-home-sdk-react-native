@@ -29,12 +29,20 @@
 @interface TuyaRNHomeModule()<TuyaSmartHomeDelegate>
 
 @property (nonatomic, strong) TuyaSmartHome *currentHome;
+@property (nonatomic, copy) RCTPromiseResolveBlock resolver;
 
 @end
 
 @implementation TuyaRNHomeModule
 
 RCT_EXPORT_MODULE(TuyaHomeModule)
+
+- (void)home:(TuyaSmartHome *)home didAddRoom:(TuyaSmartRoomModel *)room {
+  if(self.resolver) {
+    self.resolver([room yy_modelToJSONObject]);
+  }
+}
+
 
 RCT_EXPORT_METHOD(getHomeDetail:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
@@ -119,6 +127,9 @@ RCT_EXPORT_METHOD(dismissHome:(NSDictionary *)params resolver:(RCTPromiseResolve
 RCT_EXPORT_METHOD(addRoom:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
   self.currentHome = [self smartHomeWithParams:params];
+  self.currentHome.delegate = self;
+  self.resolver = resolver;
+  
   NSString *name = params[kTuyaRNHomeModuleName];
   [self.currentHome addHomeRoomWithName:name success:^{
     [TuyaRNUtils resolverWithHandler:resolver];
