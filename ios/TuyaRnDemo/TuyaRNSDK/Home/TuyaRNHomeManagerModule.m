@@ -24,16 +24,23 @@
 #define kTuyaHomeManagerModuleHomeId @"homeId"
 
 
-@interface TuyaRNHomeManagerModule()
+@interface TuyaRNHomeManagerModule()<TuyaSmartHomeManagerDelegate>
 
 @property (nonatomic, strong) TuyaSmartHomeManager *homeManager;
 @property (nonatomic, strong) TuyaSmartRequest *request;
+@property (nonatomic, copy) RCTPromiseResolveBlock resolver;
 
 @end
 
 @implementation TuyaRNHomeManagerModule
 
 RCT_EXPORT_MODULE(TuyaHomeManagerModule)
+
+- (void)homeManager:(TuyaSmartHomeManager *)manager didAddHome:(TuyaSmartHomeModel *)home {
+  if(self.resolver) {
+    self.resolver([home yy_modelToJSONObject]);
+  }
+}
 
 /**
  * 获取家庭列表
@@ -86,6 +93,9 @@ RCT_EXPORT_METHOD(createHome:(NSDictionary *)params resolver:(RCTPromiseResolveB
   
   double latValue = lat.doubleValue;
   double lonValue = lon.doubleValue;
+  
+  self.homeManager.delegate = self;
+  self.resolver = resolver;
   
   [self.homeManager addHomeWithName:name geoName:geoName rooms:rooms latitude:latValue longitude:lonValue success:^(long long result) {
     [TuyaRNUtils resolverWithHandler:resolver];
