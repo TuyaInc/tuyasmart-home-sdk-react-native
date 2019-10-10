@@ -71,7 +71,17 @@ public class TuyaHomeModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void getHomeDetail(ReadableMap params, final Promise promise) {
         if (ReactParamsCheck.checkParams(Arrays.asList(HOMEID), params)) {
-            getHomeInstance(params.getDouble(HOMEID)).getHomeDetail(getITuyaHomeResultCallback(promise));
+            getHomeInstance(params.getDouble(HOMEID)).getHomeDetail(new ITuyaHomeResultCallback() {
+                @Override
+                public void onSuccess(HomeBean bean) {
+                    promise.resolve(TuyaReactUtils.parseToWritableMap(TuyaHomeSdk.newHomeInstance(bean.getHomeId())));
+                }
+
+                @Override
+                public void onError(String errorCode, String errorMsg) {
+
+                }
+            });
         }
     }
 
