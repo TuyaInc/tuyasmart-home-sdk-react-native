@@ -32,10 +32,9 @@ RCT_EXPORT_METHOD(onDestory:(NSDictionary *)params) {
 RCT_EXPORT_METHOD(addTimerWithTask:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
    TuyaSmartTimer *timer = [[TuyaSmartTimer alloc] init];
   self.timer = timer;
-  NSDictionary *dps = @{[NSString stringWithFormat:@"%@", params[@"dpId"]]: @(YES)};
     NSString *tz = [[[NSTimeZone systemTimeZone] localizedName:NSTimeZoneNameStyleStandard locale:nil] stringByReplacingOccurrencesOfString:@"GMT" withString:@""];
   
-    [timer addTimerWithTask:params[@"taskName"] loops:params[@"loops"] devId:params[@"devId"] time:params[@"time"] dps:dps timeZone:tz success:^{
+    [timer addTimerWithTask:params[@"taskName"] loops:params[@"loops"] devId:params[@"devId"] time:params[@"time"] dps:params[@"dps"] timeZone:tz success:^{
       if (resolver) {
         resolver(@"addTimerWithTask success");
       }
