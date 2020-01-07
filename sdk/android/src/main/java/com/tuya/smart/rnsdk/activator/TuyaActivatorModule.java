@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.tuya.smart.android.common.utils.WiFiUtil;
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
 import com.tuya.smart.home.sdk.builder.ActivatorBuilder;
+import com.tuya.smart.home.sdk.builder.TuyaGwActivatorBuilder;
 import com.tuya.smart.home.sdk.builder.TuyaGwSubDevActivatorBuilder;
 import com.tuya.smart.rnsdk.utils.JsonUtils;
 import com.tuya.smart.rnsdk.utils.ReactParamsCheck;
@@ -112,6 +113,7 @@ public class TuyaActivatorModule extends ReactContextBaseJavaModule {
         }
     }
 
+
     @ReactMethod
     public void newGwSubDevActivator(final ReadableMap params, final Promise promise) {
         if (ReactParamsCheck.checkParams(Arrays.asList(DEVID, TIME), params)) {
@@ -134,6 +136,46 @@ public class TuyaActivatorModule extends ReactContextBaseJavaModule {
             });
             iTuyaActivator = TuyaHomeSdk.getActivatorInstance().newGwSubDevActivator(tuyaGwSubDevActivatorBuilder);
             iTuyaActivator.start();
+        }
+    }
+
+    @ReactMethod
+    public void newGwActivator(final ReadableMap params, final Promise promise) {
+        if (ReactParamsCheck.checkParams(Arrays.asList(HOMEID, TIME), params)) {
+            TuyaHomeSdk.getActivatorInstance().getActivatorToken(coverDTL(params.getDouble(HOMEID)), new ITuyaActivatorGetToken() {
+                @Override
+                public void onSuccess(String token) {
+                    stop();
+                    ITuyaSmartActivatorListener iTuyaSmartActivatorListener = new ITuyaSmartActivatorListener() {
+                        @Override
+                        public void onError(String errorCode, String errorMsg) {
+                            promise.reject(errorCode, errorMsg);
+                        }
+
+                        @Override
+                        public void onActiveSuccess(DeviceBean deviceBean) {
+                            promise.resolve(TuyaReactUtils.parseToWritableMap(deviceBean));
+                        }
+
+                        @Override
+                        public void onStep(String step, Object data) {
+                            promise.resolve(JsonUtils.toString(data));
+                        }
+                    };
+                    iTuyaActivator = TuyaHomeSdk.getActivatorInstance().newGwActivator(new TuyaGwActivatorBuilder()
+                            .setToken(token)
+                            .setTimeOut(params.getInt(TIME))
+                            .setContext(getReactApplicationContext())
+                            .setListener(iTuyaSmartActivatorListener));
+                    iTuyaActivator.start();
+                }
+
+                @Override
+                public void onFailure(String errorCode, String errorMsg) {
+                    promise.reject(errorCode, errorMsg);
+                }
+            });
+
         }
     }
 }

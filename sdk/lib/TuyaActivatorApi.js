@@ -13,6 +13,9 @@ const TuyaActivatorApi = {
   newGwSubDevActivator(params) {
     return ActivatorNativeApi.newGwSubDevActivator(params)
   },
+  newGwActivator(params) {
+    return ActivatorNativeApi.newGwActivator(params)
+  },
 }
 
 module.exports = TuyaActivatorApi
