@@ -46,7 +46,7 @@ class DevicesListPage extends BaseComponet {
     TuyaHomeApi.getHomeDetail({ homeId: this.state.home.homeId }).then(data => {
       this.setState(
         {
-          devList: data.deviceList
+          devList: data.homeBean.deviceList
         }
       )
     })

@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import { TuyaTimerApi } from '../../../sdk'
 
-import Picker from 'react-native-wheel-picker';
+import Picker from '../../common/picker';
 import ButtonX from '../../common/ButtonX';
 
 import HeadView from '../../common/HeadView'

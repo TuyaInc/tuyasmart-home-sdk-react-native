@@ -6,7 +6,7 @@ import {
   Modal,
   Platform,
 } from 'react-native'
-import Picker from 'react-native-wheel-picker'
+import Picker from './picker'
 import ConfirmCancellation from './ConfirmCancellation'
 
 const { width } = Dimensions.get('window')
