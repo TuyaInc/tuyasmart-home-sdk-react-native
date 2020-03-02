@@ -94,20 +94,20 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
     [[TuyaRNDeviceListener shareInstance].listenTypeDic setObject:[NSNumber numberWithUnsignedInteger:listenType] forKey:deviceId];
   } else {
     [[TuyaRNDeviceListener shareInstance].listenTypeDic removeObjectForKey:deviceId];
-    __block NSInteger deviceIdx = -1;
-    [[TuyaRNDeviceListener shareInstance].listenDeviceArr enumerateObjectsUsingBlock:^(TuyaSmartDevice * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-      if ([obj.deviceModel.devId isEqualToString:deviceId]) {
-        obj.delegate = nil;
-        deviceIdx = idx;
-        *stop = YES;
-      }
-    }];
+  }
+  __block NSInteger deviceIdx = -1;
+  [[TuyaRNDeviceListener shareInstance].listenDeviceArr enumerateObjectsUsingBlock:^(TuyaSmartDevice * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    if ([obj.deviceModel.devId isEqualToString:deviceId]) {
+      obj.delegate = nil;
+      deviceIdx = idx;
+      *stop = YES;
+    }
+  }];
+  
+  if (deviceIdx >= 0) {
+    [[TuyaRNDeviceListener shareInstance].listenDeviceArr removeObjectAtIndex:deviceIdx];
+    if ([TuyaRNDeviceListener shareInstance].listenDeviceArr.count == 0) {
     
-    if (deviceIdx >= 0) {
-      [[TuyaRNDeviceListener shareInstance].listenDeviceArr removeObjectAtIndex:deviceIdx];
-      if ([TuyaRNDeviceListener shareInstance].listenDeviceArr.count == 0) {
-      
-      }
     }
   }
 }
