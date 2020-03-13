@@ -17,7 +17,10 @@ const TuyaHomeApi = {
             },
           })
         })
-        data.deviceList = List
+        if (!data.homeBean) {
+          data.homeBean = {};
+        }
+        data.homeBean.deviceList = List
       }
       return data
     })
