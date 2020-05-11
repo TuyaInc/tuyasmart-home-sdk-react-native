@@ -21,6 +21,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		34F54AC424694EBE00C3B9BF /* TuyaSmartDevice+DevId.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F54A9D24694EBD00C3B9BF /* TuyaSmartDevice+DevId.m */; };
 		750BCF37222F718B00239E92 /* TuyaRNHomeManagerListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 750BCF36222F718B00239E92 /* TuyaRNHomeManagerListener.m */; };
 		750BCF61222F719900239E92 /* TuyaRNHomeListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 750BCF60222F719900239E92 /* TuyaRNHomeListener.m */; };
 		751591FC222A667800AD4A1B /* TuyaRNUtils+Network.m in Sources */ = {isa = PBXBuildFile; fileRef = 751591FB222A667800AD4A1B /* TuyaRNUtils+Network.m */; };
@@ -350,6 +351,8 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		20CF315E2F380A171B39D107 /* Pods-TuyaRnDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TuyaRnDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-TuyaRnDemo/Pods-TuyaRnDemo.release.xcconfig"; sourceTree = "<group>"; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		34F54A9D24694EBD00C3B9BF /* TuyaSmartDevice+DevId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TuyaSmartDevice+DevId.m"; sourceTree = "<group>"; };
+		34F54AC324694EBE00C3B9BF /* TuyaSmartDevice+DevId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuyaSmartDevice+DevId.h"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		750BCF35222F718B00239E92 /* TuyaRNHomeManagerListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TuyaRNHomeManagerListener.h; sourceTree = "<group>"; };
 		750BCF36222F718B00239E92 /* TuyaRNHomeManagerListener.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TuyaRNHomeManagerListener.m; sourceTree = "<group>"; };
@@ -576,6 +579,8 @@
 		7515923A222D181600AD4A1B /* Listener */ = {
 			isa = PBXGroup;
 			children = (
+				34F54AC324694EBE00C3B9BF /* TuyaSmartDevice+DevId.h */,
+				34F54A9D24694EBD00C3B9BF /* TuyaSmartDevice+DevId.m */,
 				7515923E222D1AFF00AD4A1B /* TuyaRNEventEmitter.h */,
 				7515923F222D1AFF00AD4A1B /* TuyaRNEventEmitter.m */,
 				7515923B222D182800AD4A1B /* TuyaRNDeviceListener.h */,
@@ -1317,6 +1322,7 @@
 				7596FFF62227C7340047DA87 /* TuyaRNActivatorModule.m in Sources */,
 				759600082227C8090047DA87 /* TuyaRNMessageModule.m in Sources */,
 				7596FFFC2227C78E0047DA87 /* TuyaRNShareModule.m in Sources */,
+				34F54AC424694EBE00C3B9BF /* TuyaSmartDevice+DevId.m in Sources */,
 				75159239222D0CEB00AD4A1B /* TuyaRNUtils+DeviceParser.m in Sources */,
 				751591FF222A87A800AD4A1B /* TuyaRNHomeDataManagerModule.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
