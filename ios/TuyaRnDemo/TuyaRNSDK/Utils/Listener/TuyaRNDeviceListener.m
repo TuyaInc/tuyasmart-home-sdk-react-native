@@ -10,6 +10,7 @@
 #import <TuyaSmartDeviceKit/TuyaSmartDevice.h>
 #import <YYModel/YYModel.h>
 #import "TuyaRNEventEmitter.h"
+#import "TuyaSmartDevice+DevId.h"
 
 static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) {
   return type < pow(2, 3) && type > 0;//1,2,4
@@ -117,7 +118,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
 #pragma mark - delegate
 /// 设备信息更新
 - (void)deviceInfoUpdate:(TuyaSmartDevice *)device {
-  NSString *deviceId = device.deviceModel.devId;
+  NSString *deviceId = [device devId];
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {
     return;
   }
@@ -135,7 +136,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
 /// 设备被移除
 - (void)deviceRemoved:(TuyaSmartDevice *)device {
   
-  NSString *deviceId = device.deviceModel.devId;
+  NSString *deviceId = [device devId];
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {
     return;
   }
@@ -153,7 +154,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
 /// dp数据更新
 - (void)device:(TuyaSmartDevice *)device dpsUpdate:(NSDictionary *)dps {
   
-  NSString *deviceId = device.deviceModel.devId;
+  NSString *deviceId = [device devId];
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {
     return;
   }
@@ -180,7 +181,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
 
 /// 固件升级成功
 - (void)deviceFirmwareUpgradeSuccess:(TuyaSmartDevice *)device type:(NSInteger)type {
-  NSString *deviceId = device.deviceModel.devId;
+  NSString *deviceId = [device devId];
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {
     return;
   }
@@ -197,7 +198,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
 
 /// 固件升级失败
 - (void)deviceFirmwareUpgradeFailure:(TuyaSmartDevice *)device type:(NSInteger)type {
-  NSString *deviceId = device.deviceModel.devId;
+  NSString *deviceId = [device devId];
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {
     return;
   }
@@ -219,7 +220,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
  *  @param progress 升级进度
  */
 - (void)device:(TuyaSmartDevice *)device firmwareUpgradeProgress:(NSInteger)type progress:(double)progress {
-  NSString *deviceId = device.deviceModel.devId;
+  NSString *deviceId = [device devId];
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {
     return;
   }
@@ -238,7 +239,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
 // wifi信号强度回调
 - (void)device:(TuyaSmartDevice *)device signal:(NSString *)signal {
   
-  NSString *deviceId = device.deviceModel.devId;
+  NSString *deviceId = [device devId];
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {
     return;
   }
