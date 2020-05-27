@@ -119,6 +119,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
 /// 设备信息更新
 - (void)deviceInfoUpdate:(TuyaSmartDevice *)device {
   NSString *deviceId = [device devId];
+  device = [TuyaSmartDevice deviceWithDeviceId:deviceId];
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {
     return;
   }
@@ -130,6 +131,13 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
                           @"type": @"onDevInfoUpdate"
                           };
     [TuyaRNEventEmitter ty_sendEvent:[kTYEventEmitterDeviceInfoEvent stringByAppendingFormat:@"//%@", deviceId] withBody:dic];
+    
+    NSDictionary *onlineDic = @{
+                          @"devId": deviceId,
+                          @"type": @"onStatusChanged",
+                          @"online": [NSString stringWithFormat:@"%d", device.deviceModel.isOnline]
+                          };
+    [TuyaRNEventEmitter ty_sendEvent:[kTYEventEmitterDeviceInfoEvent stringByAppendingFormat:@"//%@", deviceId] withBody:onlineDic];
   }
 }
 

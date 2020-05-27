@@ -128,6 +128,16 @@ RCT_EXPORT_METHOD(getDpList:(NSDictionary *)params resolver:(RCTPromiseResolveBl
   }
 }
 
+RCT_EXPORT_METHOD(requestWifiSignal:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
+  self.smartDevice  = [self smartDeviceWithParams:params];
+  
+  [self.smartDevice getWifiSignalStrengthWithSuccess:^{
+      [TuyaRNUtils resolverWithHandler:resolver];
+  } failure:^(NSError *error) {
+      [TuyaRNUtils rejecterWithError:error handler:rejecter];
+  }];
+}
+
 
 RCT_EXPORT_METHOD(resetFactory:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
