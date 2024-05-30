@@ -1,36 +1,12 @@
-# tuyasmart-home-sdk-react-native
+# Repository Decommission Notice
 
-![](https://img.shields.io/github/license/TuyaInc/tuyasmart-home-sdk-react-native.svg)
+This repository is a demo of using NativeModules to bridge to the Tuya Home SDK within a React Native framework.
 
-## Feature Overview
+We are decommissioning this repository. Future developers are encouraged to create their own React Native projects and bridge to the Tuya Home SDK using the official documentation.
 
-Tuya Smart APP SDK provides the interface package for the communication with hardware and Tuya Cloud to accelerate the application development process, including the following features:
+## Steps for Future Development:
+1. Create a new React Native project. [Getting Started with React Native](https://reactnative.dev/docs/getting-started)
+2. Follow the Tuya Home SDK integration documentation to bridge your project to Tuya services. [Tuya Home SDK Integration Documentation](https://developer.tuya.com/en/docs/app-development/preparation?id=Ka69nt983bhh5)
+3. Customize and extend the project as per your requirements.
 
-Hardware functions (network configuration, control, status reporting, regular tasks, groups, firmware upgrades, sharing)
-Account system (phone number, email registration, login, password reset and other general account functions)
-Tuya Cloud HTTP API interface package
-
-
-
-## Examples
-
-See the demo in https://github.com/TuyaInc/tuyasmart-home-sdk-react-native
-
-###  3.TIPS
-
-* in App/constant File
-
-```
-const appKey=""
-const appSecret=""
-
-//login Account
-const countryCode=""
-const userName=""
-const password=""
-
-
-There are many constants that are applied to App to fill in before it starts.
-```
-
-### 4.**At present, the project is still in the process of perfection, and there are still some problems.**
+Thank you for your understanding.
